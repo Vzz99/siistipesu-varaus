@@ -8,6 +8,7 @@ import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { type DiscountPercent, TRAVEL_FEE, MINIMUM_CHARGE, DISCOUNT_OPTIONS } from "@/data/windows";
+import { sendBookingEmail } from "@/lib/emailService";
 
 export type WindowCounts = Record<string, number>;
 
@@ -34,6 +35,7 @@ export function BookingPage() {
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const { blockedDates, toggleDate } = useBlockedDates();
 
@@ -72,9 +74,16 @@ export function BookingPage() {
     });
   }
 
-  function handleBookingSubmit(data: BookingData) {
+  async function handleBookingSubmit(data: BookingData) {
     setBookingData(data);
+    setEmailStatus("sending");
     setStep("confirmation");
+    try {
+      await sendBookingEmail(data, windowCounts, discount);
+      setEmailStatus("sent");
+    } catch {
+      setEmailStatus("error");
+    }
   }
 
   function handleReset() {
@@ -82,6 +91,7 @@ export function BookingPage() {
     setDiscount(0);
     setStep("select");
     setBookingData(null);
+    setEmailStatus("idle");
   }
 
   return (
@@ -223,6 +233,7 @@ export function BookingPage() {
                     discount={discount}
                     travelFee={TRAVEL_FEE}
                     minimumCharge={MINIMUM_CHARGE}
+                    emailStatus={emailStatus}
                     onReset={handleReset}
                   />
                 </motion.div>
