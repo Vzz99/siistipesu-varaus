@@ -1,25 +1,19 @@
-import { WINDOW_TYPES, type DiscountPercent } from "@/data/windows";
+import { WINDOW_TYPES } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
   windowCounts: WindowCounts;
-  discount: DiscountPercent;
-  onDiscountChange?: (d: DiscountPercent) => void;
   travelFee: number;
   minimumCharge: number;
-  discountOptions?: readonly DiscountPercent[];
   onProceed?: () => void;
   compact?: boolean;
 }
 
 export function PriceSummary({
   windowCounts,
-  discount,
-  onDiscountChange,
   travelFee,
   minimumCharge,
-  discountOptions,
   onProceed,
   compact,
 }: Props) {
@@ -31,9 +25,7 @@ export function PriceSummary({
 
   const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
   const subtotalWithTravel = windowsSubtotal + travelFee;
-  const chargeBase = Math.max(subtotalWithTravel, minimumCharge);
-  const discountAmount = Math.round(chargeBase * (discount / 100) * 100) / 100;
-  const total = Math.round((chargeBase - discountAmount) * 100) / 100;
+  const total = Math.max(subtotalWithTravel, minimumCharge);
 
   const hasItems = selectedItems.length > 0;
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
@@ -112,13 +104,6 @@ export function PriceSummary({
                 </span>
               </motion.div>
             )}
-
-            {discount > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-green-600 dark:text-green-400">Alennus {discount}%</span>
-                <span className="text-green-600 dark:text-green-400 font-medium tabular-nums">-{discountAmount.toFixed(2)} €</span>
-              </div>
-            )}
           </div>
         )}
 
@@ -141,27 +126,6 @@ export function PriceSummary({
           <div className="border-t border-border pt-3 flex justify-between items-baseline">
             <span className="font-semibold text-foreground">Yhteensä</span>
             <span className="text-2xl font-bold text-muted-foreground">0,00 €</span>
-          </div>
-        )}
-
-        {discountOptions && onDiscountChange && (
-          <div className="border-t border-border pt-3">
-            <p className="text-xs font-medium text-muted-foreground mb-2">Alennus</p>
-            <div className="flex flex-wrap gap-1.5">
-              {discountOptions.map((d) => (
-                <button
-                  key={d}
-                  onClick={() => onDiscountChange(d)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-                    discount === d
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  }`}
-                >
-                  {d === 0 ? "Ei alennusta" : `${d}%`}
-                </button>
-              ))}
-            </div>
           </div>
         )}
 

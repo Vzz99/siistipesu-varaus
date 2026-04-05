@@ -7,7 +7,7 @@ import { ConfirmationView } from "@/components/ConfirmationView";
 import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
-import { type DiscountPercent, TRAVEL_FEE, MINIMUM_CHARGE, DISCOUNT_OPTIONS } from "@/data/windows";
+import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { sendBookingEmail } from "@/lib/emailService";
 
 export type WindowCounts = Record<string, number>;
@@ -29,7 +29,6 @@ const TAPS_REQUIRED = 5;
 
 export function BookingPage() {
   const [windowCounts, setWindowCounts] = useState<WindowCounts>({});
-  const [discount, setDiscount] = useState<DiscountPercent>(0);
   const [step, setStep] = useState<Step>("select");
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
 
@@ -79,7 +78,7 @@ export function BookingPage() {
     setEmailStatus("sending");
     setStep("confirmation");
     try {
-      await sendBookingEmail(data, windowCounts, discount);
+      await sendBookingEmail(data, windowCounts);
       setEmailStatus("sent");
     } catch {
       setEmailStatus("error");
@@ -88,7 +87,6 @@ export function BookingPage() {
 
   function handleReset() {
     setWindowCounts({});
-    setDiscount(0);
     setStep("select");
     setBookingData(null);
     setEmailStatus("idle");
@@ -173,11 +171,8 @@ export function BookingPage() {
                       <div className="sticky top-24">
                         <PriceSummary
                           windowCounts={windowCounts}
-                          discount={discount}
-                          onDiscountChange={setDiscount}
                           travelFee={TRAVEL_FEE}
                           minimumCharge={MINIMUM_CHARGE}
-                          discountOptions={DISCOUNT_OPTIONS}
                           onProceed={() => setStep("booking")}
                         />
                       </div>
@@ -206,11 +201,8 @@ export function BookingPage() {
                       <div className="sticky top-24">
                         <PriceSummary
                           windowCounts={windowCounts}
-                          discount={discount}
-                          onDiscountChange={setDiscount}
                           travelFee={TRAVEL_FEE}
                           minimumCharge={MINIMUM_CHARGE}
-                          discountOptions={DISCOUNT_OPTIONS}
                           compact
                         />
                       </div>
@@ -230,7 +222,6 @@ export function BookingPage() {
                   <ConfirmationView
                     bookingData={bookingData}
                     windowCounts={windowCounts}
-                    discount={discount}
                     travelFee={TRAVEL_FEE}
                     minimumCharge={MINIMUM_CHARGE}
                     emailStatus={emailStatus}

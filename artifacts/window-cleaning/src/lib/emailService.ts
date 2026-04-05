@@ -1,7 +1,6 @@
 import emailjs from "@emailjs/browser";
 import { WINDOW_TYPES, TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { type BookingData, type WindowCounts } from "@/pages/BookingPage";
-import { type DiscountPercent } from "@/data/windows";
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
@@ -25,34 +24,19 @@ function buildWindowsList(windowCounts: WindowCounts): string {
     .join("\n");
 }
 
-function calcTotal(windowCounts: WindowCounts, discount: DiscountPercent): {
-  windowsSubtotal: number;
-  chargeBase: number;
-  discountAmount: number;
-  total: number;
-} {
-  const selectedItems = WINDOW_TYPES
+function calcTotal(windowCounts: WindowCounts): number {
+  const windowsSubtotal = WINDOW_TYPES
     .filter((w) => (windowCounts[w.id] ?? 0) > 0)
-    .map((w) => w.price * windowCounts[w.id]);
-  const windowsSubtotal = selectedItems.reduce((s, v) => s + v, 0);
-  const subtotalWithTravel = windowsSubtotal + TRAVEL_FEE;
-  const chargeBase = Math.max(subtotalWithTravel, MINIMUM_CHARGE);
-  const discountAmount = Math.round(chargeBase * (discount / 100) * 100) / 100;
-  const total = Math.round((chargeBase - discountAmount) * 100) / 100;
-  return { windowsSubtotal, chargeBase, discountAmount, total };
+    .reduce((s, w) => s + w.price * windowCounts[w.id], 0);
+  return Math.max(windowsSubtotal + TRAVEL_FEE, MINIMUM_CHARGE);
 }
 
 export async function sendBookingEmail(
   bookingData: BookingData,
-  windowCounts: WindowCounts,
-  discount: DiscountPercent
+  windowCounts: WindowCounts
 ): Promise<void> {
-  const { windowsSubtotal, discountAmount, total } = calcTotal(windowCounts, discount);
+  const total = calcTotal(windowCounts);
   const windowsList = buildWindowsList(windowCounts);
-
-  const discountLine = discount > 0
-    ? `Alennus ${discount}%: -${discountAmount.toFixed(2)} €`
-    : "Ei alennusta";
 
   const templateParams = {
     customer_name: bookingData.name,
@@ -62,10 +46,7 @@ export async function sendBookingEmail(
     booking_date: formatDateFi(bookingData.date),
     booking_time: bookingData.time,
     windows_list: windowsList,
-    windows_subtotal: `${windowsSubtotal} €`,
     travel_fee: `${TRAVEL_FEE} €`,
-    minimum_charge: `${MINIMUM_CHARGE} €`,
-    discount_info: discountLine,
     total_price: `${total.toFixed(2)} €`,
     additional_info: bookingData.additionalInfo || "Ei lisätietoja",
   };

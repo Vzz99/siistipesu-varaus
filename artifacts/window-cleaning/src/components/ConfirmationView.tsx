@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { WINDOW_TYPES, type DiscountPercent } from "@/data/windows";
+import { WINDOW_TYPES } from "@/data/windows";
 import { type BookingData, type WindowCounts } from "@/pages/BookingPage";
 
 interface Props {
   bookingData: BookingData;
   windowCounts: WindowCounts;
-  discount: DiscountPercent;
   travelFee: number;
   minimumCharge: number;
   emailStatus: "idle" | "sending" | "sent" | "error";
@@ -23,7 +22,7 @@ function formatDate(dateStr: string) {
   return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
-export function ConfirmationView({ bookingData, windowCounts, discount, travelFee, minimumCharge, emailStatus, onReset }: Props) {
+export function ConfirmationView({ bookingData, windowCounts, travelFee, minimumCharge, emailStatus, onReset }: Props) {
   const selectedItems = WINDOW_TYPES.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
     window: w,
     count: windowCounts[w.id],
@@ -31,10 +30,7 @@ export function ConfirmationView({ bookingData, windowCounts, discount, travelFe
   }));
 
   const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
-  const subtotalWithTravel = windowsSubtotal + travelFee;
-  const chargeBase = Math.max(subtotalWithTravel, minimumCharge);
-  const discountAmount = Math.round(chargeBase * (discount / 100) * 100) / 100;
-  const total = Math.round((chargeBase - discountAmount) * 100) / 100;
+  const total = Math.max(windowsSubtotal + travelFee, minimumCharge);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -68,7 +64,6 @@ export function ConfirmationView({ bookingData, windowCounts, discount, travelFe
             Lähetetään sähköposti-ilmoitus...
           </motion.div>
         )}
-
         {emailStatus === "sent" && (
           <motion.div
             key="sent"
@@ -84,7 +79,6 @@ export function ConfirmationView({ bookingData, windowCounts, discount, travelFe
             Sähköposti-ilmoitus lähetetty onnistuneesti.
           </motion.div>
         )}
-
         {emailStatus === "error" && (
           <motion.div
             key="error"
@@ -162,12 +156,6 @@ export function ConfirmationView({ bookingData, windowCounts, discount, travelFe
                 <span className="text-muted-foreground">Matkamaksu</span>
                 <span className="font-medium tabular-nums">{travelFee} €</span>
               </div>
-              {discount > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-green-600 dark:text-green-400">Alennus {discount}%</span>
-                  <span className="text-green-600 dark:text-green-400 font-medium tabular-nums">-{discountAmount.toFixed(2)} €</span>
-                </div>
-              )}
               <div className="flex justify-between font-semibold border-t border-border pt-2 mt-1">
                 <span>Yhteensä</span>
                 <span className="text-xl tabular-nums">{total.toFixed(2)} €</span>
