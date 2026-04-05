@@ -7,6 +7,7 @@ import { ConfirmationView } from "@/components/ConfirmationView";
 import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
+import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { sendBookingEmail } from "@/lib/emailService";
 
@@ -37,6 +38,7 @@ export function BookingPage() {
   const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const { blockedDates, toggleDate } = useBlockedDates();
+  const { bookedSlots, blockSlots } = useBookedSlots();
 
   const tapTimestamps = useRef<number[]>([]);
 
@@ -75,6 +77,7 @@ export function BookingPage() {
 
   async function handleBookingSubmit(data: BookingData) {
     setBookingData(data);
+    blockSlots(data.date, data.time);
     setEmailStatus("sending");
     setStep("confirmation");
     try {
@@ -195,7 +198,7 @@ export function BookingPage() {
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
-                      <BookingForm onSubmit={handleBookingSubmit} blockedDates={blockedDates} />
+                      <BookingForm onSubmit={handleBookingSubmit} blockedDates={blockedDates} bookedSlots={bookedSlots} />
                     </div>
                     <div className="lg:col-span-1">
                       <div className="sticky top-24">

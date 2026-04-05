@@ -5,6 +5,7 @@ import { CalendarPicker } from "@/components/CalendarPicker";
 interface Props {
   onSubmit: (data: BookingData) => void;
   blockedDates?: Set<string>;
+  bookedSlots?: Record<string, string[]>;
 }
 
 const TIME_SLOTS = [
@@ -23,7 +24,7 @@ function formatDateFi(dateStr: string): string {
   return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
-export function BookingForm({ onSubmit, blockedDates = new Set() }: Props) {
+export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = {} }: Props) {
   const [form, setForm] = useState<BookingData>({
     name: "",
     phone: "",
@@ -143,16 +144,31 @@ export function BookingForm({ onSubmit, blockedDates = new Set() }: Props) {
             </Field>
 
             <Field label="Kellonaika *" error={errors.time}>
-              <select
-                value={form.time}
-                onChange={(e) => handleChange("time", e.target.value)}
-                className={inputClass(!!errors.time)}
-              >
-                <option value="">Valitse aika...</option>
-                {TIME_SLOTS.map((slot) => (
-                  <option key={slot} value={slot}>{slot}</option>
-                ))}
-              </select>
+              <div className={`grid grid-cols-3 gap-1.5 p-1 rounded-xl border ${errors.time ? "border-destructive" : "border-input"} bg-background`}>
+                {TIME_SLOTS.map((slot) => {
+                  const blocked = (bookedSlots[form.date] ?? []).includes(slot);
+                  const selected = form.time === slot;
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      disabled={blocked}
+                      onClick={() => !blocked && handleChange("time", slot)}
+                      title={blocked ? "Aika varattu" : slot}
+                      className={[
+                        "py-2 rounded-lg text-sm font-medium transition-all duration-150 select-none",
+                        blocked
+                          ? "bg-muted/60 text-muted-foreground/40 line-through cursor-not-allowed"
+                          : selected
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "hover:bg-muted text-foreground cursor-pointer",
+                      ].join(" ")}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })}
+              </div>
             </Field>
           </div>
 
