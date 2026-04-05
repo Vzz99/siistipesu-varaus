@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { type BookingData } from "@/pages/BookingPage";
+import { CalendarPicker } from "@/components/CalendarPicker";
 
 interface Props {
   onSubmit: (data: BookingData) => void;
+  blockedDates?: Set<string>;
 }
 
 const TIME_SLOTS = [
@@ -10,11 +12,18 @@ const TIME_SLOTS = [
   "13:00", "14:00", "15:00", "16:00"
 ];
 
-function getTodayStr() {
-  return new Date().toISOString().split("T")[0];
+const MONTH_NAMES = [
+  "Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu",
+  "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"
+];
+
+function formatDateFi(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
-export function BookingForm({ onSubmit }: Props) {
+export function BookingForm({ onSubmit, blockedDates = new Set() }: Props) {
   const [form, setForm] = useState<BookingData>({
     name: "",
     phone: "",
@@ -24,7 +33,8 @@ export function BookingForm({ onSubmit }: Props) {
     time: "",
     additionalInfo: "",
   });
-  const [errors, setErrors] = useState<Partial<BookingData>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof BookingData, string>>>({});
+  const [showCalendar, setShowCalendar] = useState(false);
 
   function handleChange(field: keyof BookingData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -33,14 +43,20 @@ export function BookingForm({ onSubmit }: Props) {
     }
   }
 
+  function handleDateSelect(dateStr: string) {
+    handleChange("date", dateStr);
+    setShowCalendar(false);
+  }
+
   function validate(): boolean {
-    const newErrors: Partial<BookingData> = {};
+    const newErrors: Partial<Record<keyof BookingData, string>> = {};
     if (!form.name.trim()) newErrors.name = "Nimi on pakollinen";
     if (!form.phone.trim()) newErrors.phone = "Puhelinnumero on pakollinen";
-    if (!form.email.trim()) newErrors.email = "Sähköposti on pakollinen";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Tarkista sähköpostiosoite";
+    if (!form.email.trim()) newErrors.email = "Sahköposti on pakollinen";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Tarkista sahköpostiosoite";
     if (!form.address.trim()) newErrors.address = "Osoite on pakollinen";
     if (!form.date) newErrors.date = "Valitse päivämäärä";
+    else if (blockedDates.has(form.date)) newErrors.date = "Tama paiva ei ole saatavilla";
     if (!form.time) newErrors.time = "Valitse aika";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -61,10 +77,7 @@ export function BookingForm({ onSubmit }: Props) {
 
       <div className="px-5 py-5 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field
-            label="Nimi *"
-            error={errors.name}
-          >
+          <Field label="Nimi *" error={errors.name}>
             <input
               type="text"
               value={form.name}
@@ -85,7 +98,7 @@ export function BookingForm({ onSubmit }: Props) {
           </Field>
         </div>
 
-        <Field label="Sähköposti *" error={errors.email}>
+        <Field label="Sahköposti *" error={errors.email}>
           <input
             type="email"
             value={form.email}
@@ -106,19 +119,27 @@ export function BookingForm({ onSubmit }: Props) {
         </Field>
       </div>
 
-      <div className="px-5 pb-1 pt-1 border-t border-border">
+      <div className="px-5 pt-1 pb-1 border-t border-border">
         <div className="py-4 border-b border-border">
           <h2 className="font-semibold text-foreground mb-4">Aika</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Päivämäärä *" error={errors.date}>
-              <input
-                type="date"
-                value={form.date}
-                min={getTodayStr()}
-                onChange={(e) => handleChange("date", e.target.value)}
-                className={inputClass(!!errors.date)}
-              />
+              <button
+                type="button"
+                onClick={() => setShowCalendar((v) => !v)}
+                className={`${inputClass(!!errors.date)} text-left flex items-center justify-between gap-2`}
+              >
+                <span className={form.date ? "text-foreground" : "text-muted-foreground"}>
+                  {form.date ? formatDateFi(form.date) : "Valitse paiva..."}
+                </span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground flex-shrink-0">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </button>
             </Field>
 
             <Field label="Kellonaika *" error={errors.time}>
@@ -134,6 +155,28 @@ export function BookingForm({ onSubmit }: Props) {
               </select>
             </Field>
           </div>
+
+          {showCalendar && (
+            <div className="mt-3 p-4 border border-border rounded-xl bg-background shadow-md">
+              <CalendarPicker
+                selectedDate={form.date}
+                onSelectDate={handleDateSelect}
+                blockedDates={blockedDates}
+                allowPast={false}
+                mode="booking"
+              />
+              {blockedDates.size > 0 && (
+                <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  Yliviivatut paivat eivat ole saatavilla
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
