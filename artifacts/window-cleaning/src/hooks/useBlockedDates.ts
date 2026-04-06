@@ -1,62 +1,36 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
-const STORAGE_KEY = "ikkunanpesu_blocked_dates";
-
-function loadFromStorage(): Set<string> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return new Set();
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) return new Set<string>(parsed);
-  } catch {
-    // ignore
-  }
-  return new Set();
-}
-
-function saveToStorage(dates: Set<string>) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(dates)));
-  } catch {
-    // ignore
-  }
-}
+const API_BASE = "/api-server/api";
 
 export function useBlockedDates() {
-  const [blockedDates, setBlockedDates] = useState<Set<string>>(() => loadFromStorage());
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
 
-  const toggleDate = useCallback((dateStr: string) => {
-    setBlockedDates((prev) => {
-      const next = new Set(prev);
-      if (next.has(dateStr)) {
-        next.delete(dateStr);
-      } else {
-        next.add(dateStr);
-      }
-      saveToStorage(next);
-      return next;
-    });
+  useEffect(() => {
+    fetch(`${API_BASE}/bookings/blocked-dates`)
+      .then((r) => r.json())
+      .then((data: { dates: string[] }) => {
+        setBlockedDates(new Set(data.dates));
+      })
+      .catch(() => {});
   }, []);
 
-  const blockDate = useCallback((dateStr: string) => {
+  const toggleDate = useCallback(async (dateStr: string) => {
     setBlockedDates((prev) => {
       const next = new Set(prev);
-      next.add(dateStr);
-      saveToStorage(next);
+      if (next.has(dateStr)) next.delete(dateStr);
+      else next.add(dateStr);
       return next;
     });
-  }, []);
-
-  const unblockDate = useCallback((dateStr: string) => {
-    setBlockedDates((prev) => {
-      const next = new Set(prev);
-      next.delete(dateStr);
-      saveToStorage(next);
-      return next;
-    });
+    try {
+      await fetch(`${API_BASE}/bookings/blocked-dates/toggle`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: dateStr }),
+      });
+    } catch {}
   }, []);
 
   const isBlocked = useCallback((dateStr: string) => blockedDates.has(dateStr), [blockedDates]);
 
-  return { blockedDates, toggleDate, blockDate, unblockDate, isBlocked };
+  return { blockedDates, toggleDate, isBlocked };
 }

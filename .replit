@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [[artifacts]]
 id = "artifacts/api-server"
@@ -31,3 +31,6 @@ timeoutMs = 20000
 VITE_EMAILJS_SERVICE_ID = "service_4g19hrc"
 VITE_EMAILJS_TEMPLATE_ID = "template_u4wzjv4"
 VITE_EMAILJS_PUBLIC_KEY = "0pddut_bBq4fvKBgG"
+
+[nix]
+channel = "stable-25_05"
