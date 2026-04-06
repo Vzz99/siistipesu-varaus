@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { type BookingData } from "@/pages/BookingPage";
+import { type BookingData, type ServiceType } from "@/pages/BookingPage";
 import { CalendarPicker } from "@/components/CalendarPicker";
 
 interface Props {
   onSubmit: (data: BookingData) => void;
   blockedDates?: Set<string>;
   bookedSlots?: Record<string, string[]>;
+  serviceType?: ServiceType;
 }
 
 const TIME_SLOTS = [
@@ -24,7 +25,8 @@ function formatDateFi(dateStr: string): string {
   return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
-export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = {} }: Props) {
+export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = {}, serviceType }: Props) {
+  const isMuut = serviceType === "muut_palvelut";
   const [form, setForm] = useState<BookingData>({
     name: "",
     phone: "",

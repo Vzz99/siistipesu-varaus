@@ -1,15 +1,22 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { WINDOW_TYPES } from "@/data/windows";
-import { type BookingData, type WindowCounts } from "@/pages/BookingPage";
+import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/BookingPage";
 
 interface Props {
   bookingData: BookingData;
+  serviceType: ServiceType;
   windowCounts: WindowCounts;
   travelFee: number;
   minimumCharge: number;
   emailStatus: "idle" | "sending" | "sent" | "error";
   onReset: () => void;
 }
+
+const SERVICE_LABELS: Record<ServiceType, string> = {
+  ikkunanpesu: "Ikkunanpesu",
+  auton_ulkopesu: "Auton ulkopesu",
+  muut_palvelut: "Muut palvelut",
+};
 
 const MONTH_NAMES = [
   "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta", "kesäkuuta",
@@ -22,15 +29,21 @@ function formatDate(dateStr: string) {
   return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
-export function ConfirmationView({ bookingData, windowCounts, travelFee, minimumCharge, emailStatus, onReset }: Props) {
-  const selectedItems = WINDOW_TYPES.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
-    window: w,
-    count: windowCounts[w.id],
-    subtotal: w.price * windowCounts[w.id],
-  }));
+export function ConfirmationView({ bookingData, serviceType, windowCounts, travelFee, minimumCharge, emailStatus, onReset }: Props) {
+  const isIkkunanpesu = serviceType === "ikkunanpesu";
+  const isCarWash = serviceType === "auton_ulkopesu";
+  const isMuut = serviceType === "muut_palvelut";
+
+  const selectedItems = isIkkunanpesu
+    ? WINDOW_TYPES.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
+        window: w,
+        count: windowCounts[w.id],
+        subtotal: w.price * windowCounts[w.id],
+      }))
+    : [];
 
   const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
-  const total = Math.max(windowsSubtotal + travelFee, minimumCharge);
+  const total = isIkkunanpesu ? Math.max(windowsSubtotal + travelFee, minimumCharge) : 25;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -51,13 +64,8 @@ export function ConfirmationView({ bookingData, windowCounts, travelFee, minimum
 
       <AnimatePresence mode="wait">
         {emailStatus === "sending" && (
-          <motion.div
-            key="sending"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-sm"
-          >
+          <motion.div key="sending" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm">
             <svg className="animate-spin flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
             </svg>
@@ -65,32 +73,19 @@ export function ConfirmationView({ bookingData, windowCounts, travelFee, minimum
           </motion.div>
         )}
         {emailStatus === "sent" && (
-          <motion.div
-            key="sent"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 text-sm"
-          >
+          <motion.div key="sent" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
-              <path d="M22 2 11 13"/>
-              <path d="M22 2 15 22 11 13 2 9l20-7z"/>
+              <path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/>
             </svg>
             Sähköposti-ilmoitus lähetetty onnistuneesti.
           </motion.div>
         )}
         {emailStatus === "error" && (
-          <motion.div
-            key="error"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-sm"
-          >
+          <motion.div key="error" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-sm">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
             </svg>
             Sähköpostin lähetys epäonnistui. Tarkista EmailJS-asetukset.
           </motion.div>
@@ -98,12 +93,8 @@ export function ConfirmationView({ bookingData, windowCounts, travelFee, minimum
       </AnimatePresence>
 
       <div className="space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden"
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden">
           <div className="px-5 py-4 border-b border-border bg-muted/30">
             <h2 className="font-semibold text-foreground">Yhteystiedot</h2>
           </div>
@@ -115,12 +106,8 @@ export function ConfirmationView({ bookingData, windowCounts, travelFee, minimum
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.22 }}
-          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden"
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden">
           <div className="px-5 py-4 border-b border-border bg-muted/30">
             <h2 className="font-semibold text-foreground">Ajankohta</h2>
           </div>
@@ -129,46 +116,64 @@ export function ConfirmationView({ bookingData, windowCounts, travelFee, minimum
             <InfoRow label="Kellonaika" value={bookingData.time} />
             {bookingData.additionalInfo && (
               <div className="sm:col-span-2">
-                <InfoRow label="Lisätiedot" value={bookingData.additionalInfo} />
+                <InfoRow label={isMuut ? "Palvelun kuvaus" : "Lisätiedot"} value={bookingData.additionalInfo} />
               </div>
             )}
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden"
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+          className="bg-card border border-card-border rounded-2xl shadow-xs overflow-hidden">
           <div className="px-5 py-4 border-b border-border bg-muted/30">
-            <h2 className="font-semibold text-foreground">Tilatut palvelut</h2>
+            <h2 className="font-semibold text-foreground">Palvelu ja hinta</h2>
           </div>
           <div className="px-5 py-4 space-y-2">
-            {selectedItems.map(({ window, count, subtotal }) => (
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Palvelu</span>
+              <span className="font-medium">{SERVICE_LABELS[serviceType]}</span>
+            </div>
+
+            {isIkkunanpesu && selectedItems.map(({ window, count, subtotal }) => (
               <div key={window.id} className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{window.name} × {count}</span>
                 <span className="font-medium tabular-nums">{subtotal} €</span>
               </div>
             ))}
-            <div className="border-t border-border pt-2 mt-2 space-y-1.5">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Matkamaksu</span>
-                <span className="font-medium tabular-nums">{travelFee} €</span>
+
+            {isIkkunanpesu && (
+              <div className="border-t border-border pt-2 mt-2 space-y-1.5">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Matkamaksu</span>
+                  <span className="font-medium tabular-nums">{travelFee} €</span>
+                </div>
+                <div className="flex justify-between font-semibold border-t border-border pt-2 mt-1">
+                  <span>Yhteensä</span>
+                  <span className="text-xl tabular-nums">{total.toFixed(2)} €</span>
+                </div>
               </div>
-              <div className="flex justify-between font-semibold border-t border-border pt-2 mt-1">
-                <span>Yhteensä</span>
-                <span className="text-xl tabular-nums">{total.toFixed(2)} €</span>
+            )}
+
+            {isCarWash && (
+              <div className="border-t border-border pt-2 mt-2">
+                <div className="flex justify-between font-semibold">
+                  <span>Yhteensä</span>
+                  <span className="text-xl tabular-nums">25,00 €</span>
+                </div>
               </div>
-            </div>
+            )}
+
+            {isMuut && (
+              <div className="border-t border-border pt-2 mt-2">
+                <div className="flex justify-between font-semibold">
+                  <span>Hinta</span>
+                  <span className="text-sm text-muted-foreground font-normal">Sovitaan erikseen</span>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.38 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
           <button
             onClick={onReset}
             className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 shadow-sm"
