@@ -9,6 +9,7 @@ import { ServiceSelector } from "@/components/ServiceSelector";
 import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
 import { AboutSection } from "@/components/AboutSection";
+import { Footer } from "@/components/Footer";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
@@ -118,7 +119,7 @@ export function BookingPage() {
   const showBackButton = !isAdminLoggedIn && (step === "select" || step === "booking");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-border shadow-xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3">
           <button
@@ -154,7 +155,7 @@ export function BookingPage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
         <AnimatePresence mode="wait">
           {isAdminLoggedIn ? (
             <AdminPanel
@@ -270,6 +271,8 @@ export function BookingPage() {
           )}
         </AnimatePresence>
       </main>
+
+      <Footer />
 
       <AdminPasswordModal
         open={showPasswordModal}
