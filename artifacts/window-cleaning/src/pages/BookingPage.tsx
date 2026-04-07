@@ -11,6 +11,7 @@ import { AdminPanel } from "@/components/AdminPanel";
 import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
 import { FAQ } from "@/components/FAQ";
+import { Hero } from "@/components/Hero";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
@@ -119,6 +120,10 @@ export function BookingPage() {
 
   const showBackButton = !isAdminLoggedIn && (step === "select" || step === "booking");
 
+  function scrollToServices() {
+    document.getElementById("palvelut")?.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-border shadow-xs">
@@ -175,7 +180,10 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
-                  <ServiceSelector onSelect={handleServiceSelect} />
+                  <Hero onBookClick={scrollToServices} />
+                  <div id="palvelut">
+                    <ServiceSelector onSelect={handleServiceSelect} />
+                  </div>
                   <FAQ />
                   <AboutSection />
                 </motion.div>
