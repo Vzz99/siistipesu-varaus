@@ -74,7 +74,7 @@
     "wouter": "^3.3.5",
     "zod": "catalog:"
   },
-  "dependencies": {
-    "@emailjs/browser": "^4.4.1"
+ "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "@supabase/supabase-js": "^2.39.0"
   }
-}
