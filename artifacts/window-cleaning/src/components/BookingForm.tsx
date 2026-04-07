@@ -25,21 +25,26 @@ function formatDateFi(dateStr: string): string {
   return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
 }
 
+function isValidUusimaanPostalCode(code: string): boolean {
+  const num = parseInt(code, 10);
+  return code.length === 5 && num >= 100 && num <= 9999;
+}
+
 export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = {}, serviceType }: Props) {
-  const isMuut = serviceType === "muut_palvelut";
-  const [form, setForm] = useState<BookingData>({
+  const [form, setForm] = useState<BookingData & { postalCode: string }>({
     name: "",
     phone: "",
     email: "",
     address: "",
+    postalCode: "",
     date: "",
     time: "",
     additionalInfo: "",
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof BookingData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [showCalendar, setShowCalendar] = useState(false);
 
-  function handleChange(field: keyof BookingData, value: string) {
+  function handleChange(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -52,14 +57,16 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
   }
 
   function validate(): boolean {
-    const newErrors: Partial<Record<keyof BookingData, string>> = {};
+    const newErrors: Partial<Record<string, string>> = {};
     if (!form.name.trim()) newErrors.name = "Nimi on pakollinen";
     if (!form.phone.trim()) newErrors.phone = "Puhelinnumero on pakollinen";
-    if (!form.email.trim()) newErrors.email = "Sahköposti on pakollinen";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Tarkista sahköpostiosoite";
+    if (!form.email.trim()) newErrors.email = "Sähköposti on pakollinen";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Tarkista sähköpostiosoite";
     if (!form.address.trim()) newErrors.address = "Osoite on pakollinen";
+    if (!form.postalCode.trim()) newErrors.postalCode = "Postinumero on pakollinen";
+    else if (!isValidUusimaanPostalCode(form.postalCode)) newErrors.postalCode = "Palvelemme vain Uudenmaan alueella (00100–09999)";
     if (!form.date) newErrors.date = "Valitse päivämäärä";
-    else if (blockedDates.has(form.date)) newErrors.date = "Tama paiva ei ole saatavilla";
+    else if (blockedDates.has(form.date)) newErrors.date = "Tämä päivä ei ole saatavilla";
     if (!form.time) newErrors.time = "Valitse aika";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -68,7 +75,16 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (validate()) {
-      onSubmit(form);
+      const submitData: BookingData = {
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        address: `${form.address}, ${form.postalCode}`,
+        date: form.date,
+        time: form.time,
+        additionalInfo: form.additionalInfo,
+      };
+      onSubmit(submitData);
     }
   }
 
@@ -101,7 +117,7 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
           </Field>
         </div>
 
-        <Field label="Sahköposti *" error={errors.email}>
+        <Field label="Sähköposti *" error={errors.email}>
           <input
             type="email"
             value={form.email}
@@ -116,9 +132,21 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
             type="text"
             value={form.address}
             onChange={(e) => handleChange("address", e.target.value)}
-            placeholder="Esimerkkikatu 1, 00100 Helsinki"
+            placeholder="Esimerkkikatu 1, Helsinki"
             className={inputClass(!!errors.address)}
           />
+        </Field>
+
+        <Field label="Postinumero *" error={errors.postalCode}>
+          <input
+            type="text"
+            value={form.postalCode}
+            onChange={(e) => handleChange("postalCode", e.target.value.replace(/\D/g, "").slice(0, 5))}
+            placeholder="00100"
+            maxLength={5}
+            className={inputClass(!!errors.postalCode)}
+          />
+          <p className="text-xs text-muted-foreground mt-1">Palvelemme Uudenmaan alueella (00100–09999)</p>
         </Field>
       </div>
 
@@ -134,7 +162,7 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
                 className={`${inputClass(!!errors.date)} text-left flex items-center justify-between gap-2`}
               >
                 <span className={form.date ? "text-foreground" : "text-muted-foreground"}>
-                  {form.date ? formatDateFi(form.date) : "Valitse paiva..."}
+                  {form.date ? formatDateFi(form.date) : "Valitse päivä..."}
                 </span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground flex-shrink-0">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -190,7 +218,7 @@ export function BookingForm({ onSubmit, blockedDates = new Set(), bookedSlots = 
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
-                  Yliviivatut paivat eivat ole saatavilla
+                  Yliviivatut päivät eivät ole saatavilla
                 </p>
               )}
             </div>
