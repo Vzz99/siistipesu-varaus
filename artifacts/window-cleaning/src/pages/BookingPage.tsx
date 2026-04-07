@@ -8,6 +8,7 @@ import { ConfirmationView } from "@/components/ConfirmationView";
 import { ServiceSelector } from "@/components/ServiceSelector";
 import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
+import { AboutSection } from "@/components/AboutSection";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
@@ -173,6 +174,7 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <ServiceSelector onSelect={handleServiceSelect} />
+                  <AboutSection />
                 </motion.div>
               )}
 
