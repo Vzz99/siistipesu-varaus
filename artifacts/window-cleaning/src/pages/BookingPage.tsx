@@ -13,6 +13,7 @@ import { Footer } from "@/components/Footer";
 import { FAQ } from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
 import { PriceList } from "@/components/PriceList";
+import { ResultsSection } from "@/components/ResultsSection";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
@@ -130,6 +131,7 @@ export function BookingPage() {
 
   const navLinks = [
     { label: "Palvelut & hinnat", id: "hinnat" },
+    { label: "Tulokset", id: "tulokset" },
     { label: "Usein kysytyt", id: "ukk" },
     { label: "Meistä", id: "meista" },
   ];
@@ -139,7 +141,6 @@ export function BookingPage() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-border shadow-xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
 
-          {/* Logo */}
           <button
             onClick={handleLogoTap}
             className="flex items-center gap-2.5 cursor-default select-none focus:outline-none"
@@ -157,7 +158,6 @@ export function BookingPage() {
             </div>
           </button>
 
-          {/* Navigaatio desktop — näkyy vain etusivulla */}
           {step === "service" && !isAdminLoggedIn && (
             <nav className="hidden sm:flex items-center gap-1 ml-4">
               {navLinks.map((link) => (
@@ -184,7 +184,6 @@ export function BookingPage() {
                 Takaisin
               </button>
             )}
-
             {step === "service" && !isAdminLoggedIn && (
               <button
                 onClick={scrollToServices}
@@ -196,7 +195,6 @@ export function BookingPage() {
           </div>
         </div>
 
-        {/* Mobiilinavigaatio */}
         {step === "service" && !isAdminLoggedIn && (
           <div className="sm:hidden flex gap-2 px-4 pb-2 overflow-x-auto">
             {navLinks.map((link) => (
@@ -237,6 +235,10 @@ export function BookingPage() {
                     <PriceList />
                   </div>
 
+                  <div id="tulokset" className="scroll-mt-20">
+                    <ResultsSection />
+                  </div>
+
                   <div id="palvelut" className="scroll-mt-20">
                     <ServiceSelector onSelect={handleServiceSelect} />
                   </div>
@@ -259,10 +261,21 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
-                  <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-foreground mb-2">Ikkunanpesu</h1>
-                    <p className="text-muted-foreground text-base">Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.</p>
+                  {/* Työtekijäkuva */}
+                  <div className="relative rounded-2xl overflow-hidden h-48 mb-8">
+                    <img
+                      src="/worker.jpg"
+                      alt="Ikkunanpesu työssä"
+                      className="w-full h-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                      <div>
+                        <h1 className="text-3xl font-bold text-white mb-1">Ikkunanpesu</h1>
+                        <p className="text-white/80 text-base">Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.</p>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                       <WindowSelector windowCounts={windowCounts} onCountChange={handleCountChange} />
