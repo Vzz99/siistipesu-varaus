@@ -120,30 +120,57 @@ export function BookingPage() {
 
   const showBackButton = !isAdminLoggedIn && (step === "select" || step === "booking");
 
-  function scrollToServices() {
-    document.getElementById("palvelut")?.scrollIntoView({ behavior: "smooth" });
+  function scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }
+
+  function scrollToServices() {
+    scrollTo("palvelut");
+  }
+
+  const navLinks = [
+    { label: "Palvelut & hinnat", id: "hinnat" },
+    { label: "Usein kysytyt", id: "ukk" },
+    { label: "Meistä", id: "meista" },
+  ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-border shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
+
+          {/* Logo */}
           <button
             onClick={handleLogoTap}
             className="flex items-center gap-2.5 cursor-default select-none focus:outline-none"
             tabIndex={-1}
             aria-label="Logo"
           >
-            <div className={`w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 transition-colors duration-200 ${isAdminLoggedIn ? "ring-amber-400" : "ring-transparent"}`}>
+            <div className={`w-9 h-9 rounded-full overflow-hidden flex-shrink-0 ring-2 transition-colors duration-200 ${isAdminLoggedIn ? "ring-amber-400" : "ring-transparent"}`}>
               <img src={`${import.meta.env.BASE_URL}sp-logo.png`} alt="Siisti Pesu logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <span className="font-bold text-foreground text-lg leading-tight block">Siisti Pesu</span>
+              <span className="font-bold text-foreground text-base leading-tight block">Siisti Pesu</span>
               <span className={`text-xs leading-tight block transition-colors duration-200 ${isAdminLoggedIn ? "text-amber-500 font-medium" : "text-muted-foreground"}`}>
                 {isAdminLoggedIn ? "Ylläpitotila" : "Varauspalvelu"}
               </span>
             </div>
           </button>
+
+          {/* Navigaatio desktop — näkyy vain etusivulla */}
+          {step === "service" && !isAdminLoggedIn && (
+            <nav className="hidden sm:flex items-center gap-1 ml-4">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors duration-150"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </nav>
+          )}
 
           <div className="ml-auto flex items-center gap-2">
             {showBackButton && (
@@ -157,8 +184,32 @@ export function BookingPage() {
                 Takaisin
               </button>
             )}
+
+            {step === "service" && !isAdminLoggedIn && (
+              <button
+                onClick={scrollToServices}
+                className="px-4 py-2 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-all duration-150 active:scale-95"
+              >
+                Varaa aika
+              </button>
+            )}
           </div>
         </div>
+
+        {/* Mobiilinavigaatio */}
+        {step === "service" && !isAdminLoggedIn && (
+          <div className="sm:hidden flex gap-2 px-4 pb-2 overflow-x-auto">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="flex-shrink-0 px-3 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg border border-border transition-colors duration-150"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+        )}
       </header>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
@@ -181,12 +232,22 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <Hero onBookClick={scrollToServices} />
-                  <PriceList />
-                  <div id="palvelut">
+
+                  <div id="hinnat" className="scroll-mt-20">
+                    <PriceList />
+                  </div>
+
+                  <div id="palvelut" className="scroll-mt-20">
                     <ServiceSelector onSelect={handleServiceSelect} />
                   </div>
-                  <FAQ />
-                  <AboutSection />
+
+                  <div id="ukk" className="scroll-mt-20">
+                    <FAQ />
+                  </div>
+
+                  <div id="meista" className="scroll-mt-20">
+                    <AboutSection />
+                  </div>
                 </motion.div>
               )}
 
