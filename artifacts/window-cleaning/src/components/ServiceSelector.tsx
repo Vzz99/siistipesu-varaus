@@ -87,30 +87,30 @@ export function ServiceSelector({ onSelect }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.22, delay: i * 0.07 }}
             onClick={() => onSelect(service.id)}
-            className="w-full text-left bg-card border border-card-border rounded-2xl p-5 hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group flex items-center gap-5"
+            className="w-full text-left bg-card border border-card-border rounded-2xl p-5 hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group"
           >
-            <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
-              {service.icon}
-            </div>
+            <div className="flex items-center gap-4">
+              {/* Ikoni */}
+              <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
+                {service.icon}
+              </div>
 
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-foreground text-lg leading-tight">{service.title}</p>
-              <p className="text-sm text-muted-foreground mt-0.5">{service.subtitle}</p>
-            </div>
-
-            <div className="flex-shrink-0 text-right">
-              <p className={`font-semibold text-sm ${service.priceNote ? "text-foreground" : "text-muted-foreground"}`}>
-                {service.price}
-              </p>
-              {service.priceNote && (
-                <p className="text-xs text-muted-foreground mt-0.5">{service.priceNote}</p>
-              )}
-            </div>
-
-            <div className="flex-shrink-0 ml-1">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50 group-hover:text-primary transition-colors duration-200">
-                <path d="m9 18 6-6-6-6"/>
-              </svg>
+              {/* Tekstit ja hinta */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-foreground text-lg leading-tight">{service.title}</p>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/50 group-hover:text-primary transition-colors duration-200 flex-shrink-0 mt-1">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </div>
+                <p className="text-sm text-muted-foreground mt-0.5">{service.subtitle}</p>
+                <p className={`text-sm font-medium mt-1.5 ${service.priceNote ? "text-foreground" : "text-muted-foreground"}`}>
+                  {service.price}
+                  {service.priceNote && (
+                    <span className="text-xs text-muted-foreground font-normal ml-1">({service.priceNote})</span>
+                  )}
+                </p>
+              </div>
             </div>
           </motion.button>
         ))}
