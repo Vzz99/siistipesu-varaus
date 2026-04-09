@@ -10,6 +10,7 @@ interface ServiceOption {
   icon: React.ReactNode;
   color: string;
   bgColor: string;
+  image?: string;
 }
 
 const services: ServiceOption[] = [
@@ -18,6 +19,7 @@ const services: ServiceOption[] = [
     title: "Ikkunanpesu",
     subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
     price: "Hinta ikkunatyypin mukaan",
+    image: "/worker.jpg",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="18" rx="2"/>
@@ -87,9 +89,21 @@ export function ServiceSelector({ onSelect }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.22, delay: i * 0.07 }}
             onClick={() => onSelect(service.id)}
-            className="w-full text-left bg-card border border-card-border rounded-2xl p-5 hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group"
+            className="w-full text-left bg-card border border-card-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group"
           >
-            <div className="flex items-center gap-4">
+            {/* Kuva ikkunanpesulle */}
+            {service.image && (
+              <div className="relative h-32 w-full overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+            )}
+
+            <div className="flex items-center gap-4 p-5">
               {/* Ikoni */}
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
                 {service.icon}
