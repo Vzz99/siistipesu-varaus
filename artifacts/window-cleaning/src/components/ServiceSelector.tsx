@@ -91,23 +91,21 @@ export function ServiceSelector({ onSelect }: Props) {
             onClick={() => onSelect(service.id)}
             className="w-full text-left bg-card border border-card-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group"
           >
-            {/* Kuva ikkunanpesulle */}
-            {service.image && (
-              <div className="relative h-32 w-full overflow-hidden">
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </div>
-            )}
-
-            <div className="flex items-center gap-4 p-5">
-              {/* Ikoni */}
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
-                {service.icon}
-              </div>
+            <div className="flex items-center gap-4 p-4">
+              {/* Kuva tai ikoni */}
+              {service.image ? (
+                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              ) : (
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
+                  {service.icon}
+                </div>
+              )}
 
               {/* Tekstit ja hinta */}
               <div className="flex-1 min-w-0">
