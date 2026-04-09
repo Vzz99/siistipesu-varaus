@@ -74,6 +74,7 @@ export function BookingPage() {
 
   function handleServiceSelect(service: ServiceType) {
     setServiceType(service);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (service === "ikkunanpesu") {
       setStep("select");
     } else {
@@ -94,6 +95,7 @@ export function BookingPage() {
     setBookingData(data);
     blockSlots(data.date, data.time);
     setEmailStatus("sending");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setStep("confirmation");
     try {
       await sendBookingEmail(data, serviceType!, windowCounts);
@@ -109,9 +111,11 @@ export function BookingPage() {
     setWindowCounts({});
     setBookingData(null);
     setEmailStatus("idle");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleBack() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (step === "select") setStep("service");
     else if (step === "booking") {
       if (serviceType === "ikkunanpesu") setStep("select");
@@ -261,7 +265,6 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
-                  {/* Työtekijäkuva */}
                   <div className="relative rounded-2xl overflow-hidden h-48 mb-8">
                     <img
                       src="/worker.jpg"
@@ -286,7 +289,10 @@ export function BookingPage() {
                           windowCounts={windowCounts}
                           travelFee={TRAVEL_FEE}
                           minimumCharge={MINIMUM_CHARGE}
-                          onProceed={() => setStep("booking")}
+                          onProceed={() => {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                            setStep("booking");
+                          }}
                         />
                       </div>
                     </div>
@@ -367,4 +373,3 @@ export function BookingPage() {
     </div>
   );
 }
-
