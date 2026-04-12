@@ -54,7 +54,7 @@ export function AboutSection() {
 
             {/* Yhteystiedot */}
             <div className="flex flex-wrap gap-3 mt-5">
-              <a href="tel:+358401234567"
+              <a href="tel:+358442431103"
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
                 style={{ background: "rgba(56,189,248,0.15)", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)" }}>
                 📞 Soita meille
