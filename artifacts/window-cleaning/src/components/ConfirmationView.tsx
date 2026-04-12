@@ -173,7 +173,41 @@ export function ConfirmationView({ bookingData, serviceType, windowCounts, trave
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
+        {/* Peruutusohjeet */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.36 }}
+          className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4">
+          <h2 className="font-semibold text-amber-800 mb-2 flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Varauksen peruutus
+          </h2>
+          <p className="text-sm text-amber-700 mb-3">
+            Jos haluat perua varauksesi, ota yhteyttä meihiin mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <a
+              href="tel:+358442431103"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 rounded-xl text-sm font-medium text-amber-800 hover:bg-amber-50 transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              Soita meille
+            </a>
+            <a
+              href="mailto:siisti.pesu@gmail.com"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-amber-300 rounded-xl text-sm font-medium text-amber-800 hover:bg-amber-50 transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              Lähetä sähköpostia
+            </a>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.44 }}>
           <button
             onClick={onReset}
             className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 shadow-sm"
