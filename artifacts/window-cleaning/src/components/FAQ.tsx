@@ -25,6 +25,10 @@ const QUESTIONS = [
     q: "Millä alueella toimitte?",
     a: "Palvelemme koko Uudenmaan alueella. Voit tarkistaa postinumerosi varauslomakkeesta.",
   },
+  {
+    q: "Miten perun varaukseni?",
+    a: "Varauksen voi perua ottamalla meihin yhteyttä puhelimitse tai sähköpostitse. Pyydämme peruuttamaan viimeistään 24 tuntia ennen sovittua aikaa. Ota yhteyttä: siisti.pesu@gmail.com",
+  },
 ];
 
 export function FAQ() {
