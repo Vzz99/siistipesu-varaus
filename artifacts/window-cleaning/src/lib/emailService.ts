@@ -4,6 +4,7 @@ import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/B
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+const TEMPLATE_ID_CUSTOMER = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CUSTOMER as string;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 const SERVICE_LABELS: Record<ServiceType, string> = {
@@ -39,6 +40,11 @@ function calcTotal(serviceType: ServiceType, windowCounts: WindowCounts): string
   return `${Math.max(windowsSubtotal + TRAVEL_FEE, MINIMUM_CHARGE).toFixed(2)} €`;
 }
 
+const CANCELLATION_INFO = `Jos haluat perua tai siirtää varauksesi, ota meihin yhteyttä mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.
+
+Sähköposti: siisti.pesu@gmail.com
+Puhelin: +358 44 243 1103`;
+
 export async function sendBookingEmail(
   bookingData: BookingData,
   serviceType: ServiceType,
@@ -58,7 +64,18 @@ export async function sendBookingEmail(
     travel_fee: isIkkunanpesu ? `${TRAVEL_FEE} €` : "-",
     total_price: calcTotal(serviceType, windowCounts),
     additional_info: bookingData.additionalInfo || "Ei lisätietoja",
+    cancellation_info: CANCELLATION_INFO,
   };
 
+  // Lähetä teille (yritykselle)
   await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+
+  // Lähetä asiakkaalle vahvistus jos asiakastemplate on määritetty
+  if (TEMPLATE_ID_CUSTOMER) {
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID_CUSTOMER, {
+      ...templateParams,
+      to_email: bookingData.email,
+      to_name: bookingData.name,
+    }, PUBLIC_KEY);
+  }
 }
