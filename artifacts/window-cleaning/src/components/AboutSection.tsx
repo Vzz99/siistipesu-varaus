@@ -16,7 +16,8 @@ export function AboutSection() {
                 <img
                   src="/team.jpg"
                   alt="Siisti Pesu tiimi"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: "center 20%" }}
                 />
               </div>
               <div className="mt-3 px-3 py-2 rounded-xl text-center text-xs"
@@ -66,28 +67,6 @@ export function AboutSection() {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Muotokuvat */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="aspect-[3/4] overflow-hidden">
-            <img src="/portrait1.jpg" alt="Tiimin jäsen" className="w-full h-full object-cover object-top" />
-          </div>
-          <div className="px-4 py-3">
-            <p className="font-semibold text-foreground">Lauri Huopainen</p>
-            <p className="text-sm text-muted-foreground">Ikkunanpesu & pihatyöt</p>
-          </div>
-        </div>
-        <div className="bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="aspect-[3/4] overflow-hidden">
-            <img src="/window-thumbs.jpg" alt="Tiimin jäsen" className="w-full h-full object-cover object-top" />
-          </div>
-          <div className="px-4 py-3">
-            <p className="font-semibold text-foreground">Valtteri Jutila</p>
-            <p className="text-sm text-muted-foreground">Ikkunanpesu & auton pesu</p>
           </div>
         </div>
       </div>
