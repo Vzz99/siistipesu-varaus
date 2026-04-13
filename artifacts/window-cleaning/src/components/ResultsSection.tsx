@@ -41,21 +41,6 @@ export function ResultsSection() {
           </div>
         ))}
       </div>
-      {/* Tiimikuva */}
-      <div className="mt-6 relative rounded-2xl overflow-hidden">
-        <img
-          src="/team.jpg"
-          alt="Siisti Pesu tiimi"
-          className="w-full h-64 object-cover"
-          style={{ objectPosition: "center 20%" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-          <div>
-            <p className="text-white font-bold text-lg">Valtteri & Lauri</p>
-            <p className="text-white/80 text-sm">Valmiina palvelemaan sinua Uudellamaalla</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
