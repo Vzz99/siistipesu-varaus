@@ -1,6 +1,6 @@
 const SERVICES = [
   {
-    icon: "🪟",
+    image: "/window-thumbs.jpg",
     title: "Ikkunanpesu",
     description: "Pesemme ikkunat huolellisesti sisältä ja ulkoa. Kaikki pinnat kiiltävät — ei jälkiä, ei tahroja.",
     includes: [
@@ -21,10 +21,9 @@ const SERVICES = [
       { label: "Ovi (lasillinen)", price: "11 €" },
       { label: "Korkeat ikkunat", price: "26 €" },
     ],
-    color: "blue",
   },
   {
-    icon: "🚗",
+    image: "/car-wash.jpg",
     title: "Auton ulkopesu",
     description: "Laadukas auton ulkopesu käsin. Auto kiiltää kuin uusi — huolellinen ja tarkka työ taattu.",
     includes: [
@@ -36,10 +35,9 @@ const SERVICES = [
     prices: [
       { label: "Auton ulkopesu", price: "30 €" },
     ],
-    color: "green",
   },
   {
-    icon: "🌿",
+    image: "/mowing.jpg",
     title: "Pihatyöt & muut palvelut",
     description: "Nurmikon leikkuu, pihatyöt ja muut kotitalouspalvelut. Hinta määräytyy työmäärän suuruuden ja haastavuuden mukaan.",
     includes: [
@@ -51,15 +49,8 @@ const SERVICES = [
     prices: [
       { label: "Hinta", price: "Sovitaan" },
     ],
-    color: "emerald",
   },
 ];
-
-const iconBgMap: Record<string, string> = {
-  blue: "bg-blue-100",
-  green: "bg-green-100",
-  emerald: "bg-emerald-100",
-};
 
 export function PriceList() {
   return (
@@ -78,8 +69,12 @@ export function PriceList() {
             className="bg-card border border-border rounded-2xl shadow-xs overflow-hidden flex flex-col"
           >
             <div className="px-5 py-5 border-b border-border">
-              <div className={`w-12 h-12 rounded-2xl ${iconBgMap[service.color]} flex items-center justify-center text-2xl mb-3`}>
-                {service.icon}
+              <div className="w-12 h-12 rounded-2xl overflow-hidden mb-3 flex-shrink-0">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="font-bold text-foreground text-lg">{service.title}</h3>
               <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{service.description}</p>
