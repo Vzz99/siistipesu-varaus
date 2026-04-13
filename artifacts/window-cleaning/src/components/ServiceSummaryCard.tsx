@@ -26,17 +26,15 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
           Yhteenveto
         </h3>
       </div>
-
       <div className="px-5 py-4 space-y-3">
         <div>
           <p className="text-xs text-muted-foreground mb-0.5">Palvelu</p>
           <p className="font-semibold text-foreground">{SERVICE_LABELS[serviceType]}</p>
         </div>
-
         <div className="border-t border-border pt-3">
           <p className="text-xs text-muted-foreground mb-0.5">Hinta</p>
           {isCarWash && (
-            <p className="text-2xl font-bold text-foreground tabular-nums">25,00 €</p>
+            <p className="text-2xl font-bold text-foreground tabular-nums">30,00 €</p>
           )}
           {isMuut && (
             <p className="font-semibold text-muted-foreground text-sm leading-snug">
@@ -44,7 +42,6 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
             </p>
           )}
         </div>
-
         {onProceed && (
           <button
             onClick={onProceed}
