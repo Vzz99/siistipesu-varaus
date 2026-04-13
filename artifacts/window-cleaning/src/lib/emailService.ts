@@ -4,7 +4,6 @@ import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/B
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
-const TEMPLATE_ID_CUSTOMER = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CUSTOMER as string;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 const SERVICE_LABELS: Record<ServiceType, string> = {
@@ -32,18 +31,13 @@ function buildWindowsList(windowCounts: WindowCounts): string {
 }
 
 function calcTotal(serviceType: ServiceType, windowCounts: WindowCounts): string {
-  if (serviceType === "auton_ulkopesu") return "25,00 €";
+  if (serviceType === "auton_ulkopesu") return "30,00 €";
   if (serviceType === "muut_palvelut") return "Sovitaan erikseen";
   const windowsSubtotal = WINDOW_TYPES
     .filter((w) => (windowCounts[w.id] ?? 0) > 0)
     .reduce((s, w) => s + w.price * windowCounts[w.id], 0);
   return `${Math.max(windowsSubtotal + TRAVEL_FEE, MINIMUM_CHARGE).toFixed(2)} €`;
 }
-
-const CANCELLATION_INFO = `Jos haluat perua tai siirtää varauksesi, ota meihin yhteyttä mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.
-
-Sähköposti: siisti.pesu@gmail.com
-Puhelin: +358 44 243 1103`;
 
 export async function sendBookingEmail(
   bookingData: BookingData,
@@ -64,18 +58,8 @@ export async function sendBookingEmail(
     travel_fee: isIkkunanpesu ? `${TRAVEL_FEE} €` : "-",
     total_price: calcTotal(serviceType, windowCounts),
     additional_info: bookingData.additionalInfo || "Ei lisätietoja",
-    cancellation_info: CANCELLATION_INFO,
+    cancellation_info: "Jos haluat perua tai siirtää varauksesi, ota meihin yhteyttä mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.\n\nSähköposti: siisti.pesu@gmail.com\nPuhelin: +358 44 243 1103",
   };
 
-  // Lähetä teille (yritykselle)
   await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-
-  // Lähetä asiakkaalle vahvistus jos asiakastemplate on määritetty
-  if (TEMPLATE_ID_CUSTOMER) {
-    await emailjs.send(SERVICE_ID, TEMPLATE_ID_CUSTOMER, {
-      ...templateParams,
-      to_email: bookingData.email,
-      to_name: bookingData.name,
-    }, PUBLIC_KEY);
-  }
 }
