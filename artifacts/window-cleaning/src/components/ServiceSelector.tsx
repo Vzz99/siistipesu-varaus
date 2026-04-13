@@ -7,10 +7,8 @@ interface ServiceOption {
   subtitle: string;
   price: string;
   priceNote?: string;
-  icon: React.ReactNode;
+  image: string;
   color: string;
-  bgColor: string;
-  image?: string;
 }
 
 const services: ServiceOption[] = [
@@ -19,16 +17,8 @@ const services: ServiceOption[] = [
     title: "Ikkunanpesu",
     subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
     price: "Hinta ikkunatyypin mukaan",
-    image: "/worker.jpg",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="18" rx="2"/>
-        <line x1="2" y1="12" x2="22" y2="12"/>
-        <line x1="12" y1="3" x2="12" y2="21"/>
-      </svg>
-    ),
+    image: "/window-thumbs.jpg",
     color: "text-primary",
-    bgColor: "bg-primary/10",
   },
   {
     id: "auton_ulkopesu",
@@ -36,31 +26,16 @@ const services: ServiceOption[] = [
     subtitle: "Pesu ulkoa, kiinteä hinta",
     price: "30 €",
     priceNote: "kiinteä hinta",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1"/>
-        <path d="M17 17h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1"/>
-        <path d="M5 9V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2"/>
-        <rect x="5" y="9" width="14" height="8" rx="2"/>
-        <circle cx="7.5" cy="17" r="2"/>
-        <circle cx="16.5" cy="17" r="2"/>
-      </svg>
-    ),
+    image: "/car-dirty.jpg",
     color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
   },
   {
     id: "muut_palvelut",
     title: "Muut palvelut",
     subtitle: "Nurmikon leikkuu, siivous yms.",
     price: "Hinta sovitaan erikseen",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-      </svg>
-    ),
+    image: "/mowing.jpg",
     color: "text-violet-600",
-    bgColor: "bg-violet-50",
   },
 ];
 
@@ -92,22 +67,16 @@ export function ServiceSelector({ onSelect }: Props) {
             className="w-full text-left bg-card border border-card-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md active:scale-[0.99] transition-all duration-200 group"
           >
             <div className="flex items-center gap-4 p-4">
-              {/* Kuva tai ikoni */}
-              {service.image ? (
-                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              ) : (
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 ${service.bgColor} ${service.color} transition-transform duration-200 group-hover:scale-105`}>
-                  {service.icon}
-                </div>
-              )}
+              {/* Kuva */}
+              <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
 
-              {/* Tekstit ja hinta */}
+              {/* Tekstit */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <p className="font-semibold text-foreground text-lg leading-tight">{service.title}</p>
