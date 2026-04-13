@@ -157,7 +157,7 @@ export function ConfirmationView({ bookingData, serviceType, windowCounts, trave
               <div className="border-t border-border pt-2 mt-2">
                 <div className="flex justify-between font-semibold">
                   <span>Yhteensä</span>
-                  <span className="text-xl tabular-nums">25,00 €</span>
+                  <span className="text-xl tabular-nums">30,00 €</span>
                 </div>
               </div>
             )}
