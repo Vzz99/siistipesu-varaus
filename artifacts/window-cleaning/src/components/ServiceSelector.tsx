@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { type ServiceType } from "@/pages/BookingPage";
-
 interface ServiceOption {
   id: ServiceType;
   title: string;
@@ -10,7 +9,6 @@ interface ServiceOption {
   image: string;
   color: string;
 }
-
 const services: ServiceOption[] = [
   {
     id: "ikkunanpesu",
@@ -26,7 +24,7 @@ const services: ServiceOption[] = [
     subtitle: "Pesu ulkoa, kiinteä hinta",
     price: "30 €",
     priceNote: "kiinteä hinta",
-    image: "/car-dirty.jpg",
+    image: "/car-wash.jpg",
     color: "text-emerald-600",
   },
   {
@@ -38,11 +36,9 @@ const services: ServiceOption[] = [
     color: "text-violet-600",
   },
 ];
-
 interface Props {
   onSelect: (service: ServiceType) => void;
 }
-
 export function ServiceSelector({ onSelect }: Props) {
   return (
     <div className="max-w-2xl mx-auto">
@@ -55,7 +51,6 @@ export function ServiceSelector({ onSelect }: Props) {
         <h1 className="text-3xl font-bold text-foreground mb-2">Valitse palvelu</h1>
         <p className="text-muted-foreground text-base">Mitä haluaisit tilata? Valitse alla olevista palveluista.</p>
       </motion.div>
-
       <div className="space-y-3">
         {services.map((service, i) => (
           <motion.button
@@ -75,7 +70,6 @@ export function ServiceSelector({ onSelect }: Props) {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-
               {/* Tekstit */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
