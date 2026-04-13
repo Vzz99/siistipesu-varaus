@@ -34,7 +34,7 @@ const SERVICES = [
       "Kaikki välineet mukanamme",
     ],
     prices: [
-      { label: "Auton ulkopesu", price: "25 €" },
+      { label: "Auton ulkopesu", price: "30 €" },
     ],
     color: "green",
   },
