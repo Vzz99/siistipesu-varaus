@@ -14,6 +14,7 @@ import { FAQ } from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
 import { PriceList } from "@/components/PriceList";
 import { ResultsSection } from "@/components/ResultsSection";
+import { ValuesSection } from "@/components/ValuesSection";
 import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
@@ -190,7 +191,6 @@ export function BookingPage() {
           )}
 
           <div className="ml-auto flex items-center gap-2">
-            {/* Tumma/vaalea teema -nappula */}
             <button
               onClick={() => setIsDark(!isDark)}
               className="w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:bg-muted transition-colors duration-150"
@@ -279,6 +279,10 @@ export function BookingPage() {
 
                   <div id="tulokset" className="scroll-mt-20">
                     <ResultsSection />
+                  </div>
+
+                  <div id="arvot" className="scroll-mt-20">
+                    <ValuesSection />
                   </div>
 
                   <div id="palvelut" className="scroll-mt-20">
