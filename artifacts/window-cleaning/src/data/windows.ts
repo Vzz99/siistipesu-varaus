@@ -1,4 +1,4 @@
-export type WindowCategory = "AVAUTUVAT" | "AVAUTUMATTOMAT" | "MUUT";
+export type WindowCategory = "AVAUTUVAT" | "AVAUTUMATTOMAT" | "MUUT" | "ULKOPESU";
 
 export interface WindowType {
   id: string;
@@ -19,10 +19,18 @@ export const WINDOW_TYPES: WindowType[] = [
   { id: "korkea", category: "MUUT", name: "Korkeat ikkunat", price: 26, description: "Vaikeasti saavutettavat korkeat ikkunat" },
 ];
 
+export const OUTDOOR_WINDOW_TYPES: WindowType[] = [
+  { id: "ulko-perus", category: "ULKOPESU", name: "Perusikkuna", price: 5, description: "Tavallinen ikkuna, ulkopinta" },
+  { id: "ulko-tuuletus", category: "ULKOPESU", name: "Tuuletusikkuna", price: 5, description: "Pieni tuuletusikkuna, ulkopinta" },
+  { id: "ulko-ryhma", category: "ULKOPESU", name: "Ikkunaryhmä", price: 8, description: "Useamman ikkunan ryhmä, ulkopinta" },
+  { id: "ulko-korkea", category: "ULKOPESU", name: "Korkea ikkuna", price: 7, description: "Vaikeasti saavutettava korkea ikkuna, ulkopinta" },
+];
+
 export const CATEGORY_LABELS: Record<WindowCategory, string> = {
   AVAUTUVAT: "Avautuvat ikkunat",
   AVAUTUMATTOMAT: "Avautumattomat ikkunat",
   MUUT: "Muut",
+  ULKOPESU: "Ulkopesun ikkunat",
 };
 
 export const CATEGORY_ORDER: WindowCategory[] = ["AVAUTUVAT", "AVAUTUMATTOMAT", "MUUT"];
