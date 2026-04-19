@@ -1,6 +1,7 @@
-import { WINDOW_TYPES, CATEGORY_LABELS, CATEGORY_ORDER, type WindowType } from "@/data/windows";
+import { WINDOW_TYPES, OUTDOOR_WINDOW_TYPES, CATEGORY_LABELS, CATEGORY_ORDER, type WindowType } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface Props {
   windowCounts: WindowCounts;
@@ -8,14 +9,65 @@ interface Props {
 }
 
 export function WindowSelector({ windowCounts, onCountChange }: Props) {
-  const grouped = CATEGORY_ORDER.map((cat) => ({
-    category: cat,
-    label: CATEGORY_LABELS[cat],
-    windows: WINDOW_TYPES.filter((w) => w.category === cat),
-  }));
+  const [washType, setWashType] = useState<"sisapesu" | "ulkopersu">("sisapesu");
+
+  function handleWashTypeChange(type: "sisapesu" | "ulkopersu") {
+    // Tyhjennä valinnat kun vaihdetaan tyyppiä
+    const allIds = [...WINDOW_TYPES, ...OUTDOOR_WINDOW_TYPES].map((w) => w.id);
+    allIds.forEach((id) => onCountChange(id, 0));
+    setWashType(type);
+  }
+
+  const isOutdoor = washType === "ulkopersu";
+
+  const grouped = isOutdoor
+    ? [{ category: "ULKOPESU" as const, label: "Ulkopesun ikkunat", windows: OUTDOOR_WINDOW_TYPES }]
+    : CATEGORY_ORDER.map((cat) => ({
+        category: cat,
+        label: CATEGORY_LABELS[cat],
+        windows: WINDOW_TYPES.filter((w) => w.category === cat),
+      }));
 
   return (
     <div className="space-y-5">
+      {/* Vaihtonappula */}
+      <div className="bg-card border border-card-border rounded-2xl p-1.5 flex gap-1">
+        <button
+          onClick={() => handleWashTypeChange("sisapesu")}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            !isOutdoor
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          🪟 Sisä- ja ulkopinnat
+        </button>
+        <button
+          onClick={() => handleWashTypeChange("ulkopersu")}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            isOutdoor
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          🏠 Vain ulkopinta
+        </button>
+      </div>
+
+      {/* Selite */}
+      <div className="px-1">
+        {isOutdoor ? (
+          <p className="text-xs text-muted-foreground">
+            Pelkkä ulkopinta pestään. Hinnat ovat alhaisemmat koska työ on nopeampaa.
+          </p>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            Ikkunat pestään sekä sisä- että ulkopuolelta. Karmit ja välit puhdistetaan.
+          </p>
+        )}
+      </div>
+
+      {/* Ikkunalistat */}
       {grouped.map(({ category, label, windows }) => (
         <div key={category} className="bg-card border border-card-border rounded-2xl overflow-hidden shadow-xs">
           <div className="px-5 py-3.5 border-b border-border bg-muted/40">
