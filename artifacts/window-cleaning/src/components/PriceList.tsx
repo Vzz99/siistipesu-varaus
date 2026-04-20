@@ -11,6 +11,7 @@ const SERVICES = [
       "Matkakulut 25 €",
       "Minimiveloitus 40 €",
     ],
+    note: null,
     prices: [
       { label: "4-pintainen ikkuna", price: "16 €" },
       { label: "6-pintainen ikkuna", price: "20 €" },
@@ -32,6 +33,7 @@ const SERVICES = [
       "Lasit puhdistetaan",
       "Kaikki välineet mukanamme",
     ],
+    note: "⚠️ Huom: Auton ulkopesua varten tarvitsemme pääsyn vesiliittymään (esim. pihaletku tai ulkovesipiste).",
     prices: [
       { label: "Auton ulkopesu", price: "30 €" },
     ],
@@ -46,6 +48,7 @@ const SERVICES = [
       "Kotitalouspalvelut",
       "Hinta sovitaan erikseen",
     ],
+    note: null,
     prices: [
       { label: "Hinta", price: "Sovitaan" },
     ],
@@ -78,6 +81,12 @@ export function PriceList() {
               </div>
               <h3 className="font-bold text-foreground text-lg">{service.title}</h3>
               <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{service.description}</p>
+              {service.note && (
+                <p className="text-xs mt-3 px-3 py-2 rounded-xl leading-relaxed"
+                  style={{ background: "rgba(245,158,11,0.1)", color: "#d97706", border: "1px solid rgba(245,158,11,0.25)" }}>
+                  {service.note}
+                </p>
+              )}
             </div>
 
             <div className="px-5 py-4 border-b border-border flex-1">
