@@ -82,8 +82,8 @@ export function PriceList() {
               <h3 className="font-bold text-foreground text-lg">{service.title}</h3>
               <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{service.description}</p>
               {service.note && (
-                <p className="text-xs mt-3 px-3 py-2 rounded-xl leading-relaxed"
-                  style={{ background: "rgba(245,158,11,0.1)", color: "#d97706", border: "1px solid rgba(245,158,11,0.25)" }}>
+                <p className="text-xs mt-3 px-3 py-2 rounded-xl leading-relaxed text-muted-foreground"
+                  style={{ background: "rgba(148,163,184,0.1)", border: "1px solid rgba(148,163,184,0.25)" }}>
                   {service.note}
                 </p>
               )}
