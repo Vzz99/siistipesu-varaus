@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 const QUESTIONS = [
   {
     q: "Pitääkö minun olla kotona palvelun aikana?",
@@ -15,7 +14,7 @@ const QUESTIONS = [
   },
   {
     q: "Tuotteko omat välineet?",
-    a: "Kyllä! Ikkunanpesussa tuomme mukanamme kaikki tarvittavat välineet — ämpäristä pesulastoihin ja pyyhkeisiin. Sinun ei tarvitse huolehtia mistään.",
+    a: "Kyllä! Ikkunanpesussa tuomme mukanamme kaikki tarvittavat välineet — ämpäristä pesulastoihin ja pyyhkeisiin. Sinun ei tarvitse huolehtia mistään. Auton ulkopesua varten tarvitsemme pääsyn vesiliittymään (esim. pihaletku tai ulkovesipiste).",
   },
   {
     q: "Onko palvelullanne takuu?",
@@ -30,10 +29,8 @@ const QUESTIONS = [
     a: "Varauksen voi perua ottamalla meihin yhteyttä puhelimitse tai sähköpostitse. Pyydämme peruuttamaan viimeistään 24 tuntia ennen sovittua aikaa. Ota yhteyttä: siisti.pesu@gmail.com",
   },
 ];
-
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
-
   return (
     <div className="mt-12 mb-8">
       <h2 className="text-3xl font-bold text-foreground text-center mb-8">
