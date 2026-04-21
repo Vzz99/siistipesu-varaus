@@ -1,6 +1,10 @@
 import { useState } from "react";
 const QUESTIONS = [
   {
+    q: "Voiko palvelusta saada kotitalousvähennyksen?",
+    a: "Kyllä! Ikkunanpesu, pihatyöt ja muut kotitalouspalvelumme ovat kotitalousvähennyskelpoisia. Voit vähentää osan työn kustannuksista verotuksessa. Annamme mielellämme tarvittavan kuitin verottajaa varten.",
+  },
+  {
     q: "Pitääkö minun olla kotona palvelun aikana?",
     a: "Suosittelemme, että käytät ajan esimerkiksi rentoutumiseen tai harrastuksiin — olet täysin vapaa! Voit olla kotona tai poissa, valinta on sinun.",
   },
