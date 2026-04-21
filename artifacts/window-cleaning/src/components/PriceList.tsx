@@ -11,7 +11,7 @@ const SERVICES = [
       "Matkakulut 25 €",
       "Minimiveloitus 40 €",
     ],
-    note: null,
+    note: "💡 Ikkunanpesu on kotitalousvähennyskelpoinen — voit vähentää osan kustannuksista verotuksessa.",
     prices: [
       { label: "4-pintainen ikkuna", price: "16 €" },
       { label: "6-pintainen ikkuna", price: "20 €" },
@@ -48,7 +48,7 @@ const SERVICES = [
       "Kotitalouspalvelut",
       "Hinta sovitaan erikseen",
     ],
-    note: null,
+    note: "💡 Pihatyöt ja kotitalouspalvelut ovat kotitalousvähennyskelpoisia — voit vähentää osan kustannuksista verotuksessa.",
     prices: [
       { label: "Hinta", price: "Sovitaan" },
     ],
