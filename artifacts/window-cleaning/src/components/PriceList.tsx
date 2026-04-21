@@ -11,7 +11,7 @@ const SERVICES = [
       "Matkakulut 25 €",
       "Minimiveloitus 40 €",
     ],
-    note: "💡 Ikkunanpesu on kotitalousvähennyskelpoinen — voit vähentää osan kustannuksista verotuksessa.",
+    note: null,
     prices: [
       { label: "4-pintainen ikkuna", price: "16 €" },
       { label: "6-pintainen ikkuna", price: "20 €" },
@@ -48,7 +48,7 @@ const SERVICES = [
       "Kotitalouspalvelut",
       "Hinta sovitaan erikseen",
     ],
-    note: "💡 Pihatyöt ja kotitalouspalvelut ovat kotitalousvähennyskelpoisia — voit vähentää osan kustannuksista verotuksessa.",
+    note: null,
     prices: [
       { label: "Hinta", price: "Sovitaan" },
     ],
@@ -114,6 +114,22 @@ export function PriceList() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Kotitalousvähennys-banneri */}
+      <div className="mt-6 flex items-center gap-4 px-5 py-4 rounded-2xl"
+        style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)" }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: "rgba(34,197,94,0.15)" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div>
+          <p className="font-semibold text-sm text-foreground">Kotitalousvähennyskelpoinen yritys</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Palvelumme oikeuttavat kotitalousvähennykseen — voit säästää jopa 40 % työn osuudesta verotuksessa. Annamme tarvittavan kuitin.</p>
+        </div>
       </div>
     </div>
   );
