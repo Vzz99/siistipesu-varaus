@@ -1,4 +1,4 @@
-import { WINDOW_TYPES } from "@/data/windows";
+import { WINDOW_TYPES, OUTDOOR_WINDOW_TYPES } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -17,7 +17,8 @@ export function PriceSummary({
   onProceed,
   compact,
 }: Props) {
-  const selectedItems = WINDOW_TYPES.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
+  const allWindowTypes = [...WINDOW_TYPES, ...OUTDOOR_WINDOW_TYPES];
+  const selectedItems = allWindowTypes.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
     window: w,
     count: windowCounts[w.id],
     subtotal: w.price * windowCounts[w.id],
@@ -26,6 +27,7 @@ export function PriceSummary({
   const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
   const subtotalWithTravel = windowsSubtotal + travelFee;
   const total = Math.max(subtotalWithTravel, minimumCharge);
+  const kotitalousHinta = Math.round(total * 0.6);
 
   const hasItems = selectedItems.length > 0;
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
@@ -108,17 +110,25 @@ export function PriceSummary({
         )}
 
         {hasItems && (
-          <div className="border-t border-border pt-3 flex justify-between items-baseline">
-            <span className="font-semibold text-foreground">Yhteensä</span>
-            <motion.span
-              key={total}
-              initial={{ scale: 1.1, color: "hsl(var(--primary))" }}
-              animate={{ scale: 1, color: "hsl(var(--foreground))" }}
-              transition={{ duration: 0.3 }}
-              className="text-2xl font-bold tabular-nums"
-            >
-              {total.toFixed(2)} €
-            </motion.span>
+          <div className="border-t border-border pt-3 space-y-1">
+            <div className="flex justify-between items-baseline">
+              <span className="font-semibold text-foreground">Yhteensä</span>
+              <motion.span
+                key={total}
+                initial={{ scale: 1.1, color: "hsl(var(--primary))" }}
+                animate={{ scale: 1, color: "hsl(var(--foreground))" }}
+                transition={{ duration: 0.3 }}
+                className="text-2xl font-bold tabular-nums"
+              >
+                {total.toFixed(2)} €
+              </motion.span>
+            </div>
+            <div className="flex justify-between items-baseline">
+              <span className="text-xs text-muted-foreground">Kotitalousvähennyksellä</span>
+              <span className="text-sm font-semibold tabular-nums" style={{ color: "#22c55e" }}>
+                n. {kotitalousHinta} €
+              </span>
+            </div>
           </div>
         )}
 
