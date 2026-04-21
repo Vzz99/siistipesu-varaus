@@ -128,7 +128,7 @@ export function PriceList() {
         </div>
         <div>
           <p className="font-semibold text-sm text-foreground">Kotitalousvähennyskelpoinen yritys</p>
-          <p className="text-xs text-muted-foreground mt-0.5">Palvelumme oikeuttavat kotitalousvähennykseen — voit säästää jopa 40 % työn osuudesta verotuksessa. Annamme tarvittavan kuitin.</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Palvelumme oikeuttavat kotitalousvähennykseen — voit säästää jopa 35 % työn osuudesta verotuksessa. Annamme tarvittavan kuitin.</p>
         </div>
       </div>
     </div>
