@@ -1,40 +1,58 @@
 import { useState, useCallback, useEffect } from "react";
 
-const STORAGE_KEY = "blocked_dates";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_mE84KA7ZDyy9bpR3oJwIigQ5x7v1Rhd1gP1EnSAR4HWOY-x5jeXtHTFyEfarPgmA/exec";
 
-function loadFromStorage(): Set<string> {
+async function fetchDates(): Promise<string[]> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? new Set(JSON.parse(raw)) : new Set();
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    return data.dates ?? [];
   } catch {
-    return new Set();
+    return [];
   }
 }
 
-function saveToStorage(dates: Set<string>) {
+async function toggleDateRemote(date: string): Promise<string[]> {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(dates)));
-  } catch {}
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ date }),
+    });
+    const data = await res.json();
+    return data.dates ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export function useBlockedDates() {
-  const [blockedDates, setBlockedDates] = useState<Set<string>>(() => loadFromStorage());
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setBlockedDates(loadFromStorage());
+    fetchDates().then((dates) => {
+      setBlockedDates(new Set(dates));
+      setLoading(false);
+    });
   }, []);
 
-  const toggleDate = useCallback((dateStr: string) => {
+  const toggleDate = useCallback(async (dateStr: string) => {
+    // Päivitä UI heti
     setBlockedDates((prev) => {
       const next = new Set(prev);
       if (next.has(dateStr)) next.delete(dateStr);
       else next.add(dateStr);
-      saveToStorage(next);
       return next;
     });
+    // Tallenna Sheetsiin
+    const newDates = await toggleDateRemote(dateStr);
+    setBlockedDates(new Set(newDates));
   }, []);
 
-  const isBlocked = useCallback((dateStr: string) => blockedDates.has(dateStr), [blockedDates]);
+  const isBlocked = useCallback(
+    (dateStr: string) => blockedDates.has(dateStr),
+    [blockedDates]
+  );
 
-  return { blockedDates, toggleDate, isBlocked };
+  return { blockedDates, toggleDate, isBlocked, loading };
 }
