@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0CpZd6Ur_HTWzreXhIaJoJHw89Opdn_3k3pQckjphe6KCc3E4gV1mtO9agCcI0WnV/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvuIufl83zYwHz4Q7xAnLkR-NNcx6bjT4LllKcPSOld2-AF8gDTPesM-8Owjru6emF/exec";
 
 async function fetchDates(): Promise<string[]> {
   try {
@@ -37,14 +37,12 @@ export function useBlockedDates() {
   }, []);
 
   const toggleDate = useCallback(async (dateStr: string) => {
-    // Päivitä UI heti
     setBlockedDates((prev) => {
       const next = new Set(prev);
       if (next.has(dateStr)) next.delete(dateStr);
       else next.add(dateStr);
       return next;
     });
-    // Tallenna Sheetsiin
     const newDates = await toggleDateRemote(dateStr);
     setBlockedDates(new Set(newDates));
   }, []);
