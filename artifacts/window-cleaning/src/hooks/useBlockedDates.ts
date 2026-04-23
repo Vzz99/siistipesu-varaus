@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvuIufl83zYwHz4Q7xAnLkR-NNcx6bjT4LllKcPSOld2-AF8gDTPesM-8Owjru6emF/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4wRphpFjDf5g4yY5i_AY66RQ7hXfVFXG5VkP_s1M_83KNG18bYyPTidvp8zfXla5p/exec";
 
 async function fetchDates(): Promise<string[]> {
   try {
@@ -16,7 +16,7 @@ async function toggleDateRemote(date: string): Promise<string[]> {
   try {
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ date }),
+      body: JSON.stringify({ action: "toggleDate", date }),
     });
     const data = await res.json();
     return data.dates ?? [];
