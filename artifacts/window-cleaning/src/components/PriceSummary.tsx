@@ -27,7 +27,7 @@ export function PriceSummary({
   const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
   const subtotalWithTravel = windowsSubtotal + travelFee;
   const total = Math.max(subtotalWithTravel, minimumCharge);
-  const kotitalousHinta = Math.round(total * 0.65);
+  const kotitalousHinta = Math.round(windowsSubtotal * 0.65) + travelFee;
 
   const hasItems = selectedItems.length > 0;
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
