@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-sSM0KXWo44LzLBLihiGJHnd89guhwngL5jXo3Ll2_wtGrfZz_lD2Ckiz2-SgOVwo/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4UdPSSVPBPRgheiwyld2itUp2yx_JXxaP_Imp7Gmkd4j5p3T1ufPPVEkGC4J1VaGi/exec";
 
 const TIME_SLOTS = [
   "08:00", "09:00", "10:00", "11:00", "12:00",
