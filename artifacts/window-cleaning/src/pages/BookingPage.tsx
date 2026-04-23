@@ -51,7 +51,7 @@ export function BookingPage() {
   });
 
   const { blockedDates, toggleDate } = useBlockedDates();
-  const { bookedSlots, blockSlots } = useBookedSlots();
+  const { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots } = useBookedSlots();
 
   const tapTimestamps = useRef<number[]>([]);
 
@@ -158,7 +158,6 @@ export function BookingPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-border shadow-xs">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-
           <button
             onClick={handleLogoTap}
             className="flex items-center gap-2.5 cursor-default select-none focus:outline-none"
@@ -260,6 +259,9 @@ export function BookingPage() {
               blockedDates={blockedDates}
               onToggleDate={toggleDate}
               onLogout={handleAdminLogout}
+              bookedSlots={bookedSlots}
+              onBlockSlots={blockSpecificSlots}
+              onUnblockSlots={unblockSpecificSlots}
             />
           ) : (
             <>
