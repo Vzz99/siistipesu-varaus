@@ -7,13 +7,16 @@ const TIME_SLOTS = [
   "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
 ];
 
-async function fetchSlots(): Promise<Record<string, string[]>> {
+async function fetchAllData(): Promise<{ dates: string[], slots: Record<string, string[]> }> {
   try {
-    const res = await fetch(SCRIPT_URL);
+    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
     const data = await res.json();
-    return data.slots ?? {};
+    return {
+      dates: data.dates ?? [],
+      slots: data.slots ?? {},
+    };
   } catch {
-    return {};
+    return { dates: [], slots: {} };
   }
 }
 
@@ -29,11 +32,18 @@ async function saveSlots(date: string, slots: string[]): Promise<void> {
 export function useBookedSlots() {
   const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>({});
 
-  useEffect(() => {
-    fetchSlots().then((slots) => {
+  const refresh = useCallback(() => {
+    fetchAllData().then(({ slots }) => {
       setBookedSlots(slots);
     });
   }, []);
+
+  useEffect(() => {
+    refresh();
+    // Päivitä joka 30 sekunti
+    const interval = setInterval(refresh, 30000);
+    return () => clearInterval(interval);
+  }, [refresh]);
 
   const blockSlots = useCallback(async (date: string, startTime: string) => {
     const startIdx = TIME_SLOTS.indexOf(startTime);
@@ -44,30 +54,30 @@ export function useBookedSlots() {
       const existing = prev[date] ?? [];
       const merged = Array.from(new Set([...existing, ...toBlock]));
       const next = { ...prev, [date]: merged };
-      saveSlots(date, merged);
+      saveSlots(date, merged).then(refresh);
       return next;
     });
-  }, []);
+  }, [refresh]);
 
   const blockSpecificSlots = useCallback(async (date: string, slots: string[]) => {
     setBookedSlots((prev) => {
       const existing = prev[date] ?? [];
       const merged = Array.from(new Set([...existing, ...slots]));
       const next = { ...prev, [date]: merged };
-      saveSlots(date, merged);
+      saveSlots(date, merged).then(refresh);
       return next;
     });
-  }, []);
+  }, [refresh]);
 
   const unblockSpecificSlots = useCallback(async (date: string, slots: string[]) => {
     setBookedSlots((prev) => {
       const existing = prev[date] ?? [];
       const filtered = existing.filter(s => !slots.includes(s));
       const next = { ...prev, [date]: filtered };
-      saveSlots(date, filtered);
+      saveSlots(date, filtered).then(refresh);
       return next;
     });
-  }, []);
+  }, [refresh]);
 
-  return { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots };
+  return { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, refresh };
 }
