@@ -28,21 +28,21 @@ async function saveSlots(date: string, slots: string[]): Promise<void> {
 
 export function useBookedSlots() {
   const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>({});
-  const [loaded, setLoaded] = useState(false);
 
-  // Hae vain kerran sivun latautuessa
   useEffect(() => {
-    fetchSlots().then((slots) => {
-      setBookedSlots(slots);
-      setLoaded(true);
-    });
+    fetchSlots().then(setBookedSlots);
+  }, []);
+
+  // Hae tuore data Sheetistä — kutsu tätä kun siirrytään varauslomakkeelle
+  const refreshSlots = useCallback(async () => {
+    const fresh = await fetchSlots();
+    setBookedSlots(fresh);
   }, []);
 
   const blockSlots = useCallback((date: string, startTime: string) => {
     const startIdx = TIME_SLOTS.indexOf(startTime);
     if (startIdx === -1) return;
     const toBlock = TIME_SLOTS.slice(startIdx, startIdx + 4);
-
     setBookedSlots((prev) => {
       const existing = prev[date] ?? [];
       const merged = Array.from(new Set([...existing, ...toBlock]));
@@ -69,5 +69,5 @@ export function useBookedSlots() {
     });
   }, []);
 
-  return { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, loaded };
+  return { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, refreshSlots };
 }
