@@ -51,7 +51,7 @@ export function BookingPage() {
   });
 
   const { blockedDates, toggleDate } = useBlockedDates();
-  const { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots } = useBookedSlots();
+  const { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, refreshSlots } = useBookedSlots();
 
   const tapTimestamps = useRef<number[]>([]);
 
@@ -64,6 +64,13 @@ export function BookingPage() {
       localStorage.setItem("theme", "light");
     }
   }, [isDark]);
+
+  // Hae tuore data aina kun siirrytään varauslomakkeelle
+  useEffect(() => {
+    if (step === "booking" || step === "select") {
+      refreshSlots();
+    }
+  }, [step, refreshSlots]);
 
   const handleLogoTap = useCallback(() => {
     if (isAdminLoggedIn) return;
@@ -274,27 +281,21 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <Hero onBookClick={scrollToServices} />
-
                   <div id="hinnat" className="scroll-mt-20">
                     <PriceList />
                   </div>
-
                   <div id="tulokset" className="scroll-mt-20">
                     <ResultsSection />
                   </div>
-
                   <div id="arvot" className="scroll-mt-20">
                     <ValuesSection />
                   </div>
-
                   <div id="palvelut" className="scroll-mt-20">
                     <ServiceSelector onSelect={handleServiceSelect} />
                   </div>
-
                   <div id="ukk" className="scroll-mt-20">
                     <FAQ />
                   </div>
-
                   <div id="meista" className="scroll-mt-20">
                     <AboutSection />
                   </div>
@@ -310,11 +311,7 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <div className="relative rounded-2xl overflow-hidden h-48 mb-8">
-                    <img
-                      src="/worker.jpg"
-                      alt="Ikkunanpesu työssä"
-                      className="w-full h-full object-cover object-top"
-                    />
+                    <img src="/worker.jpg" alt="Ikkunanpesu työssä" className="w-full h-full object-cover object-top" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                       <div>
                         <h1 className="text-3xl font-bold text-white mb-1">Ikkunanpesu</h1>
@@ -322,7 +319,6 @@ export function BookingPage() {
                       </div>
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                       <WindowSelector windowCounts={windowCounts} onCountChange={handleCountChange} />
