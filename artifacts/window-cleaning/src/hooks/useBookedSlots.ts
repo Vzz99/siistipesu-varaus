@@ -2,55 +2,72 @@ import { useState, useCallback, useEffect } from "react";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4wRphpFjDf5g4yY5i_AY66RQ7hXfVFXG5VkP_s1M_83KNG18bYyPTidvp8zfXla5p/exec";
 
-async function fetchDates(): Promise<string[]> {
+const TIME_SLOTS = [
+  "08:00", "09:00", "10:00", "11:00", "12:00",
+  "13:00", "14:00", "15:00", "16:00",
+];
+
+async function fetchSlots(): Promise<Record<string, string[]>> {
   try {
     const res = await fetch(SCRIPT_URL);
     const data = await res.json();
-    return data.dates ?? [];
+    return data.slots ?? {};
   } catch {
-    return [];
+    return {};
   }
 }
 
-async function toggleDateRemote(date: string): Promise<string[]> {
+async function saveSlots(date: string, slots: string[]): Promise<void> {
   try {
-    const res = await fetch(SCRIPT_URL, {
+    await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ action: "toggleDate", date }),
+      body: JSON.stringify({ action: "blockSlots", date, slots }),
     });
-    const data = await res.json();
-    return data.dates ?? [];
-  } catch {
-    return [];
-  }
+  } catch {}
 }
 
-export function useBlockedDates() {
-  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
+export function useBookedSlots() {
+  const [bookedSlots, setBookedSlots] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
-    fetchDates().then((dates) => {
-      setBlockedDates(new Set(dates));
-      setLoading(false);
+    fetchSlots().then((slots) => {
+      setBookedSlots(slots);
     });
   }, []);
 
-  const toggleDate = useCallback(async (dateStr: string) => {
-    setBlockedDates((prev) => {
-      const next = new Set(prev);
-      if (next.has(dateStr)) next.delete(dateStr);
-      else next.add(dateStr);
+  const blockSlots = useCallback(async (date: string, startTime: string) => {
+    const startIdx = TIME_SLOTS.indexOf(startTime);
+    if (startIdx === -1) return;
+    const toBlock = TIME_SLOTS.slice(startIdx, startIdx + 4);
+
+    setBookedSlots((prev) => {
+      const existing = prev[date] ?? [];
+      const merged = Array.from(new Set([...existing, ...toBlock]));
+      const next = { ...prev, [date]: merged };
+      saveSlots(date, merged);
       return next;
     });
-    const newDates = await toggleDateRemote(dateStr);
-    setBlockedDates(new Set(newDates));
   }, []);
 
-  const isBlocked = useCallback(
-    (dateStr: string) => blockedDates.has(dateStr),
-    [blockedDates]
-  );
+  const blockSpecificSlots = useCallback(async (date: string, slots: string[]) => {
+    setBookedSlots((prev) => {
+      const existing = prev[date] ?? [];
+      const merged = Array.from(new Set([...existing, ...slots]));
+      const next = { ...prev, [date]: merged };
+      saveSlots(date, merged);
+      return next;
+    });
+  }, []);
 
-  return { blockedDates, toggleDate, isBlocked, loading };
+  const unblockSpecificSlots = useCallback(async (date: string, slots: string[]) => {
+    setBookedSlots((prev) => {
+      const existing = prev[date] ?? [];
+      const filtered = existing.filter(s => !slots.includes(s));
+      const next = { ...prev, [date]: filtered };
+      saveSlots(date, filtered);
+      return next;
+    });
+  }, []);
+
+  return { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots };
 }
