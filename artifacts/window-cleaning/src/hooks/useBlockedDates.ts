@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxej3ApvlS4Rw2pdN2rcEZByHoHzHB4G7LKLF9ZleWDoF2m-o_n4ETyi_NCowqjblM4/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4uRczQ0oNB89XyNmxf8NBQ2nTyZtGBcsVi4ml04N9CYftW7Hx5CsE9y3r1CcGHFF6/exec";
 
 async function fetchDates(): Promise<string[]> {
   try {
