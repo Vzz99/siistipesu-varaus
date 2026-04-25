@@ -4,6 +4,7 @@ import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/B
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+const CUSTOMER_TEMPLATE_ID = "template_17328o9";
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 const SERVICE_LABELS: Record<ServiceType, string> = {
@@ -61,5 +62,9 @@ export async function sendBookingEmail(
     cancellation_info: "Jos haluat perua tai siirtää varauksesi, ota meihin yhteyttä mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.\n\nSähköposti: siisti.pesu@gmail.com\nPuhelin: +358 44 243 1103",
   };
 
+  // Lähetä ilmoitus sinulle
   await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+
+  // Lähetä vahvistus asiakkaalle
+  await emailjs.send(SERVICE_ID, CUSTOMER_TEMPLATE_ID, templateParams, PUBLIC_KEY);
 }
