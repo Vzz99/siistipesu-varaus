@@ -62,9 +62,9 @@ export async function sendBookingEmail(
     cancellation_info: "Jos haluat perua tai siirtää varauksesi, ota meihin yhteyttä mahdollisimman pian — mieluiten vähintään 24 tuntia ennen sovittua aikaa.\n\nSähköposti: siisti.pesu@gmail.com\nPuhelin: +358 44 243 1103",
   };
 
-  // Lähetä ilmoitus sinulle
-  await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
-
-  // Lähetä vahvistus asiakkaalle
-  await emailjs.send(SERVICE_ID, CUSTOMER_TEMPLATE_ID, templateParams, PUBLIC_KEY);
+  // Lähetä molemmat rinnakkain — toisen epäonnistuminen ei estä toista
+  await Promise.allSettled([
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY),
+    emailjs.send(SERVICE_ID, CUSTOMER_TEMPLATE_ID, templateParams, PUBLIC_KEY),
+  ]);
 }
