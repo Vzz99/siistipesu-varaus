@@ -1,5 +1,4 @@
 export type WindowCategory = "AVAUTUVAT" | "AVAUTUMATTOMAT" | "MUUT" | "ULKOPESU";
-
 export interface WindowType {
   id: string;
   category: WindowCategory;
@@ -7,7 +6,6 @@ export interface WindowType {
   price: number;
   description?: string;
 }
-
 export const WINDOW_TYPES: WindowType[] = [
   { id: "avautuva-4", category: "AVAUTUVAT", name: "4-pintainen ikkuna", price: 16, description: "Tavallinen avautuva ikkuna, 4 pintaa" },
   { id: "avautuva-6", category: "AVAUTUVAT", name: "6-pintainen ikkuna", price: 20, description: "Avautuva ikkuna, 6 pintaa" },
@@ -16,25 +14,22 @@ export const WINDOW_TYPES: WindowType[] = [
   { id: "ikkuna-ryhma", category: "AVAUTUVAT", name: "Ikkunaryhmä", price: 25, description: "Useamman ikkunan ryhmä" },
   { id: "avautumaton", category: "AVAUTUMATTOMAT", name: "Ikkuna", price: 11, description: "Kiinteä, avautumaton ikkuna" },
   { id: "ovi", category: "MUUT", name: "Ovi (lasillinen)", price: 11, description: "Lasillinen ovi" },
-  { id: "korkea", category: "MUUT", name: "Korkeat ikkunat", price: 26, description: "Vaikeasti saavutettavat korkeat ikkunat" },
+  { id: "korkea", category: "MUUT", name: "Korkeat ikkunat (3–5m)", price: 18, description: "Vaikeasti saavutettavat korkeat ikkunat, 3–5 metriä" },
+  { id: "lasikaide", category: "MUUT", name: "Lasikaide", price: 8, description: "Lasikaide" },
 ];
-
 export const OUTDOOR_WINDOW_TYPES: WindowType[] = [
   { id: "ulko-perus", category: "ULKOPESU", name: "Perusikkuna", price: 5, description: "Tavallinen ikkuna, ulkopinta" },
   { id: "ulko-tuuletus", category: "ULKOPESU", name: "Tuuletusikkuna", price: 5, description: "Pieni tuuletusikkuna, ulkopinta" },
   { id: "ulko-ryhma", category: "ULKOPESU", name: "Ikkunaryhmä", price: 8, description: "Useamman ikkunan ryhmä, ulkopinta" },
   { id: "ulko-korkea", category: "ULKOPESU", name: "Korkea ikkuna", price: 7, description: "Vaikeasti saavutettava korkea ikkuna, ulkopinta" },
 ];
-
 export const CATEGORY_LABELS: Record<WindowCategory, string> = {
   AVAUTUVAT: "Avautuvat ikkunat",
   AVAUTUMATTOMAT: "Avautumattomat ikkunat",
   MUUT: "Muut",
   ULKOPESU: "Ulkopesun ikkunat",
 };
-
 export const CATEGORY_ORDER: WindowCategory[] = ["AVAUTUVAT", "AVAUTUMATTOMAT", "MUUT"];
-
 export const TRAVEL_FEE = 25;
 export const MINIMUM_CHARGE = 40;
 export const DISCOUNT_OPTIONS = [0, 5, 10, 15, 20] as const;
