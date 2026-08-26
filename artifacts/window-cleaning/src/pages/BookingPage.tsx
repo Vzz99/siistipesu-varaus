@@ -22,7 +22,7 @@ import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { sendBookingEmail } from "@/lib/emailService";
 
 export type WindowCounts = Record<string, number>;
-export type ServiceType = "ikkunanpesu" | "auton_ulkopesu" | "muut_palvelut";
+export type ServiceType = "ikkunanpesu" | "auton_ulkopesu" | "muut_palvelut" | "lumityot";
 
 export interface BookingData {
   name: string;
