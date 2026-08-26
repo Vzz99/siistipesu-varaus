@@ -1,378 +1,428 @@
-import { useState } from "react";
-import { type BookingData, type ServiceType } from "@/pages/BookingPage";
-import { CalendarPicker } from "@/components/CalendarPicker";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { WindowSelector } from "@/components/WindowSelector";
+import { PriceSummary } from "@/components/PriceSummary";
+import { ServiceSummaryCard } from "@/components/ServiceSummaryCard";
+import { BookingForm } from "@/components/BookingForm";
+import { ConfirmationView } from "@/components/ConfirmationView";
+import { ServiceSelector } from "@/components/ServiceSelector";
+import { AdminPasswordModal } from "@/components/AdminPasswordModal";
+import { AdminPanel } from "@/components/AdminPanel";
+import { AboutSection } from "@/components/AboutSection";
+import { Footer } from "@/components/Footer";
+import { FAQ } from "@/components/FAQ";
+import { Hero } from "@/components/Hero";
+import { CampaignBanner } from "@/components/CampaignBanner";
+import { HowItWorks } from "@/components/HowItWorks";
+import { PriceList } from "@/components/PriceList";
+import { ResultsSection } from "@/components/ResultsSection";
+import { ValuesSection } from "@/components/ValuesSection";
+import { useBlockedDates } from "@/hooks/useBlockedDates";
+import { useBookedSlots } from "@/hooks/useBookedSlots";
+import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
+import { sendBookingEmail } from "@/lib/emailService";
 
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
-const RED = "#dc2626";
+export type WindowCounts = Record<string, number>;
+export type ServiceType = "ikkunanpesu" | "auton_ulkopesu" | "muut_palvelut" | "lumityot";
 
-interface Props {
-  onSubmit: (data: BookingData) => void;
-  blockedDates?: Set<string>;
-  bookedSlots?: Record<string, string[]>;
-  serviceType?: ServiceType;
+export interface BookingData {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  date: string;
+  time: string;
+  additionalInfo: string;
 }
 
-const TIME_SLOTS = [
-  "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
-];
+export type Step = "service" | "select" | "booking" | "confirmation";
 
-// Arkisin (ma–pe) vain koulun jälkeen; viikonloppuisin koko päivä.
-function slotsForDate(dateStr: string): string[] {
-  if (!dateStr) return TIME_SLOTS;
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const day = new Date(y, m - 1, d).getDay(); // 0 = su, 6 = la
-  const isWeekend = day === 0 || day === 6;
-  if (isWeekend) return TIME_SLOTS;
-  return TIME_SLOTS.filter((t) => t >= "16:00");
-}
+const TAP_WINDOW_MS = 1800;
+const TAPS_REQUIRED = 5;
 
-const MONTH_NAMES = [
-  "Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu",
-  "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu",
-];
+export function BookingPage() {
+  const [step, setStep] = useState<Step>("service");
+  const [serviceType, setServiceType] = useState<ServiceType | null>(null);
+  const [windowCounts, setWindowCounts] = useState<WindowCounts>({});
+  const [bookingData, setBookingData] = useState<BookingData | null>(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-// Noin 5 km säteellä Kauniaisista — lumityöt
-const SNOW_POSTAL_CODES = new Set([
-  "02700", "02701", // Kauniainen
-  "02710",          // Viherlaakso
-  "02720",          // Lähderanta
-  "02730",          // Jupperi
-  "02740",          // Bemböle-Pakankylä
-  "02750",          // Sepänkylä-Kuurinniitty
-  "02760",          // Tuomarila-Suvela
-  "02770",          // Espoon keskus
-  "02600",          // Leppävaara
-  "02610",          // Kilo
-  "02620",          // Karakallio
-  "02630",          // Nihtisilta
-  "02650",          // Pohjois-Leppävaara
-  "02660",          // Lintuvaara
-  "02680",          // Uusmäki
-  "02940",          // Lippajärvi-Järvenperä
-]);
+  const { blockedDates, toggleDate } = useBlockedDates();
+  const { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, refreshSlots } = useBookedSlots();
 
-function formatDateFi(dateStr: string): string {
-  if (!dateStr) return "";
-  const [y, m, d] = dateStr.split("-").map(Number);
-  return `${d}. ${MONTH_NAMES[m - 1]} ${y}`;
-}
+  const tapTimestamps = useRef<number[]>([]);
 
-function isValidUusimaanPostalCode(code: string): boolean {
-  const num = parseInt(code, 10);
-  return code.length === 5 && num >= 100 && num <= 9999;
-}
+  // Varmistetaan ettei tumma teema jää päälle vanhoista asetuksista
+  useEffect(() => {
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem("theme");
+  }, []);
 
-export function BookingForm({
-  onSubmit,
-  blockedDates = new Set(),
-  bookedSlots = {},
-  serviceType,
-}: Props) {
-  const isSnow = serviceType === "lumityot";
+  // Hae tuore aikatieto kun siirrytään varaukseen
+  useEffect(() => {
+    if (step === "booking" || step === "select") {
+      refreshSlots?.();
+    }
+  }, [step, refreshSlots]);
 
-  const [form, setForm] = useState<BookingData & { postalCode: string }>({
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
-    postalCode: "",
-    date: "",
-    time: "",
-    additionalInfo: "",
-  });
-  const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
-  const [showCalendar, setShowCalendar] = useState(false);
+  const handleLogoTap = useCallback(() => {
+    if (isAdminLoggedIn) return;
+    const now = Date.now();
+    tapTimestamps.current = [...tapTimestamps.current, now].filter(
+      (t) => now - t < TAP_WINDOW_MS
+    );
+    if (tapTimestamps.current.length >= TAPS_REQUIRED) {
+      tapTimestamps.current = [];
+      setShowPasswordModal(true);
+    }
+  }, [isAdminLoggedIn]);
 
-  function handleChange(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+  function handleAdminLogin() {
+    setShowPasswordModal(false);
+    setIsAdminLoggedIn(true);
+  }
+
+  function handleAdminLogout() {
+    setIsAdminLoggedIn(false);
+  }
+
+  function handleServiceSelect(service: ServiceType) {
+    setServiceType(service);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (service === "ikkunanpesu") {
+      setStep("select");
+    } else {
+      setStep("booking");
     }
   }
 
-  function handleDateSelect(dateStr: string) {
-    setForm((prev) => {
-      const allowed = slotsForDate(dateStr);
-      const keepTime = allowed.includes(prev.time) ? prev.time : "";
-      return { ...prev, date: dateStr, time: keepTime };
+  function handleCountChange(windowId: string, count: number) {
+    setWindowCounts((prev) => {
+      const next = { ...prev };
+      if (count <= 0) delete next[windowId];
+      else next[windowId] = count;
+      return next;
     });
-    if (errors.date) setErrors((prev) => ({ ...prev, date: undefined }));
-    setShowCalendar(false);
   }
 
-  function validate(): boolean {
-    const e: Partial<Record<string, string>> = {};
-    if (!form.name.trim()) e.name = "Nimi on pakollinen";
-    if (!form.phone.trim()) e.phone = "Puhelinnumero on pakollinen";
-    if (!form.email.trim()) e.email = "Sähköposti on pakollinen";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Tarkista sähköpostiosoite";
-    if (!form.address.trim()) e.address = "Osoite on pakollinen";
-
-    if (!form.postalCode.trim()) {
-      e.postalCode = "Postinumero on pakollinen";
-    } else if (isSnow) {
-      if (!SNOW_POSTAL_CODES.has(form.postalCode)) {
-        e.postalCode =
-          "Lumityöt vain 5 km säteellä Kauniaisista. Ota yhteyttä, jos asut lähialueella.";
-      }
-    } else if (!isValidUusimaanPostalCode(form.postalCode)) {
-      e.postalCode = "Palvelemme vain Uudenmaan alueella (00100–09999)";
-    }
-
-    if (!form.date) e.date = "Valitse päivämäärä";
-    else if (blockedDates.has(form.date)) e.date = "Tämä päivä ei ole saatavilla";
-    if (!form.time) e.time = "Valitse aika";
-    else if (form.date && !slotsForDate(form.date).includes(form.time))
-      e.time = "Valitse sallittu aika";
-
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  }
-
-  function handleSubmit(ev: React.FormEvent) {
-    ev.preventDefault();
-    if (validate()) {
-      onSubmit({
-        name: form.name,
-        phone: form.phone,
-        email: form.email,
-        address: `${form.address}, ${form.postalCode}`,
-        date: form.date,
-        time: form.time,
-        additionalInfo: form.additionalInfo,
-      });
+  async function handleBookingSubmit(data: BookingData) {
+    setBookingData(data);
+    blockSlots(data.date, data.time);
+    setEmailStatus("sending");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setStep("confirmation");
+    try {
+      await sendBookingEmail(data, serviceType!, windowCounts);
+      setEmailStatus("sent");
+    } catch {
+      setEmailStatus("error");
     }
   }
+
+  function handleReset() {
+    setStep("service");
+    setServiceType(null);
+    setWindowCounts({});
+    setBookingData(null);
+    setEmailStatus("idle");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handleBack() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (step === "select") setStep("service");
+    else if (step === "booking") {
+      if (serviceType === "ikkunanpesu") setStep("select");
+      else setStep("service");
+    }
+  }
+
+  const showBackButton = !isAdminLoggedIn && (step === "select" || step === "booking");
+
+  function scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function scrollToServices() {
+    scrollTo("palvelut");
+  }
+
+  const navLinks = [
+    { label: "Näin se toimii", id: "miten" },
+    { label: "Palvelut & hinnat", id: "hinnat" },
+    { label: "Tulokset", id: "tulokset" },
+    { label: "Usein kysytyt", id: "ukk" },
+    { label: "Meistä", id: "meista" },
+  ];
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl bg-white overflow-hidden"
-      style={{ border: `1px solid ${BORDER}` }}
-    >
-      <div className="px-5 sm:px-6 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <h2 className="font-bold text-base" style={{ color: DARK }}>
-          Yhteystiedot
-        </h2>
-      </div>
-
-      <div className="px-5 sm:px-6 py-6 space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <Field label="Nimi *" error={errors.name}>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-              placeholder="Etunimi Sukunimi"
-              className={inputClass(!!errors.name)}
-            />
-          </Field>
-
-          <Field label="Puhelinnumero *" error={errors.phone}>
-            <input
-              type="tel"
-              value={form.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-              placeholder="040 123 4567"
-              className={inputClass(!!errors.phone)}
-            />
-          </Field>
-        </div>
-
-        <Field label="Sähköposti *" error={errors.email}>
-          <input
-            type="email"
-            value={form.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            placeholder="nimi@esimerkki.fi"
-            className={inputClass(!!errors.email)}
-          />
-        </Field>
-
-        <div className="grid grid-cols-1 sm:grid-cols-[1.6fr_1fr] gap-5">
-          <Field label="Katuosoite *" error={errors.address}>
-            <input
-              type="text"
-              value={form.address}
-              onChange={(e) => handleChange("address", e.target.value)}
-              placeholder="Esimerkkikatu 1, Espoo"
-              className={inputClass(!!errors.address)}
-            />
-          </Field>
-
-          <Field label="Postinumero *" error={errors.postalCode}>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={form.postalCode}
-              onChange={(e) =>
-                handleChange("postalCode", e.target.value.replace(/\D/g, "").slice(0, 5))
-              }
-              placeholder="02700"
-              maxLength={5}
-              className={inputClass(!!errors.postalCode)}
-            />
-          </Field>
-        </div>
-
-        {isSnow && (
-          <div
-            className="text-xs leading-relaxed px-3.5 py-3 rounded-xl"
-            style={{ background: "#eff6ff", color: "#1e40af" }}
+    <div className="min-h-screen flex flex-col" style={{ background: "#ffffff" }}>
+      <header
+        className="sticky top-0 z-40"
+        style={{
+          background: "rgba(255,255,255,0.85)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid #e2e8f0",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
+          <button
+            onClick={handleLogoTap}
+            className="flex items-center gap-2.5 cursor-default select-none focus:outline-none"
+            tabIndex={-1}
+            aria-label="Logo"
           >
-            Lumityöt tehdään 5 km säteellä Kauniaisista — Kauniainen, Viherlaakso,
-            Leppävaara, Kilo, Karakallio, Espoon keskus ja lähialueet.
-          </div>
-        )}
-      </div>
-
-      <div className="px-5 sm:px-6 py-6" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <h2 className="font-bold text-base mb-1.5" style={{ color: DARK }}>
-          Aika
-        </h2>
-        <p className="text-xs mb-5 leading-relaxed" style={{ color: GRAY }}>
-          Arkisin palvelemme klo 16–19 (koulun jälkeen), viikonloppuisin klo 8–19.
-        </p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <Field label="Päivämäärä *" error={errors.date}>
-            <button
-              type="button"
-              onClick={() => setShowCalendar((v) => !v)}
-              className={`${inputClass(!!errors.date)} text-left flex items-center justify-between gap-2`}
-            >
-              <span style={{ color: form.date ? DARK : "#94a3b8" }}>
-                {form.date ? formatDateFi(form.date) : "Valitse päivä..."}
-              </span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GRAY} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-            </button>
-          </Field>
-
-          <Field label="Kellonaika *" error={errors.time}>
             <div
-              className="grid grid-cols-3 gap-1.5 p-1.5 rounded-xl"
-              style={{ border: `1px solid ${errors.time ? RED : BORDER}` }}
+              className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 transition-all duration-200"
+              style={{
+                boxShadow: isAdminLoggedIn ? "0 0 0 2px #f59e0b" : "none",
+              }}
             >
-              {!form.date && (
-                <p className="col-span-3 text-xs text-center py-2" style={{ color: GRAY }}>
-                  Valitse ensin päivämäärä
-                </p>
-              )}
-              {form.date && slotsForDate(form.date).map((slot) => {
-                const blocked = (bookedSlots[form.date] ?? []).includes(slot);
-                const selected = form.time === slot;
-                return (
-                  <button
-                    key={slot}
-                    type="button"
-                    disabled={blocked}
-                    onClick={() => !blocked && handleChange("time", slot)}
-                    title={blocked ? "Aika varattu" : slot}
-                    className="py-2 rounded-lg text-sm font-semibold transition-all duration-150 select-none"
-                    style={
-                      blocked
-                        ? { background: "#f8fafc", color: "#cbd5e1", textDecoration: "line-through", cursor: "not-allowed" }
-                        : selected
-                        ? { background: DARK, color: "#ffffff" }
-                        : { color: DARK, cursor: "pointer" }
-                    }
-                  >
-                    {slot}
-                  </button>
-                );
-              })}
+              <img
+                src={`${import.meta.env.BASE_URL}sp-logo.png`}
+                alt="Siisti Pesu logo"
+                className="w-full h-full object-cover"
+              />
             </div>
-          </Field>
-        </div>
+            <div>
+              <span className="font-bold text-base leading-tight block" style={{ color: "#0f172a" }}>
+                Siisti Pesu
+              </span>
+              <span
+                className="text-xs leading-tight block"
+                style={{ color: isAdminLoggedIn ? "#d97706" : "#64748b" }}
+              >
+                {isAdminLoggedIn ? "Ylläpitotila" : "Varauspalvelu"}
+              </span>
+            </div>
+          </button>
 
-        {showCalendar && (
-          <div
-            className="mt-4 p-4 rounded-2xl bg-white"
-            style={{ border: `1px solid ${BORDER}`, boxShadow: "0 8px 24px rgba(15,23,42,0.07)" }}
-          >
-            <CalendarPicker
-              selectedDate={form.date}
-              onSelectDate={handleDateSelect}
-              blockedDates={blockedDates}
-              allowPast={false}
-              mode="booking"
-            />
-            {blockedDates.size > 0 && (
-              <p className="text-xs mt-3" style={{ color: GRAY }}>
-                Yliviivatut päivät eivät ole saatavilla.
-              </p>
+          {step === "service" && !isAdminLoggedIn && (
+            <nav className="hidden md:flex items-center gap-1 ml-6">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150 hover:bg-slate-100"
+                  style={{ color: "#475569" }}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </nav>
+          )}
+
+          <div className="ml-auto flex items-center gap-3">
+            {showBackButton && (
+              <button
+                onClick={handleBack}
+                className="text-sm font-medium transition-colors flex items-center gap-1.5 hover:opacity-70"
+                style={{ color: "#475569" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+                Takaisin
+              </button>
+            )}
+            {step === "service" && !isAdminLoggedIn && (
+              <button
+                onClick={scrollToServices}
+                className="px-4 py-2 text-sm font-semibold rounded-xl text-white transition-all duration-150 hover:opacity-90 active:scale-95"
+                style={{ background: "#0f172a" }}
+              >
+                Varaa aika
+              </button>
             )}
           </div>
+        </div>
+
+        {step === "service" && !isAdminLoggedIn && (
+          <div className="md:hidden flex gap-2 px-4 pb-2.5 overflow-x-auto">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="flex-shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150"
+                style={{ color: "#475569", border: "1px solid #e2e8f0" }}
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
         )}
-      </div>
+      </header>
 
-      <div className="px-5 sm:px-6 py-6" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <Field label="Lisätiedot (valinnainen)">
-          <textarea
-            value={form.additionalInfo}
-            onChange={(e) => handleChange("additionalInfo", e.target.value)}
-            placeholder={
-              isSnow
-                ? "Esim. pihan koko, kulkuohjeet — mainitse tässä myös jos haluat kausikortin."
-                : "Esim. kulkuohjeet, erityistoiveet, avainten sijainti..."
-            }
-            rows={3}
-            className={`${inputClass(false)} resize-none`}
-          />
-        </Field>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+        <AnimatePresence mode="wait">
+          {isAdminLoggedIn ? (
+            <AdminPanel
+              key="admin"
+              blockedDates={blockedDates}
+              onToggleDate={toggleDate}
+              onLogout={handleAdminLogout}
+              bookedSlots={bookedSlots}
+              onBlockSlots={blockSpecificSlots}
+              onUnblockSlots={unblockSpecificSlots}
+            />
+          ) : (
+            <>
+              {step === "service" && (
+                <motion.div
+                  key="service"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.22 }}
+                >
+                  <CampaignBanner onClick={scrollToServices} />
 
-        <button
-          type="submit"
-          className="mt-5 w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-          style={{ background: DARK }}
-        >
-          Vahvista varaus
-        </button>
-      </div>
-    </form>
-  );
-}
+                  <Hero onBookClick={scrollToServices} />
 
-function inputClass(hasError: boolean) {
-  return `w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-colors duration-150 bg-white border ${
-    hasError
-      ? "border-red-500 focus:border-red-500"
-      : "border-slate-200 focus:border-blue-600"
-  }`;
-}
+                  <div id="miten" className="scroll-mt-24">
+                    <HowItWorks onStartClick={scrollToServices} />
+                  </div>
 
-interface FieldProps {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}
+                  <div id="hinnat" className="scroll-mt-24">
+                    <PriceList />
+                  </div>
 
-function Field({ label, error, children }: FieldProps) {
-  return (
-    <div className="space-y-1.5">
-      <label className="text-sm font-semibold block" style={{ color: DARK }}>
-        {label}
-      </label>
-      {children}
-      {error && (
-        <p className="text-xs flex items-start gap-1.5 leading-snug" style={{ color: RED }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 mt-0.5">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span>{error}</span>
-        </p>
-      )}
+                  <div id="tulokset" className="scroll-mt-24">
+                    <ResultsSection />
+                  </div>
+
+                  <div id="arvot" className="scroll-mt-24">
+                    <ValuesSection />
+                  </div>
+
+                  <div id="palvelut" className="scroll-mt-24">
+                    <ServiceSelector onSelect={handleServiceSelect} />
+                  </div>
+
+                  <div id="ukk" className="scroll-mt-24">
+                    <FAQ />
+                  </div>
+
+                  <div id="meista" className="scroll-mt-24">
+                    <AboutSection />
+                  </div>
+                </motion.div>
+              )}
+
+              {step === "select" && serviceType === "ikkunanpesu" && (
+                <motion.div
+                  key="select"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.22 }}
+                >
+                  <div className="mb-8">
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                      Ikkunanpesu
+                    </h1>
+                    <p className="text-base" style={{ color: "#475569" }}>
+                      Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                      <WindowSelector windowCounts={windowCounts} onCountChange={handleCountChange} />
+                    </div>
+                    <div className="lg:col-span-1">
+                      <div className="sticky top-24">
+                        <PriceSummary
+                          windowCounts={windowCounts}
+                          travelFee={TRAVEL_FEE}
+                          minimumCharge={MINIMUM_CHARGE}
+                          onProceed={() => {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                            setStep("booking");
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {step === "booking" && serviceType && (
+                <motion.div
+                  key="booking"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.22 }}
+                >
+                  <div className="mb-8">
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                      Varauksen tiedot
+                    </h1>
+                    <p className="text-base" style={{ color: "#475569" }}>
+                      Täytä yhteystietosi ja valitse sopiva aika.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                      <BookingForm
+                        onSubmit={handleBookingSubmit}
+                        blockedDates={blockedDates}
+                        bookedSlots={bookedSlots}
+                        serviceType={serviceType}
+                      />
+                    </div>
+                    <div className="lg:col-span-1">
+                      <div className="sticky top-24">
+                        {serviceType === "ikkunanpesu" ? (
+                          <PriceSummary
+                            windowCounts={windowCounts}
+                            travelFee={TRAVEL_FEE}
+                            minimumCharge={MINIMUM_CHARGE}
+                            compact
+                          />
+                        ) : (
+                          <ServiceSummaryCard serviceType={serviceType} />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {step === "confirmation" && bookingData && serviceType && (
+                <motion.div
+                  key="confirmation"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.22 }}
+                >
+                  <ConfirmationView
+                    bookingData={bookingData}
+                    serviceType={serviceType}
+                    windowCounts={windowCounts}
+                    travelFee={TRAVEL_FEE}
+                    minimumCharge={MINIMUM_CHARGE}
+                    emailStatus={emailStatus}
+                    onReset={handleReset}
+                  />
+                </motion.div>
+              )}
+            </>
+          )}
+        </AnimatePresence>
+      </main>
+
+      <Footer />
+
+      <AdminPasswordModal
+        open={showPasswordModal}
+        onSuccess={handleAdminLogin}
+        onCancel={() => setShowPasswordModal(false)}
+      />
     </div>
   );
 }
