@@ -1,73 +1,136 @@
+import { motion } from "framer-motion";
+
+const BLUE = "#2563eb";
+const DARK = "#0f172a";
+const GRAY = "#64748b";
+const BORDER = "#e2e8f0";
+
+const STATS = [
+  { value: "2026", label: "Perustettu" },
+  { value: "4H", label: "Yritysmuoto" },
+  { value: "Uusimaa", label: "Palvelualue" },
+];
+
 export function AboutSection() {
   return (
-    <div className="mt-8 space-y-6">
-      {/* Pääosio */}
-      <div className="rounded-3xl overflow-hidden" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)" }}>
-        <div className="relative px-6 sm:px-10 py-10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-1 h-8 rounded-full" style={{ background: "#38bdf8" }} />
-            <h2 className="text-2xl font-bold text-white">Meistä</h2>
+    <div className="mb-20 sm:mb-24">
+      <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-14 items-center">
+
+        {/* Kuva */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.55 }}
+          className="order-1"
+        >
+          <div
+            className="rounded-3xl overflow-hidden"
+            style={{ aspectRatio: "4 / 5", background: "#f1f5f9" }}
+          >
+            <img
+              src="/team.jpg"
+              alt="Valtteri Jutila ja Lauri Huopainen"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: "center 20%" }}
+            />
           </div>
+        </motion.div>
 
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
-            {/* Tiimikuva */}
-            <div className="lg:w-80 flex-shrink-0">
-              <div className="rounded-2xl overflow-hidden aspect-[4/3]">
-                <img
-                  src="/team.jpg"
-                  alt="Siisti Pesu tiimi"
-                  className="w-full h-full object-cover"
-                  style={{ objectPosition: "center 20%" }}
-                />
-              </div>
-              <div className="mt-3 px-3 py-2 rounded-xl text-center text-xs"
-                style={{ background: "rgba(56,189,248,0.15)", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)" }}>
-                Valtteri Jutila & Lauri Huopainen
-              </div>
-            </div>
+        {/* Teksti */}
+        <div className="order-2">
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.4 }}
+            className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
+            style={{ color: BLUE }}
+          >
+            Meistä
+          </motion.p>
 
-            {/* Teksti */}
-            <div className="flex-1">
-              <h3 className="font-bold text-xl text-white mb-1">Valtteri Jutila & Lauri Huopainen</h3>
-              <p className="text-sm font-medium mb-4" style={{ color: "#38bdf8" }}>Nuoret yrittäjät — Siisti Pesu</p>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: "#94a3b8" }}>
-                Olemme kaksi 15-vuotiasta yrittäjää Uudeltamaalta. Perustimme Siisti Pesun vuonna 2026
-                vähäisen kesätyötarjonnan takia — yrittäjyys on aina kiehtonut meitä molempia.
-                Olemme 4H-yritys joka tarjoaa ikkunanpesua, auton ulkopesua, nurmikon leikkuuta
-                ja muita kodin palveluja. Vaikka olemme nuoria, hoidamme jokaisen työn ammattimaisesti
-                ja innokkaasti. Asiakkaamme voivat luottaa laadukkaaseen työnjälkeen! ✨
-              </p>
+          <motion.h2
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2"
+            style={{ color: DARK }}
+          >
+            Valtteri &amp; Lauri
+          </motion.h2>
 
-              {/* Statsit */}
-              <div className="grid grid-cols-3 gap-3 mb-5">
-                {[
-                  { value: "2026", label: "Perustettu" },
-                  { value: "4H", label: "Yritys" },
-                  { value: "Uusimaa", label: "Palvelualue" },
-                ].map((s) => (
-                  <div key={s.label} className="rounded-xl px-4 py-3 text-center"
-                    style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                    <div className="font-bold text-white text-base">{s.value}</div>
-                    <div className="text-xs mt-0.5" style={{ color: "#64748b" }}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.08 }}
+            className="text-base font-semibold mb-5"
+            style={{ color: BLUE }}
+          >
+            Nuoret yrittäjät Uudeltamaalta
+          </motion.p>
 
-              {/* Yhteystiedot */}
-              <div className="flex flex-wrap gap-3">
-                <a href="tel:+358442431103"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
-                  style={{ background: "rgba(56,189,248,0.15)", color: "#38bdf8", border: "1px solid rgba(56,189,248,0.3)" }}>
-                  📞 Soita meille
-                </a>
-                <a href="mailto:siisti.pesu@gmail.com"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all"
-                  style={{ background: "rgba(255,255,255,0.08)", color: "white", border: "1px solid rgba(255,255,255,0.15)" }}>
-                  ✉️ siisti.pesu@gmail.com
-                </a>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="text-base leading-relaxed mb-8"
+            style={{ color: "#475569" }}
+          >
+            Perustimme Siisti Pesun vuonna 2026, koska kesätöitä oli vaikea löytää
+            ja yrittäjyys on aina kiehtonut meitä molempia. Teemme ikkunanpesua,
+            auton ulkopesua, pihatöitä ja lumitöitä Uudellamaalla. Vaikka olemme
+            nuoria, hoidamme jokaisen työn huolellisesti ja ajallaan — siitä ei
+            tingitä.
+          </motion.p>
+
+          {/* Statsit */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.16 }}
+            className="grid grid-cols-3 gap-4 mb-8 py-6"
+            style={{ borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}
+          >
+            {STATS.map((s) => (
+              <div key={s.label}>
+                <div className="text-xl sm:text-2xl font-extrabold mb-0.5" style={{ color: DARK }}>
+                  {s.value}
+                </div>
+                <div className="text-xs font-medium" style={{ color: GRAY }}>
+                  {s.label}
+                </div>
               </div>
-            </div>
-          </div>
+            ))}
+          </motion.div>
+
+          {/* Yhteystiedot */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-wrap gap-3"
+          >
+            <a
+              href="tel:+358442431103"
+              className="px-6 py-3 font-semibold rounded-xl text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              style={{ background: DARK }}
+            >
+              044 243 1103
+            </a>
+            <a
+              href="mailto:siisti.pesu@gmail.com"
+              className="px-6 py-3 font-semibold rounded-xl text-sm transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
+              style={{ border: `1px solid #cbd5e1`, color: DARK }}
+            >
+              siisti.pesu@gmail.com
+            </a>
+          </motion.div>
         </div>
       </div>
     </div>
