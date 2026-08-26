@@ -110,7 +110,8 @@ export function PriceList() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.45, delay: (i % 2) * 0.07 }}
-            className="rounded-2xl p-6 flex flex-col bg-white"
+            whileHover={{ y: -6 }}
+            className="rounded-2xl p-6 flex flex-col bg-white transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.09)]"
             style={{ border: `1px solid ${BORDER}` }}
           >
             {/* Ylärivi */}
@@ -188,30 +189,28 @@ export function PriceList() {
 
       {/* Kotitalousvähennys */}
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.45 }}
-        className="mt-5 flex items-center gap-4 px-6 py-5 rounded-2xl"
+        transition={{ duration: 0.5 }}
+        className="mt-5 px-6 py-7 sm:py-8 rounded-2xl text-center"
         style={{ background: "#f8fafc", border: `1px solid ${BORDER}` }}
       >
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "#ffffff", border: `1px solid ${BORDER}` }}
+        <p
+          className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
+          style={{ color: BLUE }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-        </div>
-        <div>
-          <p className="font-bold text-sm mb-0.5" style={{ color: DARK }}>
-            Kotitalousvähennyskelpoinen yritys
-          </p>
-          <p className="text-sm leading-relaxed" style={{ color: GRAY }}>
-            Saat työn osuudesta jopa 35 % takaisin verotuksessa. Annamme tarvittavan kuitin.
-          </p>
-        </div>
+          Kotitalousvähennys
+        </p>
+        <p
+          className="text-lg sm:text-xl font-bold leading-snug mb-2 max-w-xl mx-auto"
+          style={{ color: DARK }}
+        >
+          Saat työn osuudesta jopa 35 % takaisin verotuksessa
+        </p>
+        <p className="text-sm leading-relaxed max-w-md mx-auto" style={{ color: GRAY }}>
+          Palvelumme ovat kotitalousvähennyskelpoisia. Annamme tarvittavan kuitin verottajaa varten.
+        </p>
       </motion.div>
     </div>
   );
