@@ -22,11 +22,15 @@ const shine = { stroke: SHINE, strokeWidth: 1.4, strokeLinecap: "round" as const
 function IconAvautuva4() {
   return (
     <Frame>
-      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
-      <rect x="20" y="14" width="24" height="36" rx="1" {...thin} />
-      <path d="M25 20l0 12M31 18l0 12" {...shine} />
-      <circle cx="43" cy="32" r="1.4" fill={S} />
-      <path d="M20 14l-4 0M20 50l-4 0" {...thin} />
+      {/* karmi */}
+      <rect x="16" y="12" width="20" height="40" rx="1" fill="#f8fafc" {...stroke} />
+      {/* avautuva lasilevy kulmassa */}
+      <path d="M36 12l14 5v34l-14 5z" fill={GLASS} {...stroke} />
+      <path d="M40 20l0 24M45 22l0 20" {...shine} />
+      {/* sarana */}
+      <path d="M36 12v40" {...stroke} />
+      <circle cx="18" cy="20" r="1.1" fill={S} />
+      <circle cx="18" cy="44" r="1.1" fill={S} />
     </Frame>
   );
 }
@@ -35,13 +39,12 @@ function IconAvautuva4() {
 function IconAvautuva6() {
   return (
     <Frame>
-      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
-      <path d="M16 32h32" {...stroke} />
-      <rect x="20" y="14" width="24" height="14" rx="1" {...thin} />
-      <rect x="20" y="36" width="24" height="14" rx="1" {...thin} />
-      <path d="M25 18l0 6M31 17l0 6" {...shine} />
-      <circle cx="43" cy="22" r="1.3" fill={S} />
-      <circle cx="43" cy="43" r="1.3" fill={S} />
+      <rect x="14" y="12" width="18" height="40" rx="1" fill="#f8fafc" {...stroke} />
+      <path d="M32 12l9 3v42l-9 3z" fill={GLASS} {...stroke} />
+      <path d="M41 15l9 3v34l-9 3z" fill={GLASS} {...stroke} />
+      <path d="M32 12v46M41 15v40" {...stroke} />
+      <path d="M36 22l0 20" {...shine} />
+      <path d="M45 24l0 16" {...shine} />
     </Frame>
   );
 }
@@ -50,10 +53,15 @@ function IconAvautuva6() {
 function IconRuudukko() {
   return (
     <Frame>
-      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
-      <path d="M32 10v44M16 25h32M16 39h32" {...stroke} />
-      <path d="M21 15l0 5M27 14l0 5" {...shine} />
-      <circle cx="43" cy="32" r="1.4" fill={S} />
+      <rect x="16" y="12" width="20" height="40" rx="1" fill="#f8fafc" {...stroke} />
+      <path d="M36 12l14 5v34l-14 5z" fill={GLASS} {...stroke} />
+      {/* ruudukko avautuvassa levyssä */}
+      <path d="M36 32l14 3" {...stroke} />
+      <path d="M43 15v40" {...stroke} />
+      <path d="M36 12v40" {...stroke} />
+      <path d="M39 20l0 8" {...shine} />
+      <circle cx="18" cy="20" r="1.1" fill={S} />
+      <circle cx="18" cy="44" r="1.1" fill={S} />
     </Frame>
   );
 }
@@ -62,12 +70,13 @@ function IconRuudukko() {
 function IconTuuletus() {
   return (
     <Frame>
-      <rect x="20" y="20" width="24" height="24" rx="2" fill={GLASS} {...stroke} />
-      <rect x="24" y="24" width="16" height="16" rx="1" {...thin} />
-      <path d="M28 28l0 8" {...shine} />
-      <path d="M20 20l24 0" strokeWidth="2.2" stroke={S} strokeLinecap="round" />
-      <circle cx="22" cy="20" r="1.2" fill={S} />
-      <circle cx="42" cy="20" r="1.2" fill={S} />
+      <rect x="22" y="14" width="14" height="36" rx="1" fill="#f8fafc" {...stroke} />
+      {/* kapea avautuva levy */}
+      <path d="M36 14l8 3v36l-8 3z" fill={GLASS} {...stroke} />
+      <path d="M40 22l0 22" {...shine} />
+      <path d="M36 14v40" {...stroke} />
+      <circle cx="24" cy="20" r="1" fill={S} />
+      <circle cx="24" cy="44" r="1" fill={S} />
     </Frame>
   );
 }
@@ -76,9 +85,9 @@ function IconTuuletus() {
 function IconAvautumaton() {
   return (
     <Frame>
-      <rect x="16" y="10" width="32" height="44" rx="1.5" fill={GLASS} {...stroke} />
-      <rect x="20" y="14" width="24" height="36" rx="1" {...thin} />
-      <path d="M25 20l0 12M31 18l0 12" {...shine} />
+      <rect x="18" y="12" width="28" height="40" rx="1.5" fill="#f8fafc" {...stroke} />
+      <rect x="22" y="16" width="20" height="32" rx="1" fill={GLASS} {...stroke} />
+      <path d="M27 22l0 12M33 20l0 12" {...shine} />
     </Frame>
   );
 }
