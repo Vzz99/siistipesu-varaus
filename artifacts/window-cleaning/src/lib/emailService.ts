@@ -11,6 +11,7 @@ const SERVICE_LABELS: Record<ServiceType, string> = {
   ikkunanpesu: "Ikkunanpesu",
   auton_ulkopesu: "Auton ulkopesu",
   muut_palvelut: "Muut palvelut",
+  lumityot: "Lumityöt",
 };
 
 const MONTH_NAMES = [
@@ -33,6 +34,7 @@ function buildWindowsList(windowCounts: WindowCounts): string {
 
 function calcTotal(serviceType: ServiceType, windowCounts: WindowCounts): string {
   if (serviceType === "auton_ulkopesu") return "30,00 €";
+  if (serviceType === "lumityot") return "alkaen 15 € (sovitaan pihan koon mukaan)";
   if (serviceType === "muut_palvelut") return "Sovitaan erikseen";
   const windowsSubtotal = WINDOW_TYPES
     .filter((w) => (windowCounts[w.id] ?? 0) > 0)
