@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { CAMPAIGN, isCampaignActive, campaignDaysLeft } from "@/data/windows";
 
-const BLUE = "#2563eb";
+const AMBER = "#f59e0b";
 const DARK = "#0f172a";
 
 export function CampaignBanner({ onClick }: { onClick?: () => void }) {
@@ -14,25 +14,32 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45 }}
-      className="rounded-2xl px-6 sm:px-8 py-5 sm:py-6 mb-8 sm:mb-10"
-      style={{ background: DARK }}
+      className="relative rounded-2xl px-6 sm:px-8 py-5 sm:py-6 mb-8 sm:mb-10 overflow-hidden"
+      style={{
+        background: "linear-gradient(120deg, #0b1220 0%, #172033 45%, #0f172a 100%)",
+      }}
     >
-      <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
+      {/* Hienovarainen lämmin hehku oikeaan reunaan */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 88% 30%, rgba(245,158,11,0.16) 0%, transparent 55%)",
+        }}
+      />
 
-        {/* Vasen — teksti */}
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
+        {/* Teksti */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2.5 mb-2 flex-wrap">
             <span
               className="text-[11px] font-bold uppercase tracking-[0.14em] px-2.5 py-1 rounded-full"
-              style={{ background: BLUE, color: "#ffffff" }}
+              style={{ background: AMBER, color: "#3d2c05" }}
             >
               {CAMPAIGN.label}
             </span>
             {daysLeft <= 30 && (
-              <span
-                className="text-xs font-semibold"
-                style={{ color: "#94a3b8" }}
-              >
+              <span className="text-xs font-semibold" style={{ color: AMBER }}>
                 {daysLeft} päivää jäljellä
               </span>
             )}
@@ -42,11 +49,12 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
             {CAMPAIGN.headline}
           </p>
           <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
-            {CAMPAIGN.description} Alennus lasketaan automaattisesti hinta-arvioon.
+            Kausi päättyy 31.10. — varaa ikkunanpesu ennen pakkasia. Alennus
+            lasketaan automaattisesti hinta-arvioon.
           </p>
         </div>
 
-        {/* Oikea — nappi */}
+        {/* Nappi */}
         {onClick && (
           <button
             onClick={onClick}
