@@ -59,9 +59,9 @@ export const MINIMUM_CHARGE = 40;
 export const CAMPAIGN = {
   enabled: true,
   percent: 10,
-  label: "Kausikampanja",
+  label: "Syyskampanja",
   headline: "Ikkunanpesusta −10 %",
-  description: "Voimassa 31.10. asti — kauden loppuun.",
+  description: "Kausi päättyy 31.10.",
   startsAt: "2026-08-26",
   endsAt: "2026-10-31",
 };
