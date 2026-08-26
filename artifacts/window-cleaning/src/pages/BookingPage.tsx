@@ -12,6 +12,7 @@ import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
 import { FAQ } from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
 import { PriceList } from "@/components/PriceList";
 import { ResultsSection } from "@/components/ResultsSection";
 import { ValuesSection } from "@/components/ValuesSection";
@@ -148,6 +149,7 @@ export function BookingPage() {
   }
 
   const navLinks = [
+    { label: "Näin se toimii", id: "miten" },
     { label: "Palvelut & hinnat", id: "hinnat" },
     { label: "Tulokset", id: "tulokset" },
     { label: "Usein kysytyt", id: "ukk" },
@@ -275,6 +277,10 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <Hero onBookClick={scrollToServices} />
+
+                  <div id="miten" className="scroll-mt-24">
+                    <HowItWorks onStartClick={scrollToServices} />
+                  </div>
 
                   <div id="hinnat" className="scroll-mt-24">
                     <PriceList />
