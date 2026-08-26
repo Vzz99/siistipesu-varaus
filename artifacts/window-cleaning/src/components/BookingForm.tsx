@@ -17,8 +17,18 @@ interface Props {
 
 const TIME_SLOTS = [
   "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
+  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
 ];
+
+// Arkisin (ma–pe) vain koulun jälkeen; viikonloppuisin koko päivä.
+function slotsForDate(dateStr: string): string[] {
+  if (!dateStr) return TIME_SLOTS;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const day = new Date(y, m - 1, d).getDay(); // 0 = su, 6 = la
+  const isWeekend = day === 0 || day === 6;
+  if (isWeekend) return TIME_SLOTS;
+  return TIME_SLOTS.filter((t) => t >= "16:00");
+}
 
 const MONTH_NAMES = [
   "Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu",
@@ -85,7 +95,12 @@ export function BookingForm({
   }
 
   function handleDateSelect(dateStr: string) {
-    handleChange("date", dateStr);
+    setForm((prev) => {
+      const allowed = slotsForDate(dateStr);
+      const keepTime = allowed.includes(prev.time) ? prev.time : "";
+      return { ...prev, date: dateStr, time: keepTime };
+    });
+    if (errors.date) setErrors((prev) => ({ ...prev, date: undefined }));
     setShowCalendar(false);
   }
 
@@ -111,6 +126,8 @@ export function BookingForm({
     if (!form.date) e.date = "Valitse päivämäärä";
     else if (blockedDates.has(form.date)) e.date = "Tämä päivä ei ole saatavilla";
     if (!form.time) e.time = "Valitse aika";
+    else if (form.date && !slotsForDate(form.date).includes(form.time))
+      e.time = "Valitse sallittu aika";
 
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -214,9 +231,12 @@ export function BookingForm({
       </div>
 
       <div className="px-5 sm:px-6 py-6" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <h2 className="font-bold text-base mb-5" style={{ color: DARK }}>
+        <h2 className="font-bold text-base mb-1.5" style={{ color: DARK }}>
           Aika
         </h2>
+        <p className="text-xs mb-5 leading-relaxed" style={{ color: GRAY }}>
+          Arkisin palvelemme klo 16–19 (koulun jälkeen), viikonloppuisin klo 8–19.
+        </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <Field label="Päivämäärä *" error={errors.date}>
@@ -242,7 +262,12 @@ export function BookingForm({
               className="grid grid-cols-3 gap-1.5 p-1.5 rounded-xl"
               style={{ border: `1px solid ${errors.time ? RED : BORDER}` }}
             >
-              {TIME_SLOTS.map((slot) => {
+              {!form.date && (
+                <p className="col-span-3 text-xs text-center py-2" style={{ color: GRAY }}>
+                  Valitse ensin päivämäärä
+                </p>
+              )}
+              {form.date && slotsForDate(form.date).map((slot) => {
                 const blocked = (bookedSlots[form.date] ?? []).includes(slot);
                 const selected = form.time === slot;
                 return (
