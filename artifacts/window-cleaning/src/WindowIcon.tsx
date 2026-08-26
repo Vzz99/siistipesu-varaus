@@ -1,15 +1,12 @@
 /* Ikkunatyyppien ikonit — piirretty SVG:nä, ei kuvatiedostoja. */
+import type { ReactElement, ReactNode } from "react";
 
 const S = "#475569";        // viiva
 const S_LIGHT = "#94a3b8";  // apuviiva
 const GLASS = "#dbeafe";    // lasi
 const SHINE = "#93c5fd";    // heijastus
 
-interface IconProps {
-  className?: string;
-}
-
-function Frame({ children }: { children: React.ReactNode }) {
+function Frame({ children }: { children: ReactNode }) {
   return (
     <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
       {children}
@@ -212,7 +209,7 @@ function IconTerassilasi() {
 }
 
 /* Ulkopesun ikonit käyttävät samoja peruskuvia */
-const ICONS: Record<string, () => JSX.Element> = {
+const ICONS: Record<string, () => ReactElement> = {
   "avautuva-4": IconAvautuva4,
   "avautuva-6": IconAvautuva6,
   ruudukko: IconRuudukko,
