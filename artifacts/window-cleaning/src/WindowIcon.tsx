@@ -22,11 +22,11 @@ const shine = { stroke: SHINE, strokeWidth: 1.4, strokeLinecap: "round" as const
 function IconAvautuva4() {
   return (
     <Frame>
-      <rect x="14" y="10" width="24" height="44" rx="1.5" fill={GLASS} {...stroke} />
-      <path d="M38 12l10 4v36l-10 4" fill={GLASS} {...stroke} />
-      <path d="M38 12v44" {...stroke} />
-      <path d="M20 20l0 14M25 18l0 14" {...shine} />
-      <path d="M42 22l0 12" {...shine} />
+      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
+      <rect x="20" y="14" width="24" height="36" rx="1" {...thin} />
+      <path d="M25 20l0 12M31 18l0 12" {...shine} />
+      <circle cx="43" cy="32" r="1.4" fill={S} />
+      <path d="M20 14l-4 0M20 50l-4 0" {...thin} />
     </Frame>
   );
 }
@@ -35,12 +35,13 @@ function IconAvautuva4() {
 function IconAvautuva6() {
   return (
     <Frame>
-      <rect x="12" y="10" width="22" height="44" rx="1.5" fill={GLASS} {...stroke} />
-      <path d="M34 12l7 3v34l-7 3" fill={GLASS} {...stroke} />
-      <path d="M41 14l7 3v30l-7 3" fill={GLASS} {...stroke} />
-      <path d="M34 12v44M41 14v40" {...stroke} />
-      <path d="M18 20l0 14M23 18l0 14" {...shine} />
-      <path d="M37 24l0 10M45 26l0 8" {...shine} />
+      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
+      <path d="M16 32h32" {...stroke} />
+      <rect x="20" y="14" width="24" height="14" rx="1" {...thin} />
+      <rect x="20" y="36" width="24" height="14" rx="1" {...thin} />
+      <path d="M25 18l0 6M31 17l0 6" {...shine} />
+      <circle cx="43" cy="22" r="1.3" fill={S} />
+      <circle cx="43" cy="43" r="1.3" fill={S} />
     </Frame>
   );
 }
@@ -49,13 +50,10 @@ function IconAvautuva6() {
 function IconRuudukko() {
   return (
     <Frame>
-      <rect x="14" y="10" width="24" height="44" rx="1.5" fill={GLASS} {...stroke} />
-      <path d="M14 32h24M26 10v44" {...stroke} />
-      <path d="M38 12l10 4v36l-10 4" fill={GLASS} {...stroke} />
-      <path d="M38 12v44" {...stroke} />
-      <path d="M43 34h5" {...thin} />
-      <path d="M18 16l0 8" {...shine} />
-      <path d="M30 38l0 8" {...shine} />
+      <rect x="16" y="10" width="32" height="44" rx="2" fill={GLASS} {...stroke} />
+      <path d="M32 10v44M16 25h32M16 39h32" {...stroke} />
+      <path d="M21 15l0 5M27 14l0 5" {...shine} />
+      <circle cx="43" cy="32" r="1.4" fill={S} />
     </Frame>
   );
 }
@@ -64,11 +62,12 @@ function IconRuudukko() {
 function IconTuuletus() {
   return (
     <Frame>
-      <rect x="20" y="16" width="16" height="32" rx="1.5" fill={GLASS} {...stroke} />
-      <path d="M36 18l8 3v26l-8 3" fill={GLASS} {...stroke} />
-      <path d="M36 18v34" {...stroke} />
-      <path d="M24 24l0 10" {...shine} />
-      <path d="M40 28l0 8" {...shine} />
+      <rect x="20" y="20" width="24" height="24" rx="2" fill={GLASS} {...stroke} />
+      <rect x="24" y="24" width="16" height="16" rx="1" {...thin} />
+      <path d="M28 28l0 8" {...shine} />
+      <path d="M20 20l24 0" strokeWidth="2.2" stroke={S} strokeLinecap="round" />
+      <circle cx="22" cy="20" r="1.2" fill={S} />
+      <circle cx="42" cy="20" r="1.2" fill={S} />
     </Frame>
   );
 }
