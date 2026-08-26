@@ -54,17 +54,23 @@ export const TRAVEL_FEE = 25;
 export const MINIMUM_CHARGE = 40;
 
 /* ── Kampanja ──
-   Voimassa 1.9.–31.12.2026, koskee vain ikkunanpesua.
+   Voimassa 31.10.2026 asti, koskee vain ikkunanpesua.
    Kytke pois päältä vaihtamalla CAMPAIGN.enabled arvoon false. */
 export const CAMPAIGN = {
   enabled: true,
   percent: 10,
-  label: "Syyskampanja",
+  label: "Kausikampanja",
   headline: "Ikkunanpesusta −10 %",
-  description: "Kampanja voimassa vuoden loppuun asti.",
+  description: "Voimassa 31.10. asti — kauden loppuun.",
   startsAt: "2026-08-26",
-  endsAt: "2026-12-31",
+  endsAt: "2026-10-31",
 };
+
+export function campaignDaysLeft(): number {
+  const end = new Date(CAMPAIGN.endsAt + "T23:59:59");
+  const diff = end.getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / 86400000));
+}
 
 export function isCampaignActive(): boolean {
   if (!CAMPAIGN.enabled) return false;
