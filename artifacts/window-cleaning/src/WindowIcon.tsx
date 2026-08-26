@@ -66,17 +66,19 @@ function IconRuudukko() {
   );
 }
 
-/* 4. Tuuletusikkuna */
+/* 4. Tuuletusikkuna — vaaka, ylhäältä aukeava */
 function IconTuuletus() {
   return (
     <Frame>
-      <rect x="22" y="14" width="14" height="36" rx="1" fill="#f8fafc" {...stroke} />
-      {/* kapea avautuva levy */}
-      <path d="M36 14l8 3v36l-8 3z" fill={GLASS} {...stroke} />
-      <path d="M40 22l0 22" {...shine} />
-      <path d="M36 14v40" {...stroke} />
-      <circle cx="24" cy="20" r="1" fill={S} />
-      <circle cx="24" cy="44" r="1" fill={S} />
+      {/* karmi */}
+      <rect x="12" y="24" width="40" height="20" rx="1.5" fill="#f8fafc" {...stroke} />
+      {/* yläreunasta avautuva levy, kulmassa */}
+      <path d="M12 24l40 0 -5 -8 -30 0z" fill={GLASS} {...stroke} />
+      <path d="M20 22l24 0" {...shine} />
+      {/* sarana ylhäällä */}
+      <circle cx="16" cy="24" r="1.1" fill={S} />
+      <circle cx="48" cy="24" r="1.1" fill={S} />
+      <path d="M18 30l0 8M26 30l0 8" {...shine} />
     </Frame>
   );
 }
@@ -139,24 +141,32 @@ function IconKorkea() {
 function IconLasikaide() {
   return (
     <Frame>
-      {/* portaat */}
-      <path d="M8 54h14v-9h14v-9h14v-9h6" {...stroke} />
-      {/* lasi */}
-      <path d="M12 46l40-24v14L12 58z" fill={GLASS} {...stroke} />
-      <path d="M20 44l0 8M28 39l0 8" {...shine} />
+      {/* käsijohde ylhäällä */}
+      <path d="M8 16h48" strokeWidth="2.4" stroke={S} strokeLinecap="round" />
+      {/* lasipaneeli */}
+      <rect x="12" y="20" width="40" height="28" rx="1" fill={GLASS} {...stroke} />
+      {/* pystytolpat */}
+      <path d="M14 16v34M50 16v34" {...stroke} />
+      {/* lattia */}
+      <path d="M6 50h52" {...stroke} />
+      <path d="M22 26l0 16M32 26l0 16" {...shine} />
     </Frame>
   );
 }
 
-/* 10. Kylpyhuoneen lasi */
+/* 10. Kylpyhuoneen lasi — suihkuseinä */
 function IconKylpyhuone() {
   return (
     <Frame>
-      <rect x="8" y="14" width="22" height="36" rx="1.5" fill={GLASS} {...stroke} />
-      <rect x="34" y="14" width="22" height="36" rx="1.5" fill={GLASS} {...stroke} />
-      <path d="M30 28h4M30 36h4" {...stroke} />
-      <path d="M13 22l0 10M19 20l0 10" {...shine} />
-      <path d="M45 22l0 10M51 20l0 10" {...shine} />
+      {/* lasiseinä */}
+      <rect x="16" y="12" width="32" height="40" rx="1.5" fill={GLASS} {...stroke} />
+      {/* kahva */}
+      <path d="M43 26v12" strokeWidth="2.4" stroke={S} strokeLinecap="round" />
+      {/* suihku ylänurkassa */}
+      <circle cx="24" cy="18" r="2.4" {...stroke} />
+      <path d="M24 21l0 3M20 22l-1 2M28 22l1 2" {...thin} />
+      <path d="M22 34l0 10" {...shine} />
+      <path d="M20 50h24" {...stroke} />
     </Frame>
   );
 }
@@ -177,14 +187,15 @@ function IconPeili() {
 function IconParvekeKaantyva() {
   return (
     <Frame>
-      <path d="M8 12h48" {...stroke} />
-      <rect x="10" y="14" width="14" height="24" fill={GLASS} {...stroke} />
-      <rect x="25" y="14" width="14" height="24" fill={GLASS} {...stroke} />
-      <path d="M40 15l10 4v20l-10 4" fill={GLASS} {...stroke} />
-      <path d="M40 14v28" {...stroke} />
-      <path d="M8 42h48M8 52h48" {...stroke} />
-      <path d="M14 42v10M24 42v10M34 42v10M44 42v10" {...thin} />
-      <path d="M14 20l0 8M29 20l0 8" {...shine} />
+      {/* ylä- ja alakisko */}
+      <path d="M8 14h48" strokeWidth="2.2" stroke={S} strokeLinecap="round" />
+      <path d="M8 46h48" strokeWidth="2.2" stroke={S} strokeLinecap="round" />
+      {/* kolme paneelia, viimeinen käännetty auki */}
+      <rect x="11" y="16" width="12" height="28" fill={GLASS} {...stroke} />
+      <rect x="24" y="16" width="12" height="28" fill={GLASS} {...stroke} />
+      <path d="M38 16l10 4v20l-10 4z" fill={GLASS} {...stroke} />
+      <path d="M15 22l0 14M28 22l0 14" {...shine} />
+      <path d="M42 24l0 12" {...shine} />
     </Frame>
   );
 }
@@ -193,12 +204,15 @@ function IconParvekeKaantyva() {
 function IconAlalasi() {
   return (
     <Frame>
-      <path d="M8 18h48" {...stroke} />
-      <path d="M8 22h48" {...thin} />
-      <rect x="10" y="34" width="44" height="18" rx="1" fill={GLASS} {...stroke} />
-      <path d="M18 38l0 10M26 38l0 10" {...shine} />
-      <path d="M10 58h44" strokeDasharray="2 3" {...thin} />
-      <path d="M13 55l-3 3 3 3M51 55l3 3-3 3" {...thin} />
+      {/* käsijohde */}
+      <path d="M8 14h48" strokeWidth="2.2" stroke={S} strokeLinecap="round" />
+      <path d="M14 14v10M50 14v10" {...stroke} />
+      {/* alalasi kaiteen alaosassa */}
+      <rect x="10" y="26" width="44" height="20" rx="1" fill={GLASS} {...stroke} />
+      <path d="M20 30l0 12M30 30l0 12M40 30l0 12" {...shine} />
+      {/* mittanuoli */}
+      <path d="M10 52h44" strokeDasharray="2 3" {...thin} />
+      <path d="M13 49l-3 3 3 3M51 49l3 3-3 3" {...thin} />
     </Frame>
   );
 }
@@ -207,11 +221,14 @@ function IconAlalasi() {
 function IconTerassilasi() {
   return (
     <Frame>
-      <path d="M10 20l22-8 22 8v6H10z" fill="#f1f5f9" {...stroke} />
-      <rect x="12" y="26" width="40" height="26" fill={GLASS} {...stroke} />
-      <path d="M25 26v26M39 26v26" {...stroke} />
-      <path d="M10 52h44" {...stroke} />
-      <path d="M17 32l0 12M31 32l0 12M45 32l0 12" {...shine} />
+      {/* katos */}
+      <path d="M8 18h48" strokeWidth="2.4" stroke={S} strokeLinecap="round" />
+      {/* kaksi lasiseinää */}
+      <rect x="12" y="20" width="18" height="30" fill={GLASS} {...stroke} />
+      <rect x="34" y="20" width="18" height="30" fill={GLASS} {...stroke} />
+      {/* lattia */}
+      <path d="M8 50h48" {...stroke} />
+      <path d="M18 26l0 16M40 26l0 16" {...shine} />
     </Frame>
   );
 }
