@@ -32,9 +32,9 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight mb-5"
             style={{ color: "#0f172a" }}
           >
-            Kirkkaat ikkunat.
+            Puhdasta jälkeä.
             <br />
-            <span style={{ color: "#2563eb" }}>Selkeä hinta.</span>
+            <span style={{ color: "#2563eb" }}>Joka kerta.</span>
           </motion.h1>
 
           {/* Kuvaus */}
