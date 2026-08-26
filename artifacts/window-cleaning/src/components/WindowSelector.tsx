@@ -8,6 +8,7 @@ import {
   type WindowType,
 } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
+import { WindowIcon } from "@/components/WindowIcon";
 
 const BLUE = "#2563eb";
 const DARK = "#0f172a";
@@ -131,18 +132,15 @@ function WindowCard({ window, count, onCountChange, index }: CardProps) {
         border: `1px solid ${selected ? "#bfdbfe" : "transparent"}`,
       }}
     >
-      <div className="flex-1 mb-3">
-        <p
-          className="font-bold text-sm leading-snug mb-0.5"
-          style={{ color: selected ? BLUE : DARK }}
-        >
-          {window.name}
-        </p>
-        {window.description && (
-          <p className="text-xs leading-snug" style={{ color: GRAY }}>
-            {window.description}
-          </p>
-        )}
+      <p
+        className="font-bold text-sm leading-snug text-center mb-3"
+        style={{ color: selected ? BLUE : DARK }}
+      >
+        {window.name}
+      </p>
+
+      <div className="flex-1 flex items-center justify-center mb-3">
+        <WindowIcon id={window.id} className="w-20 h-20" />
       </div>
 
       <div className="flex items-center gap-3">
