@@ -62,7 +62,7 @@ export const CAMPAIGN = {
   label: "Syyskampanja",
   headline: "Ikkunanpesusta −10 %",
   description: "Kampanja voimassa vuoden loppuun asti.",
-  startsAt: "2026-09-01",
+  startsAt: "2026-08-26",
   endsAt: "2026-12-31",
 };
 
