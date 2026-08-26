@@ -1,6 +1,16 @@
-import { WINDOW_TYPES, OUTDOOR_WINDOW_TYPES } from "@/data/windows";
-import { type WindowCounts } from "@/pages/BookingPage";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  WINDOW_TYPES,
+  OUTDOOR_WINDOW_TYPES,
+  CAMPAIGN,
+  isCampaignActive,
+} from "@/data/windows";
+import { type WindowCounts } from "@/pages/BookingPage";
+
+const BLUE = "#2563eb";
+const DARK = "#0f172a";
+const GRAY = "#64748b";
+const BORDER = "#e2e8f0";
 
 interface Props {
   windowCounts: WindowCounts;
@@ -17,56 +27,62 @@ export function PriceSummary({
   onProceed,
   compact,
 }: Props) {
-  const allWindowTypes = [...WINDOW_TYPES, ...OUTDOOR_WINDOW_TYPES];
-  const selectedItems = allWindowTypes.filter((w) => (windowCounts[w.id] ?? 0) > 0).map((w) => ({
-    window: w,
-    count: windowCounts[w.id],
-    subtotal: w.price * windowCounts[w.id],
-  }));
+  const allTypes = [...WINDOW_TYPES, ...OUTDOOR_WINDOW_TYPES];
 
-  const windowsSubtotal = selectedItems.reduce((sum, i) => sum + i.subtotal, 0);
-  const subtotalWithTravel = windowsSubtotal + travelFee;
+  const selected = allTypes
+    .filter((w) => (windowCounts[w.id] ?? 0) > 0)
+    .map((w) => ({
+      window: w,
+      count: windowCounts[w.id],
+      subtotal: w.price * windowCounts[w.id],
+    }));
+
+  const hasItems = selected.length > 0;
+
+  const windowsSubtotal = selected.reduce((s, i) => s + i.subtotal, 0);
+
+  const campaignOn = isCampaignActive();
+  const discount = campaignOn ? Math.round(windowsSubtotal * (CAMPAIGN.percent / 100)) : 0;
+  const laborAfterDiscount = windowsSubtotal - discount;
+
+  const subtotalWithTravel = laborAfterDiscount + travelFee;
   const total = Math.max(subtotalWithTravel, minimumCharge);
-  const effectiveWorkCost = Math.max(windowsSubtotal, minimumCharge - travelFee);
-  const kotitalousHinta = Math.round(effectiveWorkCost * 0.65) + travelFee;
-
-  const hasItems = selectedItems.length > 0;
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
 
+  const effectiveWork = Math.max(laborAfterDiscount, minimumCharge - travelFee);
+  const kotitalousHinta = Math.round(effectiveWork * 0.65) + travelFee;
+
   return (
-    <div className="bg-card border border-card-border rounded-2xl shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-border bg-primary/5">
-        <h3 className="font-semibold text-foreground flex items-center gap-2">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-            <path d="M9 14 4 9l5-5"/>
-            <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
-          </svg>
+    <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
+      <div className="px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
+        <h3 className="font-bold text-sm" style={{ color: DARK }}>
           Hinta-arvio
         </h3>
       </div>
 
-      <div className="px-5 py-4 space-y-3">
+      <div className="px-5 py-5 space-y-4">
         {!hasItems && (
-          <p className="text-sm text-muted-foreground text-center py-4">
-            Valitse ikkunoita vasemmalta
+          <p className="text-sm text-center py-6 leading-relaxed" style={{ color: GRAY }}>
+            Valitse ikkunat vasemmalta, niin hinta lasketaan tähän.
           </p>
         )}
 
+        {/* Valitut kohteet */}
         {hasItems && !compact && (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <AnimatePresence>
-              {selectedItems.map(({ window, count, subtotal }) => (
+              {selected.map(({ window, count }) => (
                 <motion.div
                   key={window.id}
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="flex justify-between text-sm"
+                  className="flex justify-between items-baseline text-sm gap-3"
                 >
-                  <span className="text-muted-foreground">
-                    {window.name} × {count}
+                  <span style={{ color: GRAY }}>{window.name}</span>
+                  <span className="font-semibold tabular-nums flex-shrink-0" style={{ color: DARK }}>
+                    × {count}
                   </span>
-                  <span className="font-medium text-foreground tabular-nums">{subtotal} €</span>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -74,81 +90,87 @@ export function PriceSummary({
         )}
 
         {hasItems && compact && (
-          <p className="text-xs text-muted-foreground">{selectedItems.length} ikkunatyyppi valittu</p>
+          <p className="text-xs" style={{ color: GRAY }}>
+            {selected.length} kohdetta valittu
+          </p>
         )}
 
+        {/* Erittely */}
         {hasItems && (
-          <div className="border-t border-border pt-3 space-y-2">
-            {!compact && (
+          <div className="pt-4 space-y-2.5" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <div className="flex justify-between text-sm">
+              <span style={{ color: GRAY }}>Ikkunat yhteensä</span>
+              <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                {windowsSubtotal} €
+              </span>
+            </div>
+
+            {campaignOn && discount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ikkunat yhteensä</span>
-                <span className="font-medium tabular-nums">{windowsSubtotal} €</span>
+                <span className="font-semibold" style={{ color: BLUE }}>
+                  {CAMPAIGN.label} −{CAMPAIGN.percent} %
+                </span>
+                <span className="font-semibold tabular-nums" style={{ color: BLUE }}>
+                  −{discount} €
+                </span>
               </div>
             )}
 
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Matkamaksu</span>
-              <span className="font-medium tabular-nums">{travelFee} €</span>
+              <span style={{ color: GRAY }}>Matkamaksu</span>
+              <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                {travelFee} €
+              </span>
             </div>
 
             {isMinimumApplied && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex justify-between text-sm"
-              >
-                <span className="text-amber-600 dark:text-amber-400 text-xs flex items-center gap-1">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  Minimilaskutus ({minimumCharge} €) käytössä
-                </span>
-              </motion.div>
+              <p className="text-xs leading-relaxed pt-1" style={{ color: GRAY }}>
+                Minimiveloitus {minimumCharge} € on käytössä.
+              </p>
             )}
           </div>
         )}
 
-        {hasItems && (
-          <div className="border-t border-border pt-3 space-y-1">
+        {/* Loppusumma */}
+        <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
+          <div className="flex justify-between items-baseline mb-1">
+            <span className="font-bold text-base" style={{ color: DARK }}>
+              Yhteensä
+            </span>
+            <motion.span
+              key={total}
+              initial={{ scale: 1.08 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className="text-2xl font-extrabold tabular-nums"
+              style={{ color: hasItems ? DARK : "#cbd5e1" }}
+            >
+              {hasItems ? `${total.toFixed(2)} €` : "0,00 €"}
+            </motion.span>
+          </div>
+
+          {hasItems && (
             <div className="flex justify-between items-baseline">
-              <span className="font-semibold text-foreground">Yhteensä</span>
-              <motion.span
-                key={total}
-                initial={{ scale: 1.1, color: "hsl(var(--primary))" }}
-                animate={{ scale: 1, color: "hsl(var(--foreground))" }}
-                transition={{ duration: 0.3 }}
-                className="text-2xl font-bold tabular-nums"
-              >
-                {total.toFixed(2)} €
-              </motion.span>
-            </div>
-            <div className="flex justify-between items-baseline">
-              <span className="text-xs text-muted-foreground">Kotitalousvähennyksellä</span>
-              <span className="text-sm font-semibold tabular-nums" style={{ color: "#22c55e" }}>
+              <span className="text-xs" style={{ color: GRAY }}>
+                Kotitalousvähennyksellä
+              </span>
+              <span className="text-sm font-bold tabular-nums" style={{ color: BLUE }}>
                 n. {kotitalousHinta} €
               </span>
             </div>
-          </div>
-        )}
-
-        {!hasItems && (
-          <div className="border-t border-border pt-3 flex justify-between items-baseline">
-            <span className="font-semibold text-foreground">Yhteensä</span>
-            <span className="text-2xl font-bold text-muted-foreground">0,00 €</span>
-          </div>
-        )}
+          )}
+        </div>
 
         {onProceed && (
           <button
             onClick={onProceed}
             disabled={!hasItems}
-            className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 mt-1 ${
+            className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200"
+            style={
               hasItems
-                ? "bg-primary text-primary-foreground hover:opacity-90 active:scale-[0.98] shadow-sm"
-                : "bg-muted text-muted-foreground cursor-not-allowed"
-            }`}
+                ? { background: DARK, color: "#ffffff" }
+                : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
+            }
           >
             {hasItems ? "Jatka varaukseen" : "Valitse ensin ikkunoita"}
           </button>
