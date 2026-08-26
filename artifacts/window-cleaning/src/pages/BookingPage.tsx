@@ -46,29 +46,22 @@ export function BookingPage() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
-  });
 
   const { blockedDates, toggleDate } = useBlockedDates();
   const { bookedSlots, blockSlots, blockSpecificSlots, unblockSpecificSlots, refreshSlots } = useBookedSlots();
 
   const tapTimestamps = useRef<number[]>([]);
 
+  // Varmistetaan ettei tumma teema jää päälle vanhoista asetuksista
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem("theme");
+  }, []);
 
-  // Hae tuore data aina kun siirrytään varauslomakkeelle
+  // Hae tuore aikatieto kun siirrytään varaukseen
   useEffect(() => {
     if (step === "booking" || step === "select") {
-      refreshSlots();
+      refreshSlots?.();
     }
   }, [step, refreshSlots]);
 
@@ -162,33 +155,55 @@ export function BookingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-border shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
+    <div className="min-h-screen flex flex-col" style={{ background: "#ffffff" }}>
+      <header
+        className="sticky top-0 z-40"
+        style={{
+          background: "rgba(255,255,255,0.85)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid #e2e8f0",
+        }}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
           <button
             onClick={handleLogoTap}
             className="flex items-center gap-2.5 cursor-default select-none focus:outline-none"
             tabIndex={-1}
             aria-label="Logo"
           >
-            <div className={`w-9 h-9 rounded-full overflow-hidden flex-shrink-0 ring-2 transition-colors duration-200 ${isAdminLoggedIn ? "ring-amber-400" : "ring-transparent"}`}>
-              <img src={`${import.meta.env.BASE_URL}sp-logo.png`} alt="Siisti Pesu logo" className="w-full h-full object-cover" />
+            <div
+              className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 transition-all duration-200"
+              style={{
+                boxShadow: isAdminLoggedIn ? "0 0 0 2px #f59e0b" : "none",
+              }}
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}sp-logo.png`}
+                alt="Siisti Pesu logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <span className="font-bold text-foreground text-base leading-tight block">Siisti Pesu</span>
-              <span className={`text-xs leading-tight block transition-colors duration-200 ${isAdminLoggedIn ? "text-amber-500 font-medium" : "text-muted-foreground"}`}>
+              <span className="font-bold text-base leading-tight block" style={{ color: "#0f172a" }}>
+                Siisti Pesu
+              </span>
+              <span
+                className="text-xs leading-tight block"
+                style={{ color: isAdminLoggedIn ? "#d97706" : "#64748b" }}
+              >
                 {isAdminLoggedIn ? "Ylläpitotila" : "Varauspalvelu"}
               </span>
             </div>
           </button>
 
           {step === "service" && !isAdminLoggedIn && (
-            <nav className="hidden sm:flex items-center gap-1 ml-4">
+            <nav className="hidden md:flex items-center gap-1 ml-6">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
-                  className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors duration-150"
+                  className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150 hover:bg-slate-100"
+                  style={{ color: "#475569" }}
                 >
                   {link.label}
                 </button>
@@ -196,38 +211,15 @@ export function BookingPage() {
             </nav>
           )}
 
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className="w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:bg-muted transition-colors duration-150"
-              aria-label="Vaihda teemaa"
-            >
-              {isDark ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="5"/>
-                  <line x1="12" y1="1" x2="12" y2="3"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                  <line x1="1" y1="12" x2="3" y2="12"/>
-                  <line x1="21" y1="12" x2="23" y2="12"/>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                </svg>
-              ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              )}
-            </button>
-
+          <div className="ml-auto flex items-center gap-3">
             {showBackButton && (
               <button
                 onClick={handleBack}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                className="text-sm font-medium transition-colors flex items-center gap-1.5 hover:opacity-70"
+                style={{ color: "#475569" }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m15 18-6-6 6-6"/>
+                  <path d="m15 18-6-6 6-6" />
                 </svg>
                 Takaisin
               </button>
@@ -235,7 +227,8 @@ export function BookingPage() {
             {step === "service" && !isAdminLoggedIn && (
               <button
                 onClick={scrollToServices}
-                className="px-4 py-2 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-all duration-150 active:scale-95"
+                className="px-4 py-2 text-sm font-semibold rounded-xl text-white transition-all duration-150 hover:opacity-90 active:scale-95"
+                style={{ background: "#0f172a" }}
               >
                 Varaa aika
               </button>
@@ -244,12 +237,13 @@ export function BookingPage() {
         </div>
 
         {step === "service" && !isAdminLoggedIn && (
-          <div className="sm:hidden flex gap-2 px-4 pb-2 overflow-x-auto">
+          <div className="md:hidden flex gap-2 px-4 pb-2.5 overflow-x-auto">
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
-                className="flex-shrink-0 px-3 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg border border-border transition-colors duration-150"
+                className="flex-shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150"
+                style={{ color: "#475569", border: "1px solid #e2e8f0" }}
               >
                 {link.label}
               </button>
@@ -281,22 +275,28 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <Hero onBookClick={scrollToServices} />
-                  <div id="hinnat" className="scroll-mt-20">
+
+                  <div id="hinnat" className="scroll-mt-24">
                     <PriceList />
                   </div>
-                  <div id="tulokset" className="scroll-mt-20">
+
+                  <div id="tulokset" className="scroll-mt-24">
                     <ResultsSection />
                   </div>
-                  <div id="arvot" className="scroll-mt-20">
+
+                  <div id="arvot" className="scroll-mt-24">
                     <ValuesSection />
                   </div>
-                  <div id="palvelut" className="scroll-mt-20">
+
+                  <div id="palvelut" className="scroll-mt-24">
                     <ServiceSelector onSelect={handleServiceSelect} />
                   </div>
-                  <div id="ukk" className="scroll-mt-20">
+
+                  <div id="ukk" className="scroll-mt-24">
                     <FAQ />
                   </div>
-                  <div id="meista" className="scroll-mt-20">
+
+                  <div id="meista" className="scroll-mt-24">
                     <AboutSection />
                   </div>
                 </motion.div>
@@ -310,15 +310,15 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
-                  <div className="relative rounded-2xl overflow-hidden h-48 mb-8">
-                    <img src="/worker.jpg" alt="Ikkunanpesu työssä" className="w-full h-full object-cover object-top" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                      <div>
-                        <h1 className="text-3xl font-bold text-white mb-1">Ikkunanpesu</h1>
-                        <p className="text-white/80 text-base">Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.</p>
-                      </div>
-                    </div>
+                  <div className="mb-8">
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                      Ikkunanpesu
+                    </h1>
+                    <p className="text-base" style={{ color: "#475569" }}>
+                      Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.
+                    </p>
                   </div>
+
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                       <WindowSelector windowCounts={windowCounts} onCountChange={handleCountChange} />
@@ -349,8 +349,12 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-foreground mb-2">Varauksen tiedot</h1>
-                    <p className="text-muted-foreground text-base">Täytä yhteystietosi ja valitse sopiva aika.</p>
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                      Varauksen tiedot
+                    </h1>
+                    <p className="text-base" style={{ color: "#475569" }}>
+                      Täytä yhteystietosi ja valitse sopiva aika.
+                    </p>
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
