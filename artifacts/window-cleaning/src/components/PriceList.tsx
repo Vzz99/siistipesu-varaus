@@ -186,32 +186,6 @@ export function PriceList() {
           </motion.div>
         ))}
       </div>
-
-      {/* Kotitalousvähennys */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.5 }}
-        className="mt-5 px-6 py-7 sm:py-8 rounded-2xl text-center"
-        style={{ background: "#f8fafc", border: `1px solid ${BORDER}` }}
-      >
-        <p
-          className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: BLUE }}
-        >
-          Kotitalousvähennys
-        </p>
-        <p
-          className="text-lg sm:text-xl font-bold leading-snug mb-2 max-w-xl mx-auto"
-          style={{ color: DARK }}
-        >
-          Saat työn osuudesta jopa 35 % takaisin verotuksessa
-        </p>
-        <p className="text-sm leading-relaxed max-w-md mx-auto" style={{ color: GRAY }}>
-          Palvelumme ovat kotitalousvähennyskelpoisia. Annamme tarvittavan kuitin verottajaa varten.
-        </p>
-      </motion.div>
     </div>
   );
 }
