@@ -1,136 +1,218 @@
+import { motion } from "framer-motion";
+
+const BLUE = "#2563eb";
+const DARK = "#0f172a";
+const GRAY = "#64748b";
+const BORDER = "#e2e8f0";
+
 const SERVICES = [
+  {
+    image: "/IMG_5565.jpeg",
+    title: "Lumityöt",
+    badge: "Nyt ajankohtainen",
+    description: "Pihojen auraus koneella ja tarkka viimeistely käsin.",
+    price: "alkaen 15 €",
+    priceUnit: "/ kerta",
+    includes: [
+      "Auraus koneella, viimeistely käsin",
+      "Aurataan kun lunta on satanut yli 5 cm",
+      "Toimialue 5 km säteellä Kauniaisista",
+    ],
+    note: "Kausikortti 39 € — sisältää ensimmäisen aurauksen ja −20 % kaikista seuraavista.",
+  },
   {
     image: "/window-thumbs.jpg",
     title: "Ikkunanpesu",
-    description: "Pesemme ikkunat huolellisesti sisältä ja ulkoa. Kaikki pinnat kiiltävät — ei jälkiä, ei tahroja.",
+    badge: null,
+    description: "Sisä- ja ulkopinnat kiiltäviksi — ei jälkiä, ei tahroja.",
+    price: "alkaen 10 €",
+    priceUnit: "/ ikkuna",
     includes: [
-      "Kaikkien pintojen puhdistus kiiltäväksi",
-      "Ikkunoiden välit ja karmit puhdistetaan",
-      "Ikkunalauta pyyhitään",
+      "Kaikki pinnat, karmit ja ikkunoiden välit",
       "Kaikki välineet mukanamme",
-      "Matkakulut 25 €",
-      "Minimiveloitus 40 €",
+      "Matkakulut 25 €, minimiveloitus 40 €",
     ],
     note: null,
-    prices: [
-      { label: "4-pintainen ikkuna", price: "16 €" },
-      { label: "6-pintainen ikkuna", price: "20 €" },
-      { label: "Ruudukkoikkuna", price: "23 €" },
-      { label: "Tuuletusikkuna", price: "10 €" },
-      { label: "Ikkunaryhmä", price: "25 €" },
-      { label: "Avautumaton ikkuna", price: "11 €" },
-      { label: "Ovi (lasillinen)", price: "11 €" },
-      { label: "Korkeat ikkunat", price: "26 €" },
-    ],
   },
   {
     image: "/car-wash.jpg",
     title: "Auton ulkopesu",
-    description: "Laadukas auton ulkopesu käsin. Auto kiiltää kuin uusi — huolellinen ja tarkka työ taattu.",
+    badge: null,
+    description: "Laadukas käsinpesu. Auto kiiltää kuin uusi.",
+    price: "30 €",
+    priceUnit: "kiinteä hinta",
     includes: [
-      "Laadukas ulkopesu käsin",
-      "Kori, pyörät ja vanteet puhdistetaan",
-      "Lasit puhdistetaan",
+      "Kori, pyörät, vanteet ja lasit",
       "Kaikki välineet mukanamme",
+      "Tarvitsemme pääsyn vesipisteeseen",
     ],
-    note: "⚠️ Huom: Auton ulkopesua varten tarvitsemme pääsyn vesiliittymään (esim. pihaletku tai ulkovesipiste).",
-    prices: [
-      { label: "Auton ulkopesu", price: "30 €" },
-    ],
+    note: null,
   },
   {
     image: "/mowing.jpg",
-    title: "Pihatyöt & muut palvelut",
-    description: "Nurmikon leikkuu, pihatyöt ja muut kotitalouspalvelut. Hinta määräytyy työmäärän suuruuden ja haastavuuden mukaan.",
+    title: "Pihatyöt & muut",
+    badge: null,
+    description: "Nurmikon leikkuu, pihatyöt ja muut kotitalouspalvelut.",
+    price: "Sovitaan",
+    priceUnit: "erikseen",
     includes: [
-      "Nurmikon leikkuu",
-      "Muut pihatyöt",
-      "Kotitalouspalvelut",
-      "Hinta sovitaan erikseen",
+      "Nurmikon leikkuu ja pihan siistiminen",
+      "Muut kodin ulkotyöt",
+      "Hinta työmäärän ja haastavuuden mukaan",
     ],
     note: null,
-    prices: [
-      { label: "Hinta", price: "Sovitaan" },
-    ],
   },
 ];
 
 export function PriceList() {
   return (
-    <div className="mt-10 mb-8">
-      <h2 className="text-3xl font-bold text-foreground text-center mb-2">
-        Palvelut ja hinnat
-      </h2>
-      <p className="text-muted-foreground text-center mb-8 text-sm">
-        Selkeät hinnat ilman yllätyksiä — tiedät aina mitä maksat.
-      </p>
+    <div className="mb-20 sm:mb-24">
+      {/* Otsikko */}
+      <div className="mb-10 sm:mb-12 max-w-2xl">
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.4 }}
+          className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
+          style={{ color: BLUE }}
+        >
+          Palvelut
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
+          style={{ color: DARK }}
+        >
+          Selkeät hinnat, ei yllätyksiä
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-base sm:text-lg leading-relaxed"
+          style={{ color: "#475569" }}
+        >
+          Näet tarkan hinnan laskurista ennen varausta. Tiedät aina mitä maksat.
+        </motion.p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {SERVICES.map((service) => (
-          <div
+      {/* Kortit */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {SERVICES.map((service, i) => (
+          <motion.div
             key={service.title}
-            className="bg-card border border-border rounded-2xl shadow-xs overflow-hidden flex flex-col"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.45, delay: (i % 2) * 0.07 }}
+            className="rounded-2xl p-6 flex flex-col bg-white"
+            style={{ border: `1px solid ${BORDER}` }}
           >
-            <div className="px-5 py-5 border-b border-border">
-              <div className="w-12 h-12 rounded-2xl overflow-hidden mb-3 flex-shrink-0">
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="w-full h-full object-cover"
-                />
+            {/* Ylärivi */}
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0" style={{ background: "#f1f5f9" }}>
+                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
               </div>
-              <h3 className="font-bold text-foreground text-lg">{service.title}</h3>
-              <p className="text-muted-foreground text-sm mt-1 leading-relaxed">{service.description}</p>
-              {service.note && (
-                <p className="text-xs mt-3 px-3 py-2 rounded-xl leading-relaxed text-muted-foreground"
-                  style={{ background: "rgba(148,163,184,0.1)", border: "1px solid rgba(148,163,184,0.25)" }}>
-                  {service.note}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <h3 className="font-bold text-lg leading-tight" style={{ color: DARK }}>
+                    {service.title}
+                  </h3>
+                  {service.badge && (
+                    <span
+                      className="text-[11px] font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: "#eff6ff", color: BLUE }}
+                    >
+                      {service.badge}
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm leading-snug" style={{ color: GRAY }}>
+                  {service.description}
                 </p>
-              )}
+              </div>
             </div>
 
-            <div className="px-5 py-4 border-b border-border flex-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Sisältyy palveluun</p>
-              <ul className="space-y-2">
-                {service.includes.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-foreground">
-                    <span className="text-green-500">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Sisältyy */}
+            <ul className="space-y-2 mb-5">
+              {service.includes.map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "#334155" }}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={BLUE}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="flex-shrink-0 mt-0.5"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span className="leading-snug">{item}</span>
+                </li>
+              ))}
+            </ul>
 
-            <div className="px-5 py-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Hinnat</p>
-              <ul className="space-y-1">
-                {service.prices.map((p) => (
-                  <li key={p.label} className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{p.label}</span>
-                    <span className="font-semibold text-foreground">{p.price}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Lisähuomio */}
+            {service.note && (
+              <div
+                className="text-xs leading-relaxed px-3.5 py-3 rounded-xl mb-5"
+                style={{ background: "#eff6ff", color: "#1e40af" }}
+              >
+                {service.note}
+              </div>
+            )}
+
+            {/* Hinta alareunassa */}
+            <div
+              className="mt-auto pt-4 flex items-baseline gap-1.5"
+              style={{ borderTop: `1px solid ${BORDER}` }}
+            >
+              <span className="text-2xl font-extrabold" style={{ color: DARK }}>
+                {service.price}
+              </span>
+              <span className="text-sm font-medium" style={{ color: GRAY }}>
+                {service.priceUnit}
+              </span>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      {/* Kotitalousvähennys-banneri */}
-      <div className="mt-6 flex items-center gap-4 px-5 py-4 rounded-2xl"
-        style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)" }}>
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "rgba(34,197,94,0.15)" }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+      {/* Kotitalousvähennys */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.45 }}
+        className="mt-5 flex items-center gap-4 px-6 py-5 rounded-2xl"
+        style={{ background: "#f8fafc", border: `1px solid ${BORDER}` }}
+      >
+        <div
+          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: "#ffffff", border: `1px solid ${BORDER}` }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
         </div>
         <div>
-          <p className="font-semibold text-sm text-foreground">Kotitalousvähennyskelpoinen yritys</p>
-          <p className="text-xs text-muted-foreground mt-0.5">Palvelumme oikeuttavat kotitalousvähennykseen — voit säästää jopa 35 % työn osuudesta verotuksessa. Annamme tarvittavan kuitin.</p>
+          <p className="font-bold text-sm mb-0.5" style={{ color: DARK }}>
+            Kotitalousvähennyskelpoinen yritys
+          </p>
+          <p className="text-sm leading-relaxed" style={{ color: GRAY }}>
+            Saat työn osuudesta jopa 35 % takaisin verotuksessa. Annamme tarvittavan kuitin.
+          </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
