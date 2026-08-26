@@ -12,6 +12,7 @@ import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
 import { FAQ } from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
+import { CampaignBanner } from "@/components/CampaignBanner";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PriceList } from "@/components/PriceList";
 import { ResultsSection } from "@/components/ResultsSection";
@@ -276,6 +277,8 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
+                  <CampaignBanner onClick={scrollToServices} />
+
                   <Hero onBookClick={scrollToServices} />
 
                   <div id="miten" className="scroll-mt-24">
