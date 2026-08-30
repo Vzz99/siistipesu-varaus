@@ -50,7 +50,12 @@ export const CATEGORY_LABELS: Record<WindowCategory, string> = {
 
 export const CATEGORY_ORDER: WindowCategory[] = ["PESTAVAT", "PARVEKE", "TERASSI"];
 
-export const TRAVEL_FEE = 25;
+/* ── Matkakulu ──
+   Ei enää veloiteta erikseen. Vakio on jätetty tiedostoon arvolla 0,
+   jotta muut tiedostot eivät hajoa. Kun matkakulurivi on poistettu
+   myös laskurista, tämän rivin voi poistaa kokonaan. */
+export const TRAVEL_FEE = 0;
+
 export const MINIMUM_CHARGE = 40;
 
 /* ── Kampanja ──
