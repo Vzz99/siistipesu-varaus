@@ -24,7 +24,6 @@ const services: ServiceOption[] = [
     price: "alkaen 15 €",
     priceNote: "hinta pihan koon mukaan",
     image: "/IMG_5565.jpeg",
-    badge: "Nyt ajankohtainen",
   },
   {
     id: "ikkunanpesu",
