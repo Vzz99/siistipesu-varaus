@@ -37,7 +37,6 @@ export const WINDOW_TYPES: WindowType[] = [
 export const OUTDOOR_WINDOW_TYPES: WindowType[] = [
   { id: "ulko-perus", category: "ULKOPESU", name: "Perusikkuna", price: 5, description: "Tavallinen ikkuna, ulkopinta" },
   { id: "ulko-tuuletus", category: "ULKOPESU", name: "Tuuletusikkuna", price: 5, description: "Pieni tuuletusikkuna, ulkopinta" },
-  { id: "ulko-ryhma", category: "ULKOPESU", name: "Ikkunaryhmä", price: 8, description: "Useamman ikkunan ryhmä, ulkopinta" },
   { id: "ulko-korkea", category: "ULKOPESU", name: "Korkea ikkuna", price: 7, description: "Vaikeasti saavutettava korkea ikkuna, ulkopinta" },
 ];
 
