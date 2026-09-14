@@ -19,7 +19,6 @@ export const WINDOW_TYPES: WindowType[] = [
   { id: "ruudukko", category: "PESTAVAT", name: "Avautuva ruutuikkuna", price: 23, description: "Ruudukollinen avautuva ikkuna" },
   { id: "tuuletus", category: "PESTAVAT", name: "Tuuletusikkuna", price: 10, description: "Pieni tuuletusikkuna" },
   { id: "avautumaton", category: "PESTAVAT", name: "Avautumaton ikkuna", price: 11, description: "Kiinteä ikkuna" },
-  { id: "ikkuna-ryhma", category: "PESTAVAT", name: "Ikkunaryhmä", price: 25, description: "Useamman ikkunan ryhmä" },
   { id: "ovi", category: "PESTAVAT", name: "Ovi (lasillinen)", price: 11, description: "Lasillinen ovi" },
   { id: "korkea", category: "PESTAVAT", name: "Kiinteä 3–5 m korkeudessa", price: 18, description: "Vaikeasti saavutettava korkea ikkuna" },
   { id: "lasikaide", category: "PESTAVAT", name: "Lasikaide (metri)", price: 8, description: "Hinta metriä kohti" },
@@ -32,6 +31,7 @@ export const WINDOW_TYPES: WindowType[] = [
 
   // Terassilasit
   { id: "terassilasi", category: "TERASSI", name: "Terassilasi", price: 11, description: "Hinta lasia kohti" },
+  { id: "terassi-katto", category: "TERASSI", name: "Terassin lasikatto", price: 80, description: "Terassin lasikaton pesu" },
 ];
 
 export const OUTDOOR_WINDOW_TYPES: WindowType[] = [
