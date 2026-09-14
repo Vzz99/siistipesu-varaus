@@ -30,7 +30,7 @@ export const WINDOW_TYPES: WindowType[] = [
   { id: "parveke-alalasi", category: "PARVEKE", name: "Parvekkeen alalasi (metri)", price: 8, description: "Hinta metriä kohti" },
 
   // Terassilasit
-  { id: "terassilasi", category: "TERASSI", name: "Terassilasi", price: 11, description: "Hinta lasia kohti" },
+  { id: "terassilasi", category: "TERASSI", name: "Terassilasi (kpl)", price: 11, description: "Hinta lasia kohti" },
   { id: "terassi-katto", category: "TERASSI", name: "Terassin lasikatto", price: 80, description: "Terassin lasikaton pesu" },
 ];
 
