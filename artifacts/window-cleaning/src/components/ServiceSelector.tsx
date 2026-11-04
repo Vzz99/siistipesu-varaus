@@ -18,14 +18,6 @@ interface ServiceOption {
 
 const services: ServiceOption[] = [
   {
-    id: "lumityot",
-    title: "Lumityöt",
-    subtitle: "Pihojen auraus koneella ja käsin",
-    price: "alkaen 15 €",
-    priceNote: "hinta pihan koon mukaan",
-    image: "/IMG_5565.jpeg",
-  },
-  {
     id: "ikkunanpesu",
     title: "Ikkunanpesu",
     subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
