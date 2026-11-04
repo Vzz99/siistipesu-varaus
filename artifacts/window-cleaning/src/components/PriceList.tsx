@@ -7,20 +7,6 @@ const BORDER = "#e2e8f0";
 
 const SERVICES = [
   {
-    image: "/IMG_5565.jpeg",
-    title: "Lumityöt",
-    badge: "Nyt ajankohtainen",
-    description: "Pihojen auraus koneella ja tarkka viimeistely käsin.",
-    price: "alkaen 15 €",
-    priceUnit: "/ kerta",
-    includes: [
-      "Auraus koneella, viimeistely käsin",
-      "Aurataan kun lunta on satanut yli 5 cm",
-      "Toimialue 5 km säteellä Kauniaisista",
-    ],
-    note: "Kausikortti 39 € — sisältää ensimmäisen aurauksen ja −20 % kaikista seuraavista.",
-  },
-  {
     image: "/window-thumbs.jpg",
     title: "Ikkunanpesu",
     badge: null,
@@ -30,7 +16,7 @@ const SERVICES = [
     includes: [
       "Kaikki pinnat, karmit ja ikkunoiden välit",
       "Kaikki välineet mukanamme",
-      "Matkakulut 25 €, minimiveloitus 40 €",
+      "Ei erillisiä matkakuluja, minimiveloitus 40 €",
     ],
     note: null,
   },
