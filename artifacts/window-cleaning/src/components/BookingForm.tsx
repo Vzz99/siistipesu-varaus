@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { type BookingData, type ServiceType } from "@/pages/BookingPage";
 import { CalendarPicker } from "@/components/CalendarPicker";
 
@@ -7,6 +7,37 @@ const DARK = "#0f172a";
 const GRAY = "#64748b";
 const BORDER = "#e2e8f0";
 const RED = "#dc2626";
+
+/* ── Kauden alku ──
+   Ikkunan- ja autonpesua ei tehdä talvella. Kaikki päivät ennen tätä
+   päivämäärää ovat varattavissa olevan kalenterin ulkopuolella.
+   Kun kausi aukeaa, vaihda päivämäärä tai aseta arvoksi "" (tyhjä),
+   jolloin rajoitus poistuu kokonaan. */
+const SEASON_START = "2027-04-01";
+const SEASON_NOTE =
+  "Pesukausi alkaa huhtikuussa 2027 — voit varata aikasi jo nyt.";
+
+function todayStr(): string {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+/* Kaikki päivät tästä päivästä kauden alkuun asti, estettyinä. */
+function datesBeforeSeason(): string[] {
+  if (!SEASON_START) return [];
+  const out: string[] = [];
+  const cur = new Date(todayStr() + "T12:00:00");
+  const end = new Date(SEASON_START + "T12:00:00");
+  while (cur < end) {
+    const m = String(cur.getMonth() + 1).padStart(2, "0");
+    const day = String(cur.getDate()).padStart(2, "0");
+    out.push(`${cur.getFullYear()}-${m}-${day}`);
+    cur.setDate(cur.getDate() + 1);
+  }
+  return out;
+}
 
 interface Props {
   onSubmit: (data: BookingData) => void;
@@ -74,6 +105,13 @@ export function BookingForm({
 }: Props) {
   const isSnow = serviceType === "lumityot";
 
+  // Ylläpidon estot + kauden ulkopuoliset päivät samassa joukossa
+  const allBlockedDates = useMemo(() => {
+    const s = new Set(blockedDates);
+    datesBeforeSeason().forEach((d) => s.add(d));
+    return s;
+  }, [blockedDates]);
+
   const [form, setForm] = useState<BookingData & { postalCode: string }>({
     name: "",
     phone: "",
@@ -124,7 +162,9 @@ export function BookingForm({
     }
 
     if (!form.date) e.date = "Valitse päivämäärä";
-    else if (blockedDates.has(form.date)) e.date = "Tämä päivä ei ole saatavilla";
+    else if (SEASON_START && form.date < SEASON_START)
+      e.date = SEASON_NOTE;
+    else if (allBlockedDates.has(form.date)) e.date = "Tämä päivä ei ole saatavilla";
     if (!form.time) e.time = "Valitse aika";
     else if (form.date && !slotsForDate(form.date).includes(form.time))
       e.time = "Valitse sallittu aika";
@@ -234,9 +274,18 @@ export function BookingForm({
         <h2 className="font-bold text-base mb-1.5" style={{ color: DARK }}>
           Aika
         </h2>
-        <p className="text-xs mb-5 leading-relaxed" style={{ color: GRAY }}>
+        <p className="text-xs mb-4 leading-relaxed" style={{ color: GRAY }}>
           Arkisin palvelemme klo 16–19 (koulun jälkeen), viikonloppuisin klo 8–19.
         </p>
+
+        {SEASON_START && !isSnow && (
+          <div
+            className="text-xs leading-relaxed px-3.5 py-3 rounded-xl mb-5"
+            style={{ background: "#eff6ff", color: "#1e40af" }}
+          >
+            {SEASON_NOTE}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <Field label="Päivämäärä *" error={errors.date}>
@@ -302,15 +351,13 @@ export function BookingForm({
             <CalendarPicker
               selectedDate={form.date}
               onSelectDate={handleDateSelect}
-              blockedDates={blockedDates}
+              blockedDates={allBlockedDates}
               allowPast={false}
               mode="booking"
             />
-            {blockedDates.size > 0 && (
-              <p className="text-xs mt-3" style={{ color: GRAY }}>
-                Yliviivatut päivät eivät ole saatavilla.
-              </p>
-            )}
+            <p className="text-xs mt-3" style={{ color: GRAY }}>
+              Yliviivatut päivät eivät ole saatavilla.
+            </p>
           </div>
         )}
       </div>
