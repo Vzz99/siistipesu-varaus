@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 import {
   WINDOW_TYPES,
   OUTDOOR_WINDOW_TYPES,
@@ -11,6 +12,15 @@ const BLUE = "#2563eb";
 const DARK = "#0f172a";
 const GRAY = "#64748b";
 const BORDER = "#e2e8f0";
+
+/* Suomalainen euromuotoilu: 40 € eikä 40.00 €,
+   mutta 40,50 € jos desimaaleja oikeasti on. */
+function euro(n: number): string {
+  return `${n.toLocaleString("fi-FI", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  })} €`;
+}
 
 interface Props {
   windowCounts: WindowCounts;
@@ -52,130 +62,204 @@ export function PriceSummary({
   const effectiveWork = Math.max(laborAfterDiscount, minimumCharge - travelFee);
   const kotitalousHinta = Math.round(effectiveWork * 0.65) + travelFee;
 
+  /* Mobiilin kiinteä alapalkki.
+     Renderöidään portaalilla suoraan bodyyn, koska Framer Motionin
+     transform vanhemmassa elementissä rikkoisi position: fixed. */
+  const mobileBar =
+    onProceed && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            className="lg:hidden fixed bottom-0 left-0 right-0 z-50"
+            style={{
+              background: "rgba(255,255,255,0.94)",
+              backdropFilter: "blur(12px)",
+              borderTop: `1px solid ${BORDER}`,
+              paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
+            }}
+          >
+            <div className="px-4 pt-3 flex items-center gap-3">
+              <div className="min-w-0">
+                <div className="flex items-baseline gap-1.5">
+                  <motion.span
+                    key={total}
+                    initial={{ scale: 1.08 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-xl font-extrabold tabular-nums leading-none"
+                    style={{ color: hasItems ? DARK : "#cbd5e1" }}
+                  >
+                    {hasItems ? euro(total) : euro(0)}
+                  </motion.span>
+                </div>
+                <span className="text-xs leading-tight block mt-1" style={{ color: GRAY }}>
+                  {hasItems ? (
+                    <>
+                      Kotitalousvähennyksellä{" "}
+                      <span className="font-bold" style={{ color: BLUE }}>
+                        n. {euro(kotitalousHinta)}
+                      </span>
+                    </>
+                  ) : (
+                    "Valitse ikkunoita"
+                  )}
+                </span>
+              </div>
+
+              <button
+                onClick={onProceed}
+                disabled={!hasItems}
+                className="ml-auto flex-shrink-0 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
+                style={
+                  hasItems
+                    ? { background: DARK, color: "#ffffff" }
+                    : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
+                }
+              >
+                Jatka
+              </button>
+            </div>
+          </div>,
+          document.body
+        )
+      : null;
+
   return (
-    <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
-      <div className="px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <h3 className="font-bold text-sm" style={{ color: DARK }}>
-          Hinta-arvio
-        </h3>
-      </div>
+    <>
+      <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
+        <div className="px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
+          <h3 className="font-bold text-sm" style={{ color: DARK }}>
+            Hinta-arvio
+          </h3>
+        </div>
 
-      <div className="px-5 py-5 space-y-4">
-        {!hasItems && (
-          <p className="text-sm text-center py-6 leading-relaxed" style={{ color: GRAY }}>
-            Valitse ikkunat vasemmalta, niin hinta lasketaan tähän.
-          </p>
-        )}
+        <div className="px-5 py-5 space-y-4">
+          {!hasItems && (
+            <p className="text-sm text-center py-6 leading-relaxed" style={{ color: GRAY }}>
+              Valitse ikkunat ja kappalemäärät, niin hinta lasketaan tähän.
+            </p>
+          )}
 
-        {/* Valitut kohteet */}
-        {hasItems && !compact && (
-          <div className="space-y-2">
-            <AnimatePresence>
-              {selected.map(({ window, count }) => (
-                <motion.div
-                  key={window.id}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="flex justify-between items-baseline text-sm gap-3"
-                >
-                  <span style={{ color: GRAY }}>{window.name}</span>
-                  <span className="font-semibold tabular-nums flex-shrink-0" style={{ color: DARK }}>
-                    × {count}
+          {/* Valitut kohteet */}
+          {hasItems && !compact && (
+            <div className="space-y-2">
+              <AnimatePresence>
+                {selected.map(({ window, count }) => (
+                  <motion.div
+                    key={window.id}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex justify-between items-baseline text-sm gap-3"
+                  >
+                    <span style={{ color: GRAY }}>{window.name}</span>
+                    <span className="font-semibold tabular-nums flex-shrink-0" style={{ color: DARK }}>
+                      × {count}
+                    </span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {hasItems && compact && (
+            <p className="text-xs" style={{ color: GRAY }}>
+              {selected.length} kohdetta valittu
+            </p>
+          )}
+
+          {/* Erittely */}
+          {hasItems && (
+            <div className="pt-4 space-y-2.5" style={{ borderTop: `1px solid ${BORDER}` }}>
+              <div className="flex justify-between text-sm">
+                <span style={{ color: GRAY }}>Ikkunat yhteensä</span>
+                <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                  {euro(windowsSubtotal)}
+                </span>
+              </div>
+
+              {campaignOn && discount > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="font-semibold" style={{ color: BLUE }}>
+                    {CAMPAIGN.label} −{CAMPAIGN.percent} %
                   </span>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
+                  <span className="font-semibold tabular-nums" style={{ color: BLUE }}>
+                    −{euro(discount)}
+                  </span>
+                </div>
+              )}
 
-        {hasItems && compact && (
-          <p className="text-xs" style={{ color: GRAY }}>
-            {selected.length} kohdetta valittu
-          </p>
-        )}
+              {/* Matkamaksurivi näkyy vain jos maksu on oikeasti käytössä.
+                 Nyt TRAVEL_FEE = 0, joten rivi on piilossa. */}
+              {travelFee > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span style={{ color: GRAY }}>Matkamaksu</span>
+                  <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                    {euro(travelFee)}
+                  </span>
+                </div>
+              )}
 
-        {/* Erittely */}
-        {hasItems && (
-          <div className="pt-4 space-y-2.5" style={{ borderTop: `1px solid ${BORDER}` }}>
-            <div className="flex justify-between text-sm">
-              <span style={{ color: GRAY }}>Ikkunat yhteensä</span>
-              <span className="font-semibold tabular-nums" style={{ color: DARK }}>
-                {windowsSubtotal} €
+              {isMinimumApplied && (
+                <p className="text-xs leading-relaxed pt-1" style={{ color: GRAY }}>
+                  Minimiveloitus {euro(minimumCharge)} on käytössä.
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Loppusumma */}
+          <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <div className="flex justify-between items-baseline mb-1">
+              <span className="font-bold text-base" style={{ color: DARK }}>
+                Yhteensä
               </span>
+              <motion.span
+                key={total}
+                initial={{ scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.25 }}
+                className="text-2xl font-extrabold tabular-nums"
+                style={{ color: hasItems ? DARK : "#cbd5e1" }}
+              >
+                {hasItems ? euro(total) : euro(0)}
+              </motion.span>
             </div>
 
-            {campaignOn && discount > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="font-semibold" style={{ color: BLUE }}>
-                  {CAMPAIGN.label} −{CAMPAIGN.percent} %
+            {hasItems && (
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs" style={{ color: GRAY }}>
+                  Kotitalousvähennyksellä
                 </span>
-                <span className="font-semibold tabular-nums" style={{ color: BLUE }}>
-                  −{discount} €
+                <span className="text-sm font-bold tabular-nums" style={{ color: BLUE }}>
+                  n. {euro(kotitalousHinta)}
                 </span>
               </div>
             )}
-
-            <div className="flex justify-between text-sm">
-              <span style={{ color: GRAY }}>Matkamaksu</span>
-              <span className="font-semibold tabular-nums" style={{ color: DARK }}>
-                {travelFee} €
-              </span>
-            </div>
-
-            {isMinimumApplied && (
-              <p className="text-xs leading-relaxed pt-1" style={{ color: GRAY }}>
-                Minimiveloitus {minimumCharge} € on käytössä.
-              </p>
-            )}
           </div>
-        )}
 
-        {/* Loppusumma */}
-        <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
-          <div className="flex justify-between items-baseline mb-1">
-            <span className="font-bold text-base" style={{ color: DARK }}>
-              Yhteensä
-            </span>
-            <motion.span
-              key={total}
-              initial={{ scale: 1.08 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.25 }}
-              className="text-2xl font-extrabold tabular-nums"
-              style={{ color: hasItems ? DARK : "#cbd5e1" }}
+          {/* Työpöydällä nappi on kortissa. Mobiilissa se on alapalkissa,
+             joten tämä piilotetaan pienillä näytöillä. */}
+          {onProceed && (
+            <button
+              onClick={onProceed}
+              disabled={!hasItems}
+              className="hidden lg:block w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200"
+              style={
+                hasItems
+                  ? { background: DARK, color: "#ffffff" }
+                  : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
+              }
             >
-              {hasItems ? `${total.toFixed(2)} €` : "0,00 €"}
-            </motion.span>
-          </div>
-
-          {hasItems && (
-            <div className="flex justify-between items-baseline">
-              <span className="text-xs" style={{ color: GRAY }}>
-                Kotitalousvähennyksellä
-              </span>
-              <span className="text-sm font-bold tabular-nums" style={{ color: BLUE }}>
-                n. {kotitalousHinta} €
-              </span>
-            </div>
+              {hasItems ? "Jatka varaukseen" : "Valitse ensin ikkunoita"}
+            </button>
           )}
         </div>
-
-        {onProceed && (
-          <button
-            onClick={onProceed}
-            disabled={!hasItems}
-            className="w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200"
-            style={
-              hasItems
-                ? { background: DARK, color: "#ffffff" }
-                : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
-            }
-          >
-            {hasItems ? "Jatka varaukseen" : "Valitse ensin ikkunoita"}
-          </button>
-        )}
       </div>
-    </div>
+
+      {/* Tila alapalkille, ettei se peitä sivun loppua */}
+      {onProceed && <div className="lg:hidden" style={{ height: 96 }} />}
+
+      {mobileBar}
+    </>
   );
 }
