@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { PrivacyPolicy } from "@/components/PrivacyPolicy";
+
 export function Footer() {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+
   return (
     <footer className="bg-slate-800 text-white mt-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -42,9 +47,15 @@ export function Footer() {
       </div>
 
       {/* Alatunniste */}
-      <div className="border-t border-slate-700 py-4 text-center text-xs text-slate-500">
-        © 2026 Siisti Pesu | Kaikki oikeudet pidätetään.
+      <div className="border-t border-slate-700 py-4 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-xs text-slate-500">
+        <span>© 2026 Siisti Pesu | Kaikki oikeudet pidätetään.</span>
+        <span className="hidden sm:inline">·</span>
+        <button
+          onClick={() => setPrivacyOpen(true)}
+          className="underline underline-offset-2 hover:text-white transition-colors"
+        >
+          Tietosuojaseloste
+        </button>
       </div>
-    </footer>
-  );
-}
+
+      <PrivacyPolicy open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
