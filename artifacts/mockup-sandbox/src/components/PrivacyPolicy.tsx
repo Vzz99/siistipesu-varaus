@@ -23,7 +23,6 @@ interface Props {
 }
 
 export function PrivacyPolicy({ open, onClose }: Props) {
-  // Esc sulkee, ja tausta ei rullaa modaalin alla
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
@@ -183,9 +182,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
                     tilikausi on päättynyt, kuten kirjanpitolaki edellyttää.
                   </li>
                 </ul>
-                <p className="mt-2">
-                  Säilytysajan päätyttyä tiedot poistetaan.
-                </p>
+                <p className="mt-2">Säilytysajan päätyttyä tiedot poistetaan.</p>
               </Section>
 
               <Section title="6. Sinun oikeutesi">
