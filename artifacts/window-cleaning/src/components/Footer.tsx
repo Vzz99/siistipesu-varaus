@@ -59,3 +59,6 @@ export function Footer() {
       </div>
 
       <PrivacyPolicy open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+          </footer>
+  );
+}
