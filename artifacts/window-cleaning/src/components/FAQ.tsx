@@ -2,7 +2,7 @@ import { useState } from "react";
 const QUESTIONS = [
   {
     q: "Voiko palvelusta saada kotitalousvähennyksen?",
-    a: "Kyllä. Ikkunanpesu, pihatyöt ja muut kotitalouspalvelumme ovat kotitalousvähennyskelpoisia. Vuosina 2026–2027 saat vähentää 40 % työn osuudesta, kun siitä on ensin vähennetty 150 euron vuotuinen omavastuu. Enimmäismäärä on 2 100 euroa vuodessa henkilöä kohden. Omavastuu vähennetään vuoden ensimmäisestä työstä, joten pienessä yksittäisessä keikassa vähennystä ei välttämättä kerry lainkaan. Matkakulu ei ole vähennyskelpoinen. Annamme aina kuitin, jossa työn osuus on eritelty verottajaa varten.",
+    a: "Kyllä. Ikkunanpesu, pihatyöt ja muut kotitalouspalvelumme ovat kotitalousvähennyskelpoisia. Vuosina 2026–2027 vähennys on 40 % työn osuudesta. Vähennyksestä pienennetään 150 euron omavastuu, mutta se on vuosikohtainen eikä työkohtainen: se vähennetään vain kerran vuodessa riippumatta siitä, montako kotitalouspalvelua ostat. Jos olet jo teettänyt saman vuoden aikana esimerkiksi remonttia tai siivousta, omavastuu on käytetty ja saat meidän työstämme täydet 40 %. Enimmäismäärä on 2 100 euroa vuodessa henkilöä kohden, pariskunnalla 4 200 euroa. Matkakulu ei ole vähennyskelpoinen. Annamme aina kuitin, jossa työn osuus on eritelty verottajaa varten.",
   },
   {
     q: "Pitääkö minun olla kotona palvelun aikana?",
