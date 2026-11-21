@@ -1,12 +1,6 @@
 import { type ServiceType } from "@/pages/BookingPage";
 import { ACCENT_DARK, ACCENT_TINT, BORDER, INK, MUTED } from "@/lib/theme";
-
-const SERVICE_LABELS: Record<ServiceType, string> = {
-  ikkunanpesu: "Ikkunanpesu",
-  auton_ulkopesu: "Auton ulkopesu",
-  muut_palvelut: "Muut palvelut",
-  lumityot: "Lumityöt",
-};
+import { SERVICE_LABELS, getService, formatServicePrice } from "@/data/services";
 
 interface Props {
   serviceType: ServiceType;
@@ -14,9 +8,10 @@ interface Props {
 }
 
 export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
-  const isCarWash = serviceType === "auton_ulkopesu";
+  const service = getService(serviceType);
   const isSnow = serviceType === "lumityot";
-  const isMuut = serviceType === "muut_palvelut";
+  /* Kiinteähintaiset palvelut nayttavat summan, muut selitteen. */
+  const hasFixedPrice = service.price !== null;
 
   return (
     <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
@@ -41,29 +36,38 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
             Hinta
           </p>
 
-          {isCarWash && (
+          {hasFixedPrice ? (
             <p className="text-2xl font-extrabold tabular-nums" style={{ color: INK }}>
-              30,00 €
+              {formatServicePrice(serviceType)}
+            </p>
+          ) : (
+            <p className="font-semibold text-sm leading-snug" style={{ color: MUTED }}>
+              {formatServicePrice(serviceType)}
             </p>
           )}
 
-          {isSnow && (
-            <>
-              <p className="text-2xl font-extrabold tabular-nums" style={{ color: INK }}>
-                alkaen 15 €
-              </p>
-              <p className="text-xs leading-relaxed mt-1.5" style={{ color: MUTED }}>
-                Lopullinen hinta sovitaan pihan koon mukaan.
-              </p>
-            </>
-          )}
-
-          {isMuut && (
-            <p className="font-semibold text-sm leading-snug" style={{ color: MUTED }}>
-              Hinta sovitaan erikseen
+          {service.priceNote && !hasFixedPrice && (
+            <p className="text-xs leading-relaxed mt-1.5" style={{ color: MUTED }}>
+              {service.priceNote}
             </p>
           )}
         </div>
+
+        {/* Mita palveluun sisaltyy */}
+        {service.includes.length > 0 && (
+          <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <p className="text-xs font-medium mb-2" style={{ color: MUTED }}>
+              Sisältyy
+            </p>
+            <ul className="space-y-1.5">
+              {service.includes.map((item) => (
+                <li key={item} className="text-sm leading-snug" style={{ color: MUTED }}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {isSnow && (
           <div

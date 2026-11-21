@@ -1,50 +1,7 @@
 import { motion } from "framer-motion";
+import { LISTED_SERVICES, shortServicePrice } from "@/data/services";
 import { ACCENT, ACCENT_DARK, ACCENT_TINT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
-const SERVICES = [
-  {
-    image: "/window-thumbs.webp",
-    title: "Ikkunanpesu",
-    badge: null,
-    description: "Sisä- ja ulkopinnat kiiltäviksi — ei jälkiä, ei tahroja.",
-    price: "alkaen 10 €",
-    priceUnit: "/ ikkuna",
-    includes: [
-      "Kaikki pinnat, karmit ja ikkunoiden välit",
-      "Kaikki välineet mukanamme",
-      "Ei erillisiä matkakuluja, minimiveloitus 40 €",
-    ],
-    note: null,
-  },
-  {
-    image: "/car-wash.webp",
-    title: "Auton ulkopesu",
-    badge: null,
-    description: "Laadukas käsinpesu. Auto kiiltää kuin uusi.",
-    price: "30 €",
-    priceUnit: "kiinteä hinta",
-    includes: [
-      "Kori, pyörät, vanteet ja lasit",
-      "Kaikki välineet mukanamme",
-      "Tarvitsemme pääsyn vesipisteeseen",
-    ],
-    note: null,
-  },
-  {
-    image: "/mowing.webp",
-    title: "Pihatyöt & muut",
-    badge: null,
-    description: "Nurmikon leikkuu, pihatyöt ja muut kotitalouspalvelut.",
-    price: "Sovitaan",
-    priceUnit: "erikseen",
-    includes: [
-      "Nurmikon leikkuu ja pihan siistiminen",
-      "Muut kodin ulkotyöt",
-      "Hinta työmäärän ja haastavuuden mukaan",
-    ],
-    note: null,
-  },
-];
 
 export function PriceList() {
   return (
@@ -85,9 +42,9 @@ export function PriceList() {
 
       {/* Kortit */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {SERVICES.map((service, i) => (
+        {LISTED_SERVICES.map((service, i) => (
           <motion.div
-            key={service.title}
+            key={service.id}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -99,22 +56,12 @@ export function PriceList() {
             {/* Ylärivi */}
             <div className="flex items-start gap-4 mb-4">
               <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0" style={{ background: SURFACE_SUNK }}>
-                <img src={service.image} alt={service.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                <img src={service.image} alt={service.label} loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <h3 className="font-bold text-lg leading-tight" style={{ color: INK }}>
-                    {service.title}
-                  </h3>
-                  {service.badge && (
-                    <span
-                      className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: ACCENT_TINT, color: ACCENT }}
-                    >
-                      {service.badge}
-                    </span>
-                  )}
-                </div>
+                <h3 className="font-bold text-lg leading-tight mb-1" style={{ color: INK }}>
+                  {service.label}
+                </h3>
                 <p className="text-sm leading-snug" style={{ color: MUTED }}>
                   {service.description}
                 </p>
@@ -143,26 +90,16 @@ export function PriceList() {
               ))}
             </ul>
 
-            {/* Lisähuomio */}
-            {service.note && (
-              <div
-                className="text-xs leading-relaxed px-3.5 py-3 rounded-xl mb-5"
-                style={{ background: ACCENT_TINT, color: ACCENT_DARK }}
-              >
-                {service.note}
-              </div>
-            )}
-
             {/* Hinta alareunassa */}
             <div
               className="mt-auto pt-4 flex items-baseline gap-1.5"
               style={{ borderTop: `1px solid ${BORDER}` }}
             >
               <span className="text-2xl font-extrabold" style={{ color: INK }}>
-                {service.price}
+                {shortServicePrice(service.id)}
               </span>
               <span className="text-sm font-medium" style={{ color: MUTED }}>
-                {service.priceUnit}
+                {service.priceNote}
               </span>
             </div>
           </motion.div>

@@ -1,18 +1,12 @@
 import emailjs from "@emailjs/browser";
 import { WINDOW_TYPES, TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/BookingPage";
+import { SERVICE_LABELS, formatServicePrice } from "@/data/services";
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
 const CUSTOMER_TEMPLATE_ID = "template_17328o9";
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
-
-const SERVICE_LABELS: Record<ServiceType, string> = {
-  ikkunanpesu: "Ikkunanpesu",
-  auton_ulkopesu: "Auton ulkopesu",
-  muut_palvelut: "Muut palvelut",
-  lumityot: "Lumityöt",
-};
 
 const MONTH_NAMES = [
   "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta", "kesäkuuta",
@@ -33,9 +27,9 @@ function buildWindowsList(windowCounts: WindowCounts): string {
 }
 
 function calcTotal(serviceType: ServiceType, windowCounts: WindowCounts): string {
-  if (serviceType === "auton_ulkopesu") return "30,00 €";
-  if (serviceType === "lumityot") return "alkaen 15 € (sovitaan pihan koon mukaan)";
-  if (serviceType === "muut_palvelut") return "Sovitaan erikseen";
+  /* Kiintea hinta tulee suoraan palvelumaarittelysta, jotta
+     vahvistussahkoposti ei voi jaada jalkeen hinnastosta. */
+  if (serviceType !== "ikkunanpesu") return formatServicePrice(serviceType);
   const windowsSubtotal = WINDOW_TYPES
     .filter((w) => (windowCounts[w.id] ?? 0) > 0)
     .reduce((s, w) => s + w.price * windowCounts[w.id], 0);
