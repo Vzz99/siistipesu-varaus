@@ -10,6 +10,7 @@ import { AdminPasswordModal } from "@/components/AdminPasswordModal";
 import { AdminPanel } from "@/components/AdminPanel";
 import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
+import { Section } from "@/components/Section";
 import { FAQ } from "@/components/FAQ";
 import { Hero } from "@/components/Hero";
 import { CampaignBanner } from "@/components/CampaignBanner";
@@ -260,7 +261,7 @@ export function BookingPage() {
         )}
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+      <main className="flex-1 w-full">
         <AnimatePresence mode="wait">
           {isAdminLoggedIn ? (
             <AdminPanel
@@ -282,43 +283,47 @@ export function BookingPage() {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.22 }}
                 >
-                  <CampaignBanner onClick={scrollToServices} />
+                  {/* Pintojen vuorottelu antaa sivulle rytmin:
+                      valkoinen, vaalea, valkoinen, tumma, vaalea... */}
+                  <Section tone="white" className="pt-4">
+                    <CampaignBanner onClick={scrollToServices} />
+                    <Hero onBookClick={scrollToServices} />
+                  </Section>
 
-                  <Hero onBookClick={scrollToServices} />
-
-                  <div id="miten" className="scroll-mt-24">
+                  <Section id="miten" tone="tint" className="pt-16 sm:pt-20">
                     <HowItWorks onStartClick={scrollToServices} />
-                  </div>
+                  </Section>
 
-                  <div id="hinnat" className="scroll-mt-24">
+                  <Section id="hinnat" tone="white" className="pt-16 sm:pt-20">
                     <PriceList />
-                  </div>
+                  </Section>
 
-                  <div id="tulokset" className="scroll-mt-24">
-                    <ResultsSection />
-                  </div>
+                  <Section id="tulokset" tone="dark" className="pt-16 sm:pt-20">
+                    <ResultsSection dark />
+                  </Section>
 
-                  <div id="arvot" className="scroll-mt-24">
+                  <Section id="arvot" tone="tint" className="pt-16 sm:pt-20">
                     <ValuesSection />
-                  </div>
+                  </Section>
 
-                  <div id="palvelut" className="scroll-mt-24">
+                  <Section id="palvelut" tone="white" className="pt-16 sm:pt-20">
                     <ServiceSelector onSelect={handleServiceSelect} />
-                  </div>
+                  </Section>
 
-                  <div id="ukk" className="scroll-mt-24">
+                  <Section id="ukk" tone="tint" className="pt-16 sm:pt-20">
                     <FAQ />
-                  </div>
+                  </Section>
 
-                  <div id="meista" className="scroll-mt-24">
+                  <Section id="meista" tone="white" className="pt-16 sm:pt-20">
                     <AboutSection />
-                  </div>
+                  </Section>
                 </motion.div>
               )}
 
               {step === "select" && serviceType === "ikkunanpesu" && (
                 <motion.div
                   key="select"
+                  className="max-w-6xl mx-auto px-4 sm:px-6 py-8"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
@@ -357,6 +362,7 @@ export function BookingPage() {
               {step === "booking" && serviceType && (
                 <motion.div
                   key="booking"
+                  className="max-w-6xl mx-auto px-4 sm:px-6 py-8"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
@@ -400,6 +406,7 @@ export function BookingPage() {
               {step === "confirmation" && bookingData && serviceType && (
                 <motion.div
                   key="confirmation"
+                  className="max-w-6xl mx-auto px-4 sm:px-6 py-8"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
