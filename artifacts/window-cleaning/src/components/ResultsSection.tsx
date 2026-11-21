@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { WorkVideo } from "@/components/WorkVideo";
 
 const BLUE = "#2563eb";
 const DARK = "#0f172a";
@@ -26,8 +27,9 @@ const PAIRS = [
 export function ResultsSection() {
   return (
     <div className="mb-20 sm:mb-24">
-      {/* Otsikko */}
-      <div className="mb-10 sm:mb-12 max-w-2xl">
+      {/* Otsikko ja video rinnakkain */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 lg:gap-12 items-center mb-10 sm:mb-12">
+      <div className="max-w-2xl">
         <motion.p
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -56,8 +58,20 @@ export function ResultsSection() {
           className="text-base sm:text-lg leading-relaxed"
           style={{ color: "#475569" }}
         >
-          Kuvat ovat omista töistämme — ei kuvapankista.
+          Kuvat ja video ovat omista töistämme — ei kuvapankista.
         </motion.p>
+      </div>
+
+        {/* Video omasta työstä */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-[280px] mx-auto lg:max-w-none lg:mx-0"
+        >
+          <WorkVideo />
+        </motion.div>
       </div>
 
       {/* Ennen / jälkeen */}
