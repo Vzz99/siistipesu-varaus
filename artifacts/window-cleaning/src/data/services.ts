@@ -47,7 +47,7 @@ export const SERVICES: Service[] = [
     price: null,
     priceLabel: "alkaen 10 €",
     priceNote: "/ ikkuna",
-    image: "/after-window.webp",
+    image: "/window-thumbs.webp",
     includes: [
       "Kaikki pinnat, karmit ja ikkunoiden välit",
       "Kaikki välineet mukanamme",

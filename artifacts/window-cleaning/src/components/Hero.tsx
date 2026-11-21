@@ -116,12 +116,12 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             style={{ aspectRatio: "4 / 5", background: SURFACE_SUNK }}
           >
             <img
-              src="/window-thumbs.webp"
-              alt="Siisti Pesun tekijä lasta kädessä pestyn ikkunan edessä"
+              src="/hero-poster.webp"
+              alt="Lasta vedetään pitkin ikkunalasia valoisassa keittiössä"
               fetchPriority="high"
               decoding="async"
               className="w-full h-full object-cover"
-              style={{ objectPosition: "50% 35%" }}
+              style={{ objectPosition: "50% 42%" }}
             />
           </div>
 
