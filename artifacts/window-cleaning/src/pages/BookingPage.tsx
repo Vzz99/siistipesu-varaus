@@ -170,7 +170,7 @@ export function BookingPage() {
         style={{
           background: "rgba(255,255,255,0.85)",
           backdropFilter: "blur(12px)",
-          borderBottom: "1px solid BORDER",
+          borderBottom: `1px solid ${BORDER}`,
         }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
@@ -252,7 +252,7 @@ export function BookingPage() {
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
                 className="flex-shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150"
-                style={{ color: BODY, border: "1px solid BORDER" }}
+                style={{ color: BODY, border: `1px solid ${BORDER}` }}
               >
                 {link.label}
               </button>

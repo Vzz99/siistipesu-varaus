@@ -17,7 +17,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-6"
             style={{
               background: ACCENT_TINT,
-              border: "1px solid ACCENT_EDGE",
+              border: `1px solid ${ACCENT_EDGE}`,
               color: ACCENT_DARK,
             }}
           >
@@ -68,7 +68,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             <a
               href="tel:+358442431103"
               className="inline-flex items-center gap-2 px-6 py-3.5 font-semibold rounded-xl text-base transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
-              style={{ border: "1px solid BORDER_STRONG", color: INK }}
+              style={{ border: `1px solid ${BORDER_STRONG}`, color: INK }}
             >
               Soita meille
             </a>
@@ -123,7 +123,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
           {/* Kelluva hintakortti */}
           <div
             className="absolute -bottom-5 left-4 sm:left-auto sm:-right-5 rounded-2xl px-5 py-4 bg-white"
-            style={{ border: "1px solid BORDER", boxShadow: "0 8px 24px rgba(15,23,42,0.08)" }}
+            style={{ border: `1px solid ${BORDER}`, boxShadow: "0 8px 24px rgba(15,23,42,0.08)" }}
           >
             <p className="text-xs font-medium mb-0.5" style={{ color: MUTED }}>
               Ikkunat alkaen

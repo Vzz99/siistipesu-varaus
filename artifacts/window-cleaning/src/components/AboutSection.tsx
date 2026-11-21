@@ -124,7 +124,7 @@ export function AboutSection() {
             <a
               href="mailto:siisti.pesu@gmail.com"
               className="px-6 py-3 font-semibold rounded-xl text-sm transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
-              style={{ border: `1px solid BORDER_STRONG`, color: INK }}
+              style={{ border: `1px solid ${BORDER_STRONG}`, color: INK }}
             >
               siisti.pesu@gmail.com
             </a>
