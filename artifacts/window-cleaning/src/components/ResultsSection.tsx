@@ -2,12 +2,11 @@ import { motion } from "framer-motion";
 import { WorkVideo } from "@/components/WorkVideo";
 import { ACCENT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
-/* Videot omista töistä. Autopesuvideo lisätään tähän kun se on
-   editoitu: riittää että tiedostot ovat public-kansiossa ja
-   rivi otetaan kommenteista pois. Asettelu venyy kahdelle itse. */
+/* Videot omista töistä. Lisää uusi laittamalla tiedostot
+   public-kansioon ja rivi tähän — asettelu venyy itse. */
 const VIDEOS = [
   { src: "/hero.mp4", poster: "/hero-poster.webp", alt: "Siisti Pesu pesee ikkunaa" },
-  // { src: "/car.mp4", poster: "/car-poster.webp", alt: "Siisti Pesu pesee autoa" },
+  { src: "/car.mp4", poster: "/car-poster.webp", alt: "Auton sisäpesun jälki" },
 ];
 
 const PAIRS = [
