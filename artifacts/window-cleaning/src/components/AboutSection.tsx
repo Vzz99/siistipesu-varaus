@@ -29,8 +29,10 @@ export function AboutSection() {
             style={{ aspectRatio: "4 / 5", background: "#f1f5f9" }}
           >
             <img
-              src="/team.jpg"
+              src="/team.webp"
               alt="Valtteri Jutila ja Lauri Huopainen"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
               style={{ objectPosition: "center 20%" }}
             />

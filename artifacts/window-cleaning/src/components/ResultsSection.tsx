@@ -8,18 +8,18 @@ const BORDER = "#e2e8f0";
 const PAIRS = [
   {
     label: "Ikkunanpesu",
-    before: { src: "/before-window.jpg", alt: "Ikkuna ennen pesua" },
-    after: { src: "/after-window.jpg", alt: "Ikkuna pesun jälkeen" },
+    before: { src: "/before-window.webp", alt: "Ikkuna ennen pesua" },
+    after: { src: "/after-window.webp", alt: "Ikkuna pesun jälkeen" },
   },
   {
     label: "Karmit ja kiskot",
-    before: { src: "/window-track-1.jpg", alt: "Kisko ennen pesua" },
-    after: { src: "/window-track-2.jpg", alt: "Kisko pesun jälkeen" },
+    before: { src: "/window-track-1.webp", alt: "Kisko ennen pesua" },
+    after: { src: "/window-track-2.webp", alt: "Kisko pesun jälkeen" },
   },
   {
     label: "Auton ulkopesu",
-    before: { src: "/car-dirty.jpg", alt: "Auto ennen pesua" },
-    after: { src: "/car-clean.jpg", alt: "Auto pesun jälkeen" },
+    before: { src: "/car-dirty.webp", alt: "Auto ennen pesua" },
+    after: { src: "/car-clean.webp", alt: "Auto pesun jälkeen" },
   },
 ];
 
@@ -75,7 +75,7 @@ export function ResultsSection() {
           >
             <div className="grid grid-cols-2 gap-2.5 mb-3.5">
               <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: "#f1f5f9" }}>
-                <img src={pair.before.src} alt={pair.before.alt} className="w-full h-full object-cover" />
+                <img src={pair.before.src} alt={pair.before.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 <span
                   className="absolute top-2 left-2 text-[11px] font-bold px-2 py-0.5 rounded-full"
                   style={{ background: "rgba(255,255,255,0.92)", color: GRAY }}
@@ -84,7 +84,7 @@ export function ResultsSection() {
                 </span>
               </div>
               <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: "#f1f5f9" }}>
-                <img src={pair.after.src} alt={pair.after.alt} className="w-full h-full object-cover" />
+                <img src={pair.after.src} alt={pair.after.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 <span
                   className="absolute top-2 left-2 text-[11px] font-bold px-2 py-0.5 rounded-full text-white"
                   style={{ background: BLUE }}

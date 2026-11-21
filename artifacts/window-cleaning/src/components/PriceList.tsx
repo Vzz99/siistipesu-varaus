@@ -7,7 +7,7 @@ const BORDER = "#e2e8f0";
 
 const SERVICES = [
   {
-    image: "/window-thumbs.jpg",
+    image: "/window-thumbs.webp",
     title: "Ikkunanpesu",
     badge: null,
     description: "Sisä- ja ulkopinnat kiiltäviksi — ei jälkiä, ei tahroja.",
@@ -21,7 +21,7 @@ const SERVICES = [
     note: null,
   },
   {
-    image: "/car-wash.jpg",
+    image: "/car-wash.webp",
     title: "Auton ulkopesu",
     badge: null,
     description: "Laadukas käsinpesu. Auto kiiltää kuin uusi.",
@@ -35,7 +35,7 @@ const SERVICES = [
     note: null,
   },
   {
-    image: "/mowing.jpg",
+    image: "/mowing.webp",
     title: "Pihatyöt & muut",
     badge: null,
     description: "Nurmikon leikkuu, pihatyöt ja muut kotitalouspalvelut.",
@@ -103,7 +103,7 @@ export function PriceList() {
             {/* Ylärivi */}
             <div className="flex items-start gap-4 mb-4">
               <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0" style={{ background: "#f1f5f9" }}>
-                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                <img src={service.image} alt={service.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
