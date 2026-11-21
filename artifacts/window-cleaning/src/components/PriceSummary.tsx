@@ -7,6 +7,7 @@ import {
   isCampaignActive,
 } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
+import { hintaVahennyksenJalkeen, vahennysTyosta, KV_OMAVASTUU } from "@/data/kotitalousvahennys";
 import { ACCENT, BORDER, BORDER_STRONG, DISABLED, INK, MUTED, SURFACE_SUNK, WHITE } from "@/lib/theme";
 
 /* Suomalainen euromuotoilu: 40 € eikä 40.00 €,
@@ -56,7 +57,12 @@ export function PriceSummary({
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
 
   const effectiveWork = Math.max(laborAfterDiscount, minimumCharge - travelFee);
-  const kotitalousHinta = Math.round(effectiveWork * 0.65) + travelFee;
+  /* 40 % tyon osuudesta, josta vahennetaan 150 euron vuotuinen
+     omavastuu. Pienessa keikassa vahennys voi jaada kokonaan
+     saamatta, joten summaa ei nayteta jos se ei tuo saastoa. */
+  const kotitalousHinta = hintaVahennyksenJalkeen(effectiveWork, travelFee);
+  const kotitalousSaasto = vahennysTyosta(effectiveWork);
+  const naytaVahennys = hasItems && kotitalousSaasto > 0;
 
   /* Mobiilin kiinteä alapalkki.
      Renderöidään portaalilla suoraan bodyyn, koska Framer Motionin
@@ -88,7 +94,9 @@ export function PriceSummary({
                   </motion.span>
                 </div>
                 <span className="text-xs leading-tight block mt-1" style={{ color: MUTED }}>
-                  {hasItems ? (
+                  {!hasItems ? (
+                    "Valitse ikkunoita"
+                  ) : naytaVahennys ? (
                     <>
                       Kotitalousvähennyksellä{" "}
                       <span className="font-bold" style={{ color: ACCENT }}>
@@ -96,7 +104,7 @@ export function PriceSummary({
                       </span>
                     </>
                   ) : (
-                    "Valitse ikkunoita"
+                    "Hinta sisältää matkakulun"
                   )}
                 </span>
               </div>
@@ -221,15 +229,22 @@ export function PriceSummary({
               </motion.span>
             </div>
 
-            {hasItems && (
-              <div className="flex justify-between items-baseline">
-                <span className="text-xs" style={{ color: MUTED }}>
-                  Kotitalousvähennyksellä
-                </span>
-                <span className="text-sm font-bold tabular-nums" style={{ color: ACCENT }}>
-                  n. {euro(kotitalousHinta)}
-                </span>
-              </div>
+            {naytaVahennys && (
+              <>
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs" style={{ color: MUTED }}>
+                    Kotitalousvähennyksellä
+                  </span>
+                  <span className="text-sm font-bold tabular-nums" style={{ color: ACCENT }}>
+                    n. {euro(kotitalousHinta)}
+                  </span>
+                </div>
+                <p className="text-[11px] leading-snug mt-1" style={{ color: MUTED }}>
+                  Arvio: 40 % työn osuudesta, josta on vähennetty{" "}
+                  {KV_OMAVASTUU} € vuotuinen omavastuu. Lopullisen
+                  vähennyksen vahvistaa Verohallinto.
+                </p>
+              </>
             )}
           </div>
 
