@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { WorkVideo } from "@/components/WorkVideo";
+import { SocialLinks } from "@/components/SocialLinks";
 import { ACCENT, ACCENT_EDGE, BORDER, INK, MUTED, SURFACE_SUNK, WHITE } from "@/lib/theme";
 
 /* Videot omista töistä. Lisää uusi laittamalla tiedostot
@@ -77,7 +78,7 @@ export function ResultsSection({ dark = false }: Props) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.25 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-center gap-4 sm:gap-5 mb-10 sm:mb-12"
+        className="flex justify-center gap-4 sm:gap-5 mb-6 sm:mb-7"
       >
         {VIDEOS.map((v) => (
           <WorkVideo
@@ -88,6 +89,24 @@ export function ResultsSection({ dark = false }: Props) {
             className="w-full max-w-[240px] sm:max-w-[280px]"
           />
         ))}
+      </motion.div>
+
+      {/* Somelinkit videoiden alla — kiinnostus on tassa kohtaa
+          korkeimmillaan, koska tyonjalki on juuri nahty. */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-14"
+      >
+        <span
+          className="text-sm"
+          style={{ color: dark ? "rgba(255,255,255,0.65)" : MUTED }}
+        >
+          Lisää töitämme somessa
+        </span>
+        <SocialLinks variant={dark ? "ghost" : "solid"} size="sm" />
       </motion.div>
 
       {/* Ennen / jälkeen */}
