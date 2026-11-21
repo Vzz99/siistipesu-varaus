@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ADMIN_PASSWORD = "admin123";
+/* Salasana luetaan ympäristömuuttujasta, jotta se ei ole GitHubissa.
+   Huom: Vite leipoo arvon buildiin, joten tämä EI piilota salasanaa
+   selaimelta — se vain pitää sen poissa julkisesta repositoriosta.
+   Oikea suojaus vaatisi tarkistuksen Apps Scriptin päässä. */
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? "";
 
 interface Props {
   open: boolean;
@@ -25,7 +29,8 @@ export function AdminPasswordModal({ open, onSuccess, onCancel }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
+    // Tyhjä salasana ei koskaan kelpaa, vaikka muuttuja puuttuisi
+    if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
       setError(false);
       onSuccess();
     } else {
@@ -68,8 +73,8 @@ export function AdminPasswordModal({ open, onSuccess, onCancel }: Props) {
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
               </div>
-              <h2 className="font-bold text-foreground text-lg">Yllapito</h2>
-              <p className="text-sm text-muted-foreground mt-1">Syota yllapitosalasana</p>
+              <h2 className="font-bold text-foreground text-lg">Ylläpito</h2>
+              <p className="text-sm text-muted-foreground mt-1">Syötä ylläpitosalasana</p>
             </div>
 
             <form onSubmit={handleSubmit} className="px-6 pb-6 pt-4 space-y-3">
@@ -95,7 +100,7 @@ export function AdminPasswordModal({ open, onSuccess, onCancel }: Props) {
                     <line x1="12" y1="8" x2="12" y2="12"/>
                     <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
-                  Vaarä salasana
+                  Väärä salasana
                 </motion.p>
               )}
               <div className="flex gap-2 pt-1">
