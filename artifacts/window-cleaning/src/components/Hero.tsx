@@ -111,8 +111,10 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             style={{ aspectRatio: "4 / 5", background: "#f1f5f9" }}
           >
             <img
-              src="/IMG_8822.jpeg"
+              src="/IMG_8822.webp"
               alt="Siisti Pesu — ikkunanpesua"
+              fetchPriority="high"
+              decoding="async"
               className="w-full h-full object-cover"
             />
           </div>

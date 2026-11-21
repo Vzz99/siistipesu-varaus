@@ -11,7 +11,7 @@ export function Footer() {
         {/* Logo ja kuvaus */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <img src="/sp-logo.png" alt="Siisti Pesu" className="w-12 h-12 rounded-full object-cover" />
+            <img src="/sp-logo.png" alt="Siisti Pesu" loading="lazy" decoding="async" className="w-12 h-12 rounded-full object-cover" />
             <div>
               <div className="font-bold text-lg">Siisti Pesu</div>
               <div className="text-xs text-slate-400">4H-yritys</div>

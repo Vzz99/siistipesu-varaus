@@ -22,7 +22,7 @@ const services: ServiceOption[] = [
     title: "Ikkunanpesu",
     subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
     price: "Laske hinta laskurista",
-    image: "/window-thumbs.jpg",
+    image: "/window-thumbs.webp",
   },
   {
     id: "auton_ulkopesu",
@@ -30,14 +30,14 @@ const services: ServiceOption[] = [
     subtitle: "Käsinpesu ulkoa, kiinteä hinta",
     price: "30 €",
     priceNote: "kiinteä hinta",
-    image: "/car-wash.jpg",
+    image: "/car-wash.webp",
   },
   {
     id: "muut_palvelut",
     title: "Muut palvelut",
     subtitle: "Nurmikon leikkuu, pihatyöt yms.",
     price: "Hinta sovitaan erikseen",
-    image: "/mowing.jpg",
+    image: "/mowing.webp",
   },
 ];
 
@@ -105,6 +105,8 @@ export function ServiceSelector({ onSelect }: Props) {
                 <img
                   src={service.image}
                   alt={service.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>

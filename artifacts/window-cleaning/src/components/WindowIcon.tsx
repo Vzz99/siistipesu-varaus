@@ -1,6 +1,6 @@
-/* Ikkunatyyppien ikonit — PNG-kuvat public-kansiossa.
+/* Ikkunatyyppien ikonit — WebP-kuvat public-kansiossa.
    Tiedostonimi vastaa windows.ts:n id-kenttää, esim.
-   id "avautuva-4" → public/avautuva-4.png */
+   id "avautuva-4" → public/avautuva-4.webp */
 
 /* Ulkopesun tyypeille ei ole omia kuvia — ne käyttävät
    vastaavaa sisäpesun ikonia. */
@@ -12,7 +12,7 @@ const ICON_FILE: Record<string, string> = {
 
 export function WindowIcon({ id, className }: { id: string; className?: string }) {
   const file = ICON_FILE[id] ?? id;
-  const src = `${import.meta.env.BASE_URL}${file}.png`;
+  const src = `${import.meta.env.BASE_URL}${file}.webp`;
 
   return (
     <div className={className}>
@@ -21,6 +21,7 @@ export function WindowIcon({ id, className }: { id: string; className?: string }
         alt=""
         aria-hidden="true"
         loading="lazy"
+        decoding="async"
         className="w-full h-full object-contain select-none pointer-events-none"
         onError={(e) => {
           e.currentTarget.style.visibility = "hidden";
