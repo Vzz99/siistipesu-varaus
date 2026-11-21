@@ -9,11 +9,7 @@ import {
 } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
 import { WindowIcon } from "@/components/WindowIcon";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, ACCENT_EDGE, ACCENT_TINT, BORDER, BORDER_STRONG, INK, MUTED, SURFACE, WHITE } from "@/lib/theme";
 
 /* Nämä ryhmät ovat auki heti. Muut avataan klikkaamalla,
    tai itsestään jos niissä on jo valintoja. */
@@ -62,8 +58,8 @@ export function WindowSelector({ windowCounts, onCountChange }: Props) {
           className="flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200"
           style={
             !isOutdoor
-              ? { background: DARK, color: "#ffffff" }
-              : { color: GRAY }
+              ? { background: INK, color: WHITE }
+              : { color: MUTED }
           }
         >
           Sisä- ja ulkopinnat
@@ -73,15 +69,15 @@ export function WindowSelector({ windowCounts, onCountChange }: Props) {
           className="flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200"
           style={
             isOutdoor
-              ? { background: DARK, color: "#ffffff" }
-              : { color: GRAY }
+              ? { background: INK, color: WHITE }
+              : { color: MUTED }
           }
         >
           Vain ulkopinta
         </button>
       </div>
 
-      <p className="text-sm px-1 leading-relaxed" style={{ color: GRAY }}>
+      <p className="text-sm px-1 leading-relaxed" style={{ color: MUTED }}>
         {isOutdoor
           ? "Pesemme vain ulkopinnan. Hinta on edullisempi, koska työ on nopeampaa."
           : "Pesemme ikkunat molemmin puolin. Karmit ja välit puhdistetaan."}
@@ -105,14 +101,14 @@ export function WindowSelector({ windowCounts, onCountChange }: Props) {
               style={{ borderBottom: open ? `1px solid ${BORDER}` : "none" }}
               aria-expanded={open}
             >
-              <h2 className="font-bold text-base" style={{ color: DARK }}>
+              <h2 className="font-bold text-base" style={{ color: INK }}>
                 {label}
               </h2>
 
               {picked > 0 && (
                 <span
                   className="px-2 py-0.5 rounded-full text-xs font-bold tabular-nums"
-                  style={{ background: "#eff6ff", color: BLUE }}
+                  style={{ background: ACCENT_TINT, color: ACCENT }}
                 >
                   {picked}
                 </span>
@@ -120,7 +116,7 @@ export function WindowSelector({ windowCounts, onCountChange }: Props) {
 
               <svg
                 className="ml-auto flex-shrink-0 transition-transform duration-200"
-                style={{ transform: open ? "rotate(180deg)" : "none", color: GRAY }}
+                style={{ transform: open ? "rotate(180deg)" : "none", color: MUTED }}
                 width="18"
                 height="18"
                 viewBox="0 0 24 24"
@@ -179,8 +175,8 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
     <div
       className="rounded-xl flex items-center gap-3 px-3 py-2.5 sm:flex-col sm:gap-0 sm:px-4 sm:py-4 transition-colors duration-200"
       style={{
-        background: selected ? "#eff6ff" : "#f8fafc",
-        border: `1px solid ${selected ? "#bfdbfe" : "transparent"}`,
+        background: selected ? ACCENT_TINT : SURFACE,
+        border: `1px solid ${selected ? ACCENT_EDGE : "transparent"}`,
       }}
     >
       <div className="order-1 sm:order-2 flex-shrink-0 sm:flex-1 sm:w-full sm:flex sm:items-center sm:justify-center sm:mb-3">
@@ -189,7 +185,7 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
 
       <p
         className="order-2 sm:order-1 flex-1 min-w-0 sm:flex-none sm:w-full font-bold text-sm leading-snug text-left sm:text-center sm:mb-3"
-        style={{ color: selected ? BLUE : DARK }}
+        style={{ color: selected ? ACCENT : INK }}
       >
         {window.name}
       </p>
@@ -202,8 +198,8 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
           className="w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-150 active:scale-95"
           style={
             count === 0
-              ? { background: "#ffffff", color: "#cbd5e1", border: `1px solid ${BORDER}`, cursor: "not-allowed" }
-              : { background: "#ffffff", color: DARK, border: `1px solid #cbd5e1` }
+              ? { background: WHITE, color: BORDER_STRONG, border: `1px solid ${BORDER}`, cursor: "not-allowed" }
+              : { background: WHITE, color: INK, border: `1px solid BORDER_STRONG` }
           }
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -213,7 +209,7 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
 
         <span
           className="w-6 sm:w-auto sm:flex-1 text-center font-bold text-base tabular-nums"
-          style={{ color: selected ? BLUE : DARK }}
+          style={{ color: selected ? ACCENT : INK }}
         >
           {count}
         </span>
@@ -222,7 +218,7 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
           onClick={() => onCountChange(window.id, count + 1)}
           aria-label={`Lisää ${window.name}`}
           className="w-10 h-10 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-white transition-all duration-150 active:scale-95 hover:opacity-90"
-          style={{ background: DARK }}
+          style={{ background: INK }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <line x1="12" y1="5" x2="12" y2="19" />

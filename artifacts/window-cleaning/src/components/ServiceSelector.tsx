@@ -1,10 +1,6 @@
 import { motion } from "framer-motion";
 import { type ServiceType } from "@/pages/BookingPage";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, ACCENT_TINT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
 interface ServiceOption {
   id: ServiceType;
@@ -56,7 +52,7 @@ export function ServiceSelector({ onSelect }: Props) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.4 }}
           className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: BLUE }}
+          style={{ color: ACCENT }}
         >
           Varaus
         </motion.p>
@@ -66,7 +62,7 @@ export function ServiceSelector({ onSelect }: Props) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
-          style={{ color: DARK }}
+          style={{ color: INK }}
         >
           Valitse palvelu
         </motion.h2>
@@ -76,7 +72,7 @@ export function ServiceSelector({ onSelect }: Props) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-base sm:text-lg leading-relaxed"
-          style={{ color: "#475569" }}
+          style={{ color: BODY }}
         >
           Mitä haluaisit tilata? Valitse alta, niin päästään eteenpäin.
         </motion.p>
@@ -100,7 +96,7 @@ export function ServiceSelector({ onSelect }: Props) {
               {/* Kuva */}
               <div
                 className="w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-xl overflow-hidden flex-shrink-0"
-                style={{ background: "#f1f5f9" }}
+                style={{ background: SURFACE_SUNK }}
               >
                 <img
                   src={service.image}
@@ -114,25 +110,25 @@ export function ServiceSelector({ onSelect }: Props) {
               {/* Teksti */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                  <span className="font-bold text-lg leading-tight" style={{ color: DARK }}>
+                  <span className="font-bold text-lg leading-tight" style={{ color: INK }}>
                     {service.title}
                   </span>
                   {service.badge && (
                     <span
                       className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: "#eff6ff", color: BLUE }}
+                      style={{ background: ACCENT_TINT, color: ACCENT }}
                     >
                       {service.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-sm mb-1.5 leading-snug" style={{ color: GRAY }}>
+                <p className="text-sm mb-1.5 leading-snug" style={{ color: MUTED }}>
                   {service.subtitle}
                 </p>
-                <p className="text-sm font-semibold" style={{ color: DARK }}>
+                <p className="text-sm font-semibold" style={{ color: INK }}>
                   {service.price}
                   {service.priceNote && (
-                    <span className="font-normal ml-1.5" style={{ color: GRAY }}>
+                    <span className="font-normal ml-1.5" style={{ color: MUTED }}>
                       ({service.priceNote})
                     </span>
                   )}
@@ -154,7 +150,7 @@ export function ServiceSelector({ onSelect }: Props) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   className="transition-colors duration-300 group-hover:text-white"
-                  style={{ color: GRAY }}
+                  style={{ color: MUTED }}
                 >
                   <path d="m9 18 6-6-6-6" />
                 </svg>

@@ -12,10 +12,14 @@ interface Props {
   onReset: () => void;
 }
 
+/* Lumityöt eivät ole tällä hetkellä valittavissa varauksessa,
+   mutta tyyppi ja käsittely ovat tallella, jotta palvelun voi
+   ottaa takaisin käyttöön ilman koodimuutoksia. */
 const SERVICE_LABELS: Record<ServiceType, string> = {
   ikkunanpesu: "Ikkunanpesu",
   auton_ulkopesu: "Auton ulkopesu",
   muut_palvelut: "Muut palvelut",
+  lumityot: "Lumityöt",
 };
 
 const MONTH_NAMES = [

@@ -1,9 +1,5 @@
 import { motion } from "framer-motion";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, ACCENT_TINT, BODY, BORDER, INK, MUTED } from "@/lib/theme";
 
 const VALUES = [
   {
@@ -56,7 +52,7 @@ export function ValuesSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.4 }}
           className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: BLUE }}
+          style={{ color: ACCENT }}
         >
           Arvomme
         </motion.p>
@@ -66,7 +62,7 @@ export function ValuesSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
-          style={{ color: DARK }}
+          style={{ color: INK }}
         >
           Mihin voit meillä luottaa
         </motion.h2>
@@ -76,7 +72,7 @@ export function ValuesSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-base sm:text-lg leading-relaxed"
-          style={{ color: "#475569" }}
+          style={{ color: BODY }}
         >
           Nämä neljä asiaa ohjaavat kaikkea mitä teemme, jokaisessa työssä.
         </motion.p>
@@ -97,14 +93,14 @@ export function ValuesSection() {
           >
             <div
               className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
-              style={{ background: "#eff6ff", color: BLUE }}
+              style={{ background: ACCENT_TINT, color: ACCENT }}
             >
               {v.icon}
             </div>
-            <h3 className="font-bold text-base mb-2" style={{ color: DARK }}>
+            <h3 className="font-bold text-base mb-2" style={{ color: INK }}>
               {v.title}
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: GRAY }}>
+            <p className="text-sm leading-relaxed" style={{ color: MUTED }}>
               {v.description}
             </p>
           </motion.div>

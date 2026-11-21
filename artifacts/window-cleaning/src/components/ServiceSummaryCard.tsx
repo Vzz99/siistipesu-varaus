@@ -1,9 +1,5 @@
 import { type ServiceType } from "@/pages/BookingPage";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT_DARK, ACCENT_TINT, BORDER, INK, MUTED } from "@/lib/theme";
 
 const SERVICE_LABELS: Record<ServiceType, string> = {
   ikkunanpesu: "Ikkunanpesu",
@@ -25,45 +21,45 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
   return (
     <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
       <div className="px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <h3 className="font-bold text-sm" style={{ color: DARK }}>
+        <h3 className="font-bold text-sm" style={{ color: INK }}>
           Yhteenveto
         </h3>
       </div>
 
       <div className="px-5 py-5 space-y-4">
         <div>
-          <p className="text-xs font-medium mb-1" style={{ color: GRAY }}>
+          <p className="text-xs font-medium mb-1" style={{ color: MUTED }}>
             Palvelu
           </p>
-          <p className="font-bold text-base" style={{ color: DARK }}>
+          <p className="font-bold text-base" style={{ color: INK }}>
             {SERVICE_LABELS[serviceType]}
           </p>
         </div>
 
         <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
-          <p className="text-xs font-medium mb-1" style={{ color: GRAY }}>
+          <p className="text-xs font-medium mb-1" style={{ color: MUTED }}>
             Hinta
           </p>
 
           {isCarWash && (
-            <p className="text-2xl font-extrabold tabular-nums" style={{ color: DARK }}>
+            <p className="text-2xl font-extrabold tabular-nums" style={{ color: INK }}>
               30,00 €
             </p>
           )}
 
           {isSnow && (
             <>
-              <p className="text-2xl font-extrabold tabular-nums" style={{ color: DARK }}>
+              <p className="text-2xl font-extrabold tabular-nums" style={{ color: INK }}>
                 alkaen 15 €
               </p>
-              <p className="text-xs leading-relaxed mt-1.5" style={{ color: GRAY }}>
+              <p className="text-xs leading-relaxed mt-1.5" style={{ color: MUTED }}>
                 Lopullinen hinta sovitaan pihan koon mukaan.
               </p>
             </>
           )}
 
           {isMuut && (
-            <p className="font-semibold text-sm leading-snug" style={{ color: GRAY }}>
+            <p className="font-semibold text-sm leading-snug" style={{ color: MUTED }}>
               Hinta sovitaan erikseen
             </p>
           )}
@@ -72,7 +68,7 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
         {isSnow && (
           <div
             className="text-xs leading-relaxed px-3.5 py-3 rounded-xl"
-            style={{ background: "#eff6ff", color: "#1e40af" }}
+            style={{ background: ACCENT_TINT, color: ACCENT_DARK }}
           >
             Haluatko kausikortin? Mainitse siitä lisätiedoissa — 39 € sisältää
             ensimmäisen aurauksen ja −20 % kaikista seuraavista.
@@ -83,7 +79,7 @@ export function ServiceSummaryCard({ serviceType, onProceed }: Props) {
           <button
             onClick={onProceed}
             className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-            style={{ background: DARK }}
+            style={{ background: INK }}
           >
             Jatka varaukseen
           </button>

@@ -1,9 +1,5 @@
 import { motion } from "framer-motion";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, ACCENT_DARK, ACCENT_TINT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
 const SERVICES = [
   {
@@ -61,7 +57,7 @@ export function PriceList() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.4 }}
           className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: BLUE }}
+          style={{ color: ACCENT }}
         >
           Palvelut
         </motion.p>
@@ -71,7 +67,7 @@ export function PriceList() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
-          style={{ color: DARK }}
+          style={{ color: INK }}
         >
           Selkeät hinnat, ei yllätyksiä
         </motion.h2>
@@ -81,7 +77,7 @@ export function PriceList() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-base sm:text-lg leading-relaxed"
-          style={{ color: "#475569" }}
+          style={{ color: BODY }}
         >
           Näet tarkan hinnan laskurista ennen varausta. Tiedät aina mitä maksat.
         </motion.p>
@@ -102,24 +98,24 @@ export function PriceList() {
           >
             {/* Ylärivi */}
             <div className="flex items-start gap-4 mb-4">
-              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0" style={{ background: "#f1f5f9" }}>
+              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0" style={{ background: SURFACE_SUNK }}>
                 <img src={service.image} alt={service.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <h3 className="font-bold text-lg leading-tight" style={{ color: DARK }}>
+                  <h3 className="font-bold text-lg leading-tight" style={{ color: INK }}>
                     {service.title}
                   </h3>
                   {service.badge && (
                     <span
                       className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: "#eff6ff", color: BLUE }}
+                      style={{ background: ACCENT_TINT, color: ACCENT }}
                     >
                       {service.badge}
                     </span>
                   )}
                 </div>
-                <p className="text-sm leading-snug" style={{ color: GRAY }}>
+                <p className="text-sm leading-snug" style={{ color: MUTED }}>
                   {service.description}
                 </p>
               </div>
@@ -128,13 +124,13 @@ export function PriceList() {
             {/* Sisältyy */}
             <ul className="space-y-2 mb-5">
               {service.includes.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: "#334155" }}>
+                <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: BODY }}>
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke={BLUE}
+                    stroke={ACCENT}
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -151,7 +147,7 @@ export function PriceList() {
             {service.note && (
               <div
                 className="text-xs leading-relaxed px-3.5 py-3 rounded-xl mb-5"
-                style={{ background: "#eff6ff", color: "#1e40af" }}
+                style={{ background: ACCENT_TINT, color: ACCENT_DARK }}
               >
                 {service.note}
               </div>
@@ -162,10 +158,10 @@ export function PriceList() {
               className="mt-auto pt-4 flex items-baseline gap-1.5"
               style={{ borderTop: `1px solid ${BORDER}` }}
             >
-              <span className="text-2xl font-extrabold" style={{ color: DARK }}>
+              <span className="text-2xl font-extrabold" style={{ color: INK }}>
                 {service.price}
               </span>
-              <span className="text-sm font-medium" style={{ color: GRAY }}>
+              <span className="text-sm font-medium" style={{ color: MUTED }}>
                 {service.priceUnit}
               </span>
             </div>

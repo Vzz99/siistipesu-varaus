@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ACCENT, ACCENT_DARK, ACCENT_EDGE, ACCENT_TINT, BODY, BORDER, BORDER_STRONG, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
 export function Hero({ onBookClick }: { onBookClick: () => void }) {
   return (
@@ -15,12 +16,12 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             transition={{ duration: 0.4 }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-6"
             style={{
-              background: "#eff6ff",
-              border: "1px solid #bfdbfe",
-              color: "#1d4ed8",
+              background: ACCENT_TINT,
+              border: "1px solid ACCENT_EDGE",
+              color: ACCENT_DARK,
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: "#2563eb" }} />
+            <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: ACCENT }} />
             Otamme vastaan varauksia — Uusimaa
           </motion.div>
 
@@ -30,11 +31,11 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
             className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight mb-5"
-            style={{ color: "#0f172a" }}
+            style={{ color: INK }}
           >
             Puhdasta jälkeä.
             <br />
-            <span style={{ color: "#2563eb" }}>Joka kerta.</span>
+            <span style={{ color: ACCENT }}>Joka kerta.</span>
           </motion.h1>
 
           {/* Kuvaus */}
@@ -43,7 +44,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.12 }}
             className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
-            style={{ color: "#475569" }}
+            style={{ color: BODY }}
           >
             Olemme kaksi nuorta yrittäjää Uudeltamaalta. Näet hinnan heti
             laskurista, valitset sopivan ajan — ja me hoidamme loput.
@@ -60,14 +61,14 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             <button
               onClick={onBookClick}
               className="px-7 py-3.5 font-semibold rounded-xl text-base text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-              style={{ background: "#0f172a" }}
+              style={{ background: INK }}
             >
               Laske hinta ja varaa →
             </button>
             <a
               href="tel:+358442431103"
               className="inline-flex items-center gap-2 px-6 py-3.5 font-semibold rounded-xl text-base transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
-              style={{ border: "1px solid #cbd5e1", color: "#0f172a" }}
+              style={{ border: "1px solid BORDER_STRONG", color: INK }}
             >
               Soita meille
             </a>
@@ -88,9 +89,9 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
               <span
                 key={item}
                 className="inline-flex items-center gap-2 text-sm font-medium"
-                style={{ color: "#334155" }}
+                style={{ color: BODY }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
                 {item}
@@ -108,7 +109,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
         >
           <div
             className="relative rounded-3xl overflow-hidden"
-            style={{ aspectRatio: "4 / 5", background: "#f1f5f9" }}
+            style={{ aspectRatio: "4 / 5", background: SURFACE_SUNK }}
           >
             <img
               src="/IMG_8822.webp"
@@ -122,13 +123,13 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
           {/* Kelluva hintakortti */}
           <div
             className="absolute -bottom-5 left-4 sm:left-auto sm:-right-5 rounded-2xl px-5 py-4 bg-white"
-            style={{ border: "1px solid #e2e8f0", boxShadow: "0 8px 24px rgba(15,23,42,0.08)" }}
+            style={{ border: "1px solid BORDER", boxShadow: "0 8px 24px rgba(15,23,42,0.08)" }}
           >
-            <p className="text-xs font-medium mb-0.5" style={{ color: "#64748b" }}>
+            <p className="text-xs font-medium mb-0.5" style={{ color: MUTED }}>
               Ikkunat alkaen
             </p>
-            <p className="text-2xl font-extrabold" style={{ color: "#0f172a" }}>
-              10 € <span className="text-sm font-medium" style={{ color: "#64748b" }}>/ ikkuna</span>
+            <p className="text-2xl font-extrabold" style={{ color: INK }}>
+              10 € <span className="text-sm font-medium" style={{ color: MUTED }}>/ ikkuna</span>
             </p>
           </div>
         </motion.div>

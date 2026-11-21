@@ -7,11 +7,7 @@ import {
   isCampaignActive,
 } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, BORDER, BORDER_STRONG, DISABLED, INK, MUTED, SURFACE_SUNK, WHITE } from "@/lib/theme";
 
 /* Suomalainen euromuotoilu: 40 € eikä 40.00 €,
    mutta 40,50 € jos desimaaleja oikeasti on. */
@@ -86,16 +82,16 @@ export function PriceSummary({
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.25 }}
                     className="text-xl font-extrabold tabular-nums leading-none"
-                    style={{ color: hasItems ? DARK : "#cbd5e1" }}
+                    style={{ color: hasItems ? INK : BORDER_STRONG }}
                   >
                     {hasItems ? euro(total) : euro(0)}
                   </motion.span>
                 </div>
-                <span className="text-xs leading-tight block mt-1" style={{ color: GRAY }}>
+                <span className="text-xs leading-tight block mt-1" style={{ color: MUTED }}>
                   {hasItems ? (
                     <>
                       Kotitalousvähennyksellä{" "}
-                      <span className="font-bold" style={{ color: BLUE }}>
+                      <span className="font-bold" style={{ color: ACCENT }}>
                         n. {euro(kotitalousHinta)}
                       </span>
                     </>
@@ -111,8 +107,8 @@ export function PriceSummary({
                 className="ml-auto flex-shrink-0 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
                 style={
                   hasItems
-                    ? { background: DARK, color: "#ffffff" }
-                    : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
+                    ? { background: INK, color: WHITE }
+                    : { background: SURFACE_SUNK, color: DISABLED, cursor: "not-allowed" }
                 }
               >
                 Jatka
@@ -127,14 +123,14 @@ export function PriceSummary({
     <>
       <div className="rounded-2xl bg-white overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
         <div className="px-5 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <h3 className="font-bold text-sm" style={{ color: DARK }}>
+          <h3 className="font-bold text-sm" style={{ color: INK }}>
             Hinta-arvio
           </h3>
         </div>
 
         <div className="px-5 py-5 space-y-4">
           {!hasItems && (
-            <p className="text-sm text-center py-6 leading-relaxed" style={{ color: GRAY }}>
+            <p className="text-sm text-center py-6 leading-relaxed" style={{ color: MUTED }}>
               Valitse ikkunat ja kappalemäärät, niin hinta lasketaan tähän.
             </p>
           )}
@@ -151,8 +147,8 @@ export function PriceSummary({
                     exit={{ opacity: 0, height: 0 }}
                     className="flex justify-between items-baseline text-sm gap-3"
                   >
-                    <span style={{ color: GRAY }}>{window.name}</span>
-                    <span className="font-semibold tabular-nums flex-shrink-0" style={{ color: DARK }}>
+                    <span style={{ color: MUTED }}>{window.name}</span>
+                    <span className="font-semibold tabular-nums flex-shrink-0" style={{ color: INK }}>
                       × {count}
                     </span>
                   </motion.div>
@@ -162,7 +158,7 @@ export function PriceSummary({
           )}
 
           {hasItems && compact && (
-            <p className="text-xs" style={{ color: GRAY }}>
+            <p className="text-xs" style={{ color: MUTED }}>
               {selected.length} kohdetta valittu
             </p>
           )}
@@ -171,18 +167,18 @@ export function PriceSummary({
           {hasItems && (
             <div className="pt-4 space-y-2.5" style={{ borderTop: `1px solid ${BORDER}` }}>
               <div className="flex justify-between text-sm">
-                <span style={{ color: GRAY }}>Ikkunat yhteensä</span>
-                <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                <span style={{ color: MUTED }}>Ikkunat yhteensä</span>
+                <span className="font-semibold tabular-nums" style={{ color: INK }}>
                   {euro(windowsSubtotal)}
                 </span>
               </div>
 
               {campaignOn && discount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="font-semibold" style={{ color: BLUE }}>
+                  <span className="font-semibold" style={{ color: ACCENT }}>
                     {CAMPAIGN.label} −{CAMPAIGN.percent} %
                   </span>
-                  <span className="font-semibold tabular-nums" style={{ color: BLUE }}>
+                  <span className="font-semibold tabular-nums" style={{ color: ACCENT }}>
                     −{euro(discount)}
                   </span>
                 </div>
@@ -192,15 +188,15 @@ export function PriceSummary({
                  Nyt TRAVEL_FEE = 0, joten rivi on piilossa. */}
               {travelFee > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: GRAY }}>Matkamaksu</span>
-                  <span className="font-semibold tabular-nums" style={{ color: DARK }}>
+                  <span style={{ color: MUTED }}>Matkamaksu</span>
+                  <span className="font-semibold tabular-nums" style={{ color: INK }}>
                     {euro(travelFee)}
                   </span>
                 </div>
               )}
 
               {isMinimumApplied && (
-                <p className="text-xs leading-relaxed pt-1" style={{ color: GRAY }}>
+                <p className="text-xs leading-relaxed pt-1" style={{ color: MUTED }}>
                   Minimiveloitus {euro(minimumCharge)} on käytössä.
                 </p>
               )}
@@ -210,7 +206,7 @@ export function PriceSummary({
           {/* Loppusumma */}
           <div className="pt-4" style={{ borderTop: `1px solid ${BORDER}` }}>
             <div className="flex justify-between items-baseline mb-1">
-              <span className="font-bold text-base" style={{ color: DARK }}>
+              <span className="font-bold text-base" style={{ color: INK }}>
                 Yhteensä
               </span>
               <motion.span
@@ -219,7 +215,7 @@ export function PriceSummary({
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.25 }}
                 className="text-2xl font-extrabold tabular-nums"
-                style={{ color: hasItems ? DARK : "#cbd5e1" }}
+                style={{ color: hasItems ? INK : BORDER_STRONG }}
               >
                 {hasItems ? euro(total) : euro(0)}
               </motion.span>
@@ -227,10 +223,10 @@ export function PriceSummary({
 
             {hasItems && (
               <div className="flex justify-between items-baseline">
-                <span className="text-xs" style={{ color: GRAY }}>
+                <span className="text-xs" style={{ color: MUTED }}>
                   Kotitalousvähennyksellä
                 </span>
-                <span className="text-sm font-bold tabular-nums" style={{ color: BLUE }}>
+                <span className="text-sm font-bold tabular-nums" style={{ color: ACCENT }}>
                   n. {euro(kotitalousHinta)}
                 </span>
               </div>
@@ -246,8 +242,8 @@ export function PriceSummary({
               className="hidden lg:block w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-200"
               style={
                 hasItems
-                  ? { background: DARK, color: "#ffffff" }
-                  : { background: "#f1f5f9", color: "#94a3b8", cursor: "not-allowed" }
+                  ? { background: INK, color: WHITE }
+                  : { background: SURFACE_SUNK, color: DISABLED, cursor: "not-allowed" }
               }
             >
               {hasItems ? "Jatka varaukseen" : "Valitse ensin ikkunoita"}

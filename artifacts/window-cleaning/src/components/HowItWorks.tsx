@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { ACCENT, BODY, BORDER, DISABLED, INK, MUTED, WHITE } from "@/lib/theme";
 
 const STEPS = [
   {
@@ -19,11 +20,6 @@ const STEPS = [
     text: "Tulemme sovittuna aikana välineiden kanssa. Maksat vasta työn jälkeen.",
   },
 ];
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const LINE = "#e2e8f0";
 
 export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -51,7 +47,7 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.4 }}
           className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: BLUE }}
+          style={{ color: ACCENT }}
         >
           Näin se toimii
         </motion.p>
@@ -61,7 +57,7 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
-          style={{ color: DARK }}
+          style={{ color: INK }}
         >
           Varaus onnistuu neljässä vaiheessa
         </motion.h2>
@@ -71,7 +67,7 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-base sm:text-lg leading-relaxed"
-          style={{ color: "#475569" }}
+          style={{ color: BODY }}
         >
           Koko varaus hoituu verkossa muutamassa minuutissa — ilman
           soittoja, tarjouspyyntöjä tai odottelua.
@@ -83,12 +79,12 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
         {/* Taustaviiva */}
         <div
           className="absolute h-[2px] rounded-full"
-          style={{ background: LINE, top: "27px", left: "12.5%", right: "12.5%" }}
+          style={{ background: BORDER, top: "27px", left: "12.5%", right: "12.5%" }}
         />
         {/* Täyttyvä viiva */}
         <motion.div
           className="absolute h-[2px] rounded-full origin-left"
-          style={{ background: BLUE, top: "27px", left: "12.5%", width: fill, maxWidth: "75%" }}
+          style={{ background: ACCENT, top: "27px", left: "12.5%", width: fill, maxWidth: "75%" }}
         />
 
         <div className="relative grid grid-cols-4 gap-6">
@@ -107,9 +103,9 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center text-lg font-extrabold transition-all duration-500"
                     style={{
-                      background: isOn ? BLUE : "#ffffff",
-                      color: isOn ? "#ffffff" : GRAY,
-                      border: `2px solid ${isOn ? BLUE : LINE}`,
+                      background: isOn ? ACCENT : WHITE,
+                      color: isOn ? WHITE : MUTED,
+                      border: `2px solid ${isOn ? ACCENT : BORDER}`,
                       boxShadow: isOn ? "0 6px 18px rgba(37,99,235,0.25)" : "none",
                       transform: isOn ? "scale(1.06)" : "scale(1)",
                     }}
@@ -119,11 +115,11 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
                 </div>
                 <h3
                   className="font-bold text-lg mb-2 transition-colors duration-500"
-                  style={{ color: isOn ? DARK : "#94a3b8" }}
+                  style={{ color: isOn ? INK : DISABLED }}
                 >
                   {step.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: GRAY }}>
+                <p className="text-sm leading-relaxed" style={{ color: MUTED }}>
                   {step.text}
                 </p>
               </motion.div>
@@ -136,11 +132,11 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
       <div className="md:hidden relative pl-2">
         <div
           className="absolute w-[2px] rounded-full"
-          style={{ background: LINE, left: "25px", top: "24px", bottom: "24px" }}
+          style={{ background: BORDER, left: "25px", top: "24px", bottom: "24px" }}
         />
         <motion.div
           className="absolute w-[2px] rounded-full"
-          style={{ background: BLUE, left: "25px", top: "24px", height: fill, maxHeight: "calc(100% - 48px)" }}
+          style={{ background: ACCENT, left: "25px", top: "24px", height: fill, maxHeight: "calc(100% - 48px)" }}
         />
 
         <div className="relative flex flex-col gap-7">
@@ -158,9 +154,9 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center text-base font-extrabold flex-shrink-0 transition-all duration-500"
                   style={{
-                    background: isOn ? BLUE : "#ffffff",
-                    color: isOn ? "#ffffff" : GRAY,
-                    border: `2px solid ${isOn ? BLUE : LINE}`,
+                    background: isOn ? ACCENT : WHITE,
+                    color: isOn ? WHITE : MUTED,
+                    border: `2px solid ${isOn ? ACCENT : BORDER}`,
                     boxShadow: isOn ? "0 4px 14px rgba(37,99,235,0.22)" : "none",
                   }}
                 >
@@ -169,11 +165,11 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
                 <div className="pt-1">
                   <h3
                     className="font-bold text-base mb-1 transition-colors duration-500"
-                    style={{ color: isOn ? DARK : "#94a3b8" }}
+                    style={{ color: isOn ? INK : DISABLED }}
                   >
                     {step.title}
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: GRAY }}>
+                  <p className="text-sm leading-relaxed" style={{ color: MUTED }}>
                     {step.text}
                   </p>
                 </div>
@@ -194,7 +190,7 @@ export function HowItWorks({ onStartClick }: { onStartClick: () => void }) {
         <button
           onClick={onStartClick}
           className="px-7 py-3.5 font-semibold rounded-xl text-base text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-          style={{ background: DARK }}
+          style={{ background: INK }}
         >
           Aloita varaus →
         </button>

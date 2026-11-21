@@ -21,6 +21,7 @@ import { useBlockedDates } from "@/hooks/useBlockedDates";
 import { useBookedSlots } from "@/hooks/useBookedSlots";
 import { TRAVEL_FEE, MINIMUM_CHARGE } from "@/data/windows";
 import { sendBookingEmail } from "@/lib/emailService";
+import { AMBER, BODY, BORDER, INK, MUTED, WHITE } from "@/lib/theme";
 
 export type WindowCounts = Record<string, number>;
 export type ServiceType = "ikkunanpesu" | "auton_ulkopesu" | "muut_palvelut" | "lumityot";
@@ -158,13 +159,13 @@ export function BookingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#ffffff" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: WHITE }}>
       <header
         className="sticky top-0 z-40"
         style={{
           background: "rgba(255,255,255,0.85)",
           backdropFilter: "blur(12px)",
-          borderBottom: "1px solid #e2e8f0",
+          borderBottom: "1px solid BORDER",
         }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
@@ -177,7 +178,7 @@ export function BookingPage() {
             <div
               className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 transition-all duration-200"
               style={{
-                boxShadow: isAdminLoggedIn ? "0 0 0 2px #f59e0b" : "none",
+                boxShadow: isAdminLoggedIn ? "0 0 0 2px AMBER" : "none",
               }}
             >
               <img
@@ -187,12 +188,12 @@ export function BookingPage() {
               />
             </div>
             <div>
-              <span className="font-bold text-base leading-tight block" style={{ color: "#0f172a" }}>
+              <span className="font-bold text-base leading-tight block" style={{ color: INK }}>
                 Siisti Pesu
               </span>
               <span
                 className="text-xs leading-tight block"
-                style={{ color: isAdminLoggedIn ? "#d97706" : "#64748b" }}
+                style={{ color: isAdminLoggedIn ? AMBER : MUTED }}
               >
                 {isAdminLoggedIn ? "Ylläpitotila" : "Varauspalvelu"}
               </span>
@@ -206,7 +207,7 @@ export function BookingPage() {
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
                   className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150 hover:bg-slate-100"
-                  style={{ color: "#475569" }}
+                  style={{ color: BODY }}
                 >
                   {link.label}
                 </button>
@@ -219,7 +220,7 @@ export function BookingPage() {
               <button
                 onClick={handleBack}
                 className="text-sm font-medium transition-colors flex items-center gap-1.5 hover:opacity-70"
-                style={{ color: "#475569" }}
+                style={{ color: BODY }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m15 18-6-6 6-6" />
@@ -231,7 +232,7 @@ export function BookingPage() {
               <button
                 onClick={scrollToServices}
                 className="px-4 py-2 text-sm font-semibold rounded-xl text-white transition-all duration-150 hover:opacity-90 active:scale-95"
-                style={{ background: "#0f172a" }}
+                style={{ background: INK }}
               >
                 Varaa aika
               </button>
@@ -246,7 +247,7 @@ export function BookingPage() {
                 key={link.id}
                 onClick={() => scrollTo(link.id)}
                 className="flex-shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150"
-                style={{ color: "#475569", border: "1px solid #e2e8f0" }}
+                style={{ color: BODY, border: "1px solid BORDER" }}
               >
                 {link.label}
               </button>
@@ -320,10 +321,10 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <div className="mb-8">
-                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: INK }}>
                       Ikkunanpesu
                     </h1>
-                    <p className="text-base" style={{ color: "#475569" }}>
+                    <p className="text-base" style={{ color: BODY }}>
                       Valitse ikkunatyypit ja kappalemäärät. Hinta lasketaan automaattisesti.
                     </p>
                   </div>
@@ -358,10 +359,10 @@ export function BookingPage() {
                   transition={{ duration: 0.22 }}
                 >
                   <div className="mb-8">
-                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "#0f172a" }}>
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: INK }}>
                       Varauksen tiedot
                     </h1>
-                    <p className="text-base" style={{ color: "#475569" }}>
+                    <p className="text-base" style={{ color: BODY }}>
                       Täytä yhteystietosi ja valitse sopiva aika.
                     </p>
                   </div>
