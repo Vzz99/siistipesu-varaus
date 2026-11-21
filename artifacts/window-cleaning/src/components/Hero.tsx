@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { HALVIN_IKKUNA } from "@/data/windows";
 import { ACCENT, ACCENT_DARK, ACCENT_EDGE, ACCENT_TINT, BODY, BORDER, BORDER_STRONG, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
 export function Hero({ onBookClick }: { onBookClick: () => void }) {
@@ -134,7 +135,7 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
               Ikkunat alkaen
             </p>
             <p className="text-2xl font-extrabold" style={{ color: INK }}>
-              10 € <span className="text-sm font-medium" style={{ color: MUTED }}>/ ikkuna</span>
+              {HALVIN_IKKUNA} € <span className="text-sm font-medium" style={{ color: MUTED }}>/ ikkuna</span>
             </p>
           </div>
         </motion.div>

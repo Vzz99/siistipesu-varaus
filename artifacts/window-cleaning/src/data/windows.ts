@@ -84,3 +84,13 @@ export function isCampaignActive(): boolean {
 
 export const DISCOUNT_OPTIONS = [0, 5, 10, 15, 20] as const;
 export type DiscountPercent = (typeof DISCOUNT_OPTIONS)[number];
+
+/* Halvin ikkunahinta hinnastosta. Heron "alkaen"-kortti käyttää
+   tätä, jottei luku jää jälkeen kun hinnasto muuttuu — kortissa
+   luki pitkään 10 €, vaikka ulkopesun perusikkuna on 5 €.
+   Peili ei ole ikkuna, joten se jätetään pois. */
+export const HALVIN_IKKUNA = Math.min(
+  ...[...WINDOW_TYPES, ...OUTDOOR_WINDOW_TYPES]
+    .filter((w) => w.id !== "peili")
+    .map((w) => w.price),
+);
