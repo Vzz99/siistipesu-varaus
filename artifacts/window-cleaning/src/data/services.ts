@@ -8,6 +8,8 @@
    kaikkialla.
    ───────────────────────────────────────────────────────────── */
 
+import { HALVIN_IKKUNA } from "@/data/windows";
+
 export type ServiceType =
   | "ikkunanpesu"
   | "auton_ulkopesu"
@@ -45,7 +47,7 @@ export const SERVICES: Service[] = [
     subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
     description: "Sisä- ja ulkopinnat kiiltäviksi — ei jälkiä, ei tahroja.",
     price: null,
-    priceLabel: "alkaen 10 €",
+    priceLabel: `alkaen ${HALVIN_IKKUNA} €`,
     priceNote: "/ ikkuna",
     image: "/window-thumbs.webp",
     includes: [
@@ -117,7 +119,9 @@ export const SERVICES: Service[] = [
       "Muut kodin ulkotyöt",
       "Hinta työmäärän ja haastavuuden mukaan",
     ],
-    listed: true,
+    /* Pois kaudeksi. Tyyppi jaa olemaan, jotta vanhojen varausten
+       vahvistusnakymat ja sahkopostit loytavat yha nimen. */
+    listed: false,
   },
   {
     id: "lumityot",
