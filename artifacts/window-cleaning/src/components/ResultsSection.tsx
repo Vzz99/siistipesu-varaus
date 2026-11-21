@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { WorkVideo } from "@/components/WorkVideo";
-import { ACCENT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
+import { ACCENT, ACCENT_EDGE, BORDER, INK, MUTED, SURFACE_SUNK, WHITE } from "@/lib/theme";
 
 /* Videot omista töistä. Lisää uusi laittamalla tiedostot
    public-kansioon ja rivi tähän — asettelu venyy itse. */
@@ -27,9 +27,26 @@ const PAIRS = [
   },
 ];
 
-export function ResultsSection() {
+interface Props {
+  /* Tummalla pohjalla tekstit ja kortit kaantyvat vaaleiksi.
+     Kuvat nayttavat tummaa vastaan selvasti paremmilta, ja yksi
+     tumma osio antaa sivulle rytmin. */
+  dark?: boolean;
+}
+
+export function ResultsSection({ dark = false }: Props) {
+  const headingColor = dark ? WHITE : INK;
+  const labelColor = dark ? ACCENT_EDGE : ACCENT;
+  const cardBg = dark ? "rgba(255,255,255,0.06)" : WHITE;
+  const cardBorder = dark ? "rgba(255,255,255,0.14)" : BORDER;
+  const cardLabel = dark ? WHITE : INK;
+  const imgBg = dark ? "rgba(255,255,255,0.08)" : SURFACE_SUNK;
+  const beforeChip = dark
+    ? { background: "rgba(0,0,0,0.55)", color: "#FFFFFF" }
+    : { background: "rgba(255,255,255,0.92)", color: MUTED };
+
   return (
-    <div className="mb-20 sm:mb-24">
+    <div className="pb-20 sm:pb-24">
       {/* Otsikko */}
       <div className="mb-8 sm:mb-10 max-w-2xl">
         <motion.p
@@ -38,7 +55,7 @@ export function ResultsSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.4 }}
           className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-          style={{ color: ACCENT }}
+          style={{ color: labelColor }}
         >
           Tulokset
         </motion.p>
@@ -48,7 +65,7 @@ export function ResultsSection() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4"
-          style={{ color: INK }}
+          style={{ color: headingColor }}
         >
           Ero näkyy heti
         </motion.h2>
@@ -83,20 +100,20 @@ export function ResultsSection() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.45, delay: i * 0.08 }}
             whileHover={{ y: -6 }}
-            className="rounded-2xl p-4 bg-white transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.09)]"
-            style={{ border: `1px solid ${BORDER}` }}
+            className="rounded-2xl p-4 transition-shadow duration-300"
+            style={{ background: cardBg, border: `1px solid ${cardBorder}` }}
           >
             <div className="grid grid-cols-2 gap-2.5 mb-3.5">
-              <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: SURFACE_SUNK }}>
+              <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: imgBg }}>
                 <img src={pair.before.src} alt={pair.before.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 <span
                   className="absolute top-2 left-2 text-[11px] font-bold px-2 py-0.5 rounded-full"
-                  style={{ background: "rgba(255,255,255,0.92)", color: MUTED }}
+                  style={beforeChip}
                 >
                   Ennen
                 </span>
               </div>
-              <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: SURFACE_SUNK }}>
+              <div className="relative rounded-xl overflow-hidden aspect-square" style={{ background: imgBg }}>
                 <img src={pair.after.src} alt={pair.after.alt} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 <span
                   className="absolute top-2 left-2 text-[11px] font-bold px-2 py-0.5 rounded-full text-white"
@@ -106,7 +123,7 @@ export function ResultsSection() {
                 </span>
               </div>
             </div>
-            <p className="text-sm font-bold px-1" style={{ color: INK }}>
+            <p className="text-sm font-bold px-1" style={{ color: cardLabel }}>
               {pair.label}
             </p>
           </motion.div>
