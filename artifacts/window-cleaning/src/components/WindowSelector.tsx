@@ -199,7 +199,7 @@ function WindowCard({ window, count, onCountChange }: CardProps) {
           style={
             count === 0
               ? { background: WHITE, color: BORDER_STRONG, border: `1px solid ${BORDER}`, cursor: "not-allowed" }
-              : { background: WHITE, color: INK, border: `1px solid BORDER_STRONG` }
+              : { background: WHITE, color: INK, border: `1px solid ${BORDER_STRONG}` }
           }
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
