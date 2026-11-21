@@ -2,10 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4UdPSSVPBPRgheiwyld2itUp2yx_JXxaP_Imp7Gmkd4j5p3T1ufPPVEkGC4J1VaGi/exec";
 
-const TIME_SLOTS = [
-  "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
-];
+import { TIME_SLOTS, SLOTS_PER_JOB } from "@/data/schedule";
 
 async function fetchSlots(): Promise<Record<string, string[]>> {
   try {
@@ -40,9 +37,17 @@ export function useBookedSlots() {
   }, []);
 
   const blockSlots = useCallback((date: string, startTime: string) => {
-    const startIdx = TIME_SLOTS.indexOf(startTime);
-    if (startIdx === -1) return;
-    const toBlock = TIME_SLOTS.slice(startIdx, startIdx + 4);
+    const startIdx = TIME_SLOTS.indexOf(startTime as (typeof TIME_SLOTS)[number]);
+
+    /* Tuntematon aika tarkoitti ennen sitä, ettei varausta estetty
+       lainkaan ja sama aika jäi vapaaksi seuraavalle varaajalle.
+       Estetään silloin edes se yksi tunti. */
+    if (startIdx === -1) console.warn(`Tuntematon varausaika: ${startTime}`);
+    const toBlock: string[] =
+      startIdx === -1
+        ? [startTime]
+        : [...TIME_SLOTS.slice(startIdx, startIdx + SLOTS_PER_JOB)];
+
     setBookedSlots((prev) => {
       const existing = prev[date] ?? [];
       const merged = Array.from(new Set([...existing, ...toBlock]));
