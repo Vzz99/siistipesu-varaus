@@ -27,13 +27,18 @@ export const KV_VUOSI = "2026–2027";
 /**
  * Paljonko asiakas saa vähentää yhdestä työstä.
  *
- * Omavastuu oletetaan käyttämättömäksi, mikä on varovainen
- * arvio: jos asiakas on jo ostanut muita kotitalouspalveluita
- * samana vuonna, hän saa enemmän kuin tämä näyttää.
+ * Omavastuu on VUOSIKOHTAINEN, ei keikkakohtainen: se vähennetään
+ * kerran vuodessa, vaikka asiakas ostaisi useita eri palveluita.
+ * Siksi tämä olettaa omavastuun jo käytetyksi — niin on asian laita
+ * jokaisella, joka on teettänyt saman vuoden aikana remonttia,
+ * siivousta, hoivatyötä tai mitä tahansa muuta vähennyskelpoista.
+ *
+ * Vain sille asiakkaalle, jolle tämä keikka on vuoden ensimmäinen
+ * ja ainoa vähennyskelpoinen ostos, vähennys jää 150 euroa
+ * pienemmäksi. Siitä kerrotaan laskurissa rivin alla.
  */
 export function vahennysTyosta(tyonOsuus: number): number {
-  const brutto = Math.min(tyonOsuus * KV_OSUUS, KV_ENIMMAIS);
-  return Math.max(brutto - KV_OMAVASTUU, 0);
+  return Math.min(tyonOsuus * KV_OSUUS, KV_ENIMMAIS);
 }
 
 /** Hinta vähennyksen jälkeen. Matkakulu ei ole vähennyskelpoinen. */

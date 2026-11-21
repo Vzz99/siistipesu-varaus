@@ -7,7 +7,7 @@ import {
   isCampaignActive,
 } from "@/data/windows";
 import { type WindowCounts } from "@/pages/BookingPage";
-import { hintaVahennyksenJalkeen, vahennysTyosta, KV_OMAVASTUU } from "@/data/kotitalousvahennys";
+import { hintaVahennyksenJalkeen, KV_OMAVASTUU } from "@/data/kotitalousvahennys";
 import { ACCENT, BORDER, BORDER_STRONG, DISABLED, INK, MUTED, SURFACE_SUNK, WHITE } from "@/lib/theme";
 
 /* Suomalainen euromuotoilu: 40 € eikä 40.00 €,
@@ -57,12 +57,13 @@ export function PriceSummary({
   const isMinimumApplied = subtotalWithTravel < minimumCharge && hasItems;
 
   const effectiveWork = Math.max(laborAfterDiscount, minimumCharge - travelFee);
-  /* 40 % tyon osuudesta, josta vahennetaan 150 euron vuotuinen
-     omavastuu. Pienessa keikassa vahennys voi jaada kokonaan
-     saamatta, joten summaa ei nayteta jos se ei tuo saastoa. */
+  /* 40 % tyon osuudesta. Vuotuinen 150 euron omavastuu oletetaan
+     kaytetyksi, koska se on vuosikohtainen eika keikkakohtainen —
+     niin on asian laita jokaisella, joka on teettanyt saman vuoden
+     aikana muuta vahennyskelpoista tyota. Poikkeus kerrotaan
+     rivin alla olevassa selitteessa. */
   const kotitalousHinta = hintaVahennyksenJalkeen(effectiveWork, travelFee);
-  const kotitalousSaasto = vahennysTyosta(effectiveWork);
-  const naytaVahennys = hasItems && kotitalousSaasto > 0;
+  const naytaVahennys = hasItems;
 
   /* Mobiilin kiinteä alapalkki.
      Renderöidään portaalilla suoraan bodyyn, koska Framer Motionin
@@ -240,9 +241,10 @@ export function PriceSummary({
                   </span>
                 </div>
                 <p className="text-[11px] leading-snug mt-1" style={{ color: MUTED }}>
-                  Arvio: 40 % työn osuudesta, josta on vähennetty{" "}
-                  {KV_OMAVASTUU} € vuotuinen omavastuu. Lopullisen
-                  vähennyksen vahvistaa Verohallinto.
+                  40 % työn osuudesta, kun vuoden {KV_OMAVASTUU} €
+                  omavastuu on jo käytetty muihin kotitalouspalveluihin.
+                  Muuten omavastuu pienentää vähennystä {KV_OMAVASTUU}
+                  eurolla.
                 </p>
               </>
             )}
