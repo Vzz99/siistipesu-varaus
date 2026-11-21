@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-
-const DARK = "#0f172a";
-const BORDER = "#e2e8f0";
+import { BORDER, INK } from "@/lib/theme";
 
 /* Pystyvideo omasta työstä.
    Latautuu vasta kun se tulee lähelle näkymää, jotta
    etusivun ensilataus pysyy kevyenä. Julistekuva näkyy
    siihen asti, joten paikka ei ole koskaan tyhjä. */
-export function WorkVideo({ className = "" }: { className?: string }) {
+interface Props {
+  src: string;
+  poster: string;
+  alt: string;
+  className?: string;
+}
+
+export function WorkVideo({ src, poster, alt, className = "" }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [load, setLoad] = useState(false);
@@ -75,19 +80,19 @@ export function WorkVideo({ className = "" }: { className?: string }) {
       {load ? (
         <video
           ref={videoRef}
-          src="/hero.mp4"
-          poster="/hero-poster.webp"
+          src={src}
+          poster={poster}
           muted
           loop
           playsInline
           preload="metadata"
-          aria-label="Siisti Pesu pesee ikkunaa"
+          aria-label={alt}
           className="w-full h-full object-cover"
         />
       ) : (
         <img
-          src="/hero-poster.webp"
-          alt="Siisti Pesu pesee ikkunaa"
+          src={poster}
+          alt={alt}
           loading="lazy"
           decoding="async"
           className="w-full h-full object-cover"
@@ -100,7 +105,7 @@ export function WorkVideo({ className = "" }: { className?: string }) {
           onClick={toggleSound}
           aria-label={muted ? "Laita ääni päälle" : "Mykistä"}
           className="absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-150 hover:bg-white"
-          style={{ background: "rgba(255,255,255,0.9)", color: DARK }}
+          style={{ background: "rgba(255,255,255,0.9)", color: INK }}
         >
           {muted ? (
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

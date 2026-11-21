@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { CAMPAIGN, isCampaignActive, campaignDaysLeft } from "@/data/windows";
-
-const AMBER = "#f59e0b";
-const DARK = "#0f172a";
+import { AMBER, DISABLED, INK, INK_SOFT, WHITE } from "@/lib/theme";
 
 export function CampaignBanner({ onClick }: { onClick?: () => void }) {
   if (!isCampaignActive()) return null;
@@ -16,7 +14,7 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
       transition={{ duration: 0.45 }}
       className="relative rounded-2xl px-6 sm:px-8 py-5 sm:py-6 mb-8 sm:mb-10 overflow-hidden"
       style={{
-        background: "linear-gradient(120deg, #0b1220 0%, #172033 45%, #0f172a 100%)",
+        background: "linear-gradient(120deg, INK 0%, INK_SOFT 45%, INK 100%)",
       }}
     >
       {/* Hienovarainen lämmin hehku oikeaan reunaan */}
@@ -34,7 +32,7 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
           <div className="flex items-center gap-2.5 mb-2 flex-wrap">
             <span
               className="text-[11px] font-bold uppercase tracking-[0.14em] px-2.5 py-1 rounded-full"
-              style={{ background: AMBER, color: "#3d2c05" }}
+              style={{ background: AMBER, color: INK }}
             >
               {CAMPAIGN.label}
             </span>
@@ -48,7 +46,7 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
           <p className="text-white font-extrabold text-xl sm:text-2xl tracking-tight leading-tight mb-1">
             {CAMPAIGN.headline}
           </p>
-          <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+          <p className="text-sm leading-relaxed" style={{ color: DISABLED }}>
             Kausi päättyy 31.10. — varaa ikkunanpesu ennen pakkasia. Alennus
             lasketaan automaattisesti hinta-arvioon.
           </p>
@@ -59,7 +57,7 @@ export function CampaignBanner({ onClick }: { onClick?: () => void }) {
           <button
             onClick={onClick}
             className="flex-shrink-0 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.98] self-start sm:self-auto"
-            style={{ background: "#ffffff", color: DARK }}
+            style={{ background: WHITE, color: INK }}
           >
             Laske hinta →
           </button>

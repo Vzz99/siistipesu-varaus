@@ -1,9 +1,5 @@
 import { motion } from "framer-motion";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
+import { ACCENT, BODY, BORDER, BORDER_STRONG, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
 const STATS = [
   { value: "2026", label: "Perustettu" },
@@ -26,7 +22,7 @@ export function AboutSection() {
         >
           <div
             className="rounded-3xl overflow-hidden"
-            style={{ aspectRatio: "4 / 5", background: "#f1f5f9" }}
+            style={{ aspectRatio: "4 / 5", background: SURFACE_SUNK }}
           >
             <img
               src="/team.webp"
@@ -47,7 +43,7 @@ export function AboutSection() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.4 }}
             className="text-xs font-bold uppercase tracking-[0.14em] mb-3"
-            style={{ color: BLUE }}
+            style={{ color: ACCENT }}
           >
             Meistä
           </motion.p>
@@ -58,7 +54,7 @@ export function AboutSection() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.5, delay: 0.05 }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2"
-            style={{ color: DARK }}
+            style={{ color: INK }}
           >
             Valtteri &amp; Lauri
           </motion.h2>
@@ -69,7 +65,7 @@ export function AboutSection() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.5, delay: 0.08 }}
             className="text-base font-semibold mb-5"
-            style={{ color: BLUE }}
+            style={{ color: ACCENT }}
           >
             Nuoret yrittäjät Uudeltamaalta
           </motion.p>
@@ -80,7 +76,7 @@ export function AboutSection() {
             viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.5, delay: 0.12 }}
             className="text-base leading-relaxed mb-8"
-            style={{ color: "#475569" }}
+            style={{ color: BODY }}
           >
             Perustimme Siisti Pesun vuonna 2026, koska kesätöitä oli vaikea löytää
             ja yrittäjyys on aina kiehtonut meitä molempia. Teemme ikkunanpesua,
@@ -100,10 +96,10 @@ export function AboutSection() {
           >
             {STATS.map((s) => (
               <div key={s.label}>
-                <div className="text-xl sm:text-2xl font-extrabold mb-0.5" style={{ color: DARK }}>
+                <div className="text-xl sm:text-2xl font-extrabold mb-0.5" style={{ color: INK }}>
                   {s.value}
                 </div>
-                <div className="text-xs font-medium" style={{ color: GRAY }}>
+                <div className="text-xs font-medium" style={{ color: MUTED }}>
                   {s.label}
                 </div>
               </div>
@@ -121,14 +117,14 @@ export function AboutSection() {
             <a
               href="tel:+358442431103"
               className="px-6 py-3 font-semibold rounded-xl text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-              style={{ background: DARK }}
+              style={{ background: INK }}
             >
               044 243 1103
             </a>
             <a
               href="mailto:siisti.pesu@gmail.com"
               className="px-6 py-3 font-semibold rounded-xl text-sm transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
-              style={{ border: `1px solid #cbd5e1`, color: DARK }}
+              style={{ border: `1px solid BORDER_STRONG`, color: INK }}
             >
               siisti.pesu@gmail.com
             </a>

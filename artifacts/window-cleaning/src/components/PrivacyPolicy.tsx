@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { ACCENT, BORDER, INK, MUTED } from "@/lib/theme";
 
 /* ─────────────────────────────────────────────
    Valtteri Jutila rekisterinpitäjänä.
@@ -10,12 +11,6 @@ const BUSINESS_ID = "3609363-2";
 const CONTACT_EMAIL = "siisti.pesu@gmail.com";
 const CONTACT_PHONE = "044 243 1103";
 const UPDATED = "20.11.2026";
-
-const DARK = "#0f172a";
-const GRAY = "#475569";
-const MUTED = "#64748b";
-const BORDER = "#e2e8f0";
-const BLUE = "#2563eb";
 
 interface Props {
   open: boolean;
@@ -62,7 +57,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
               className="px-5 sm:px-7 py-4 flex items-center gap-3 flex-shrink-0"
               style={{ borderBottom: `1px solid ${BORDER}` }}
             >
-              <h2 className="font-bold text-lg" style={{ color: DARK }}>
+              <h2 className="font-bold text-lg" style={{ color: INK }}>
                 Tietosuojaseloste
               </h2>
               <button
@@ -81,7 +76,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
             <div
               className="px-5 sm:px-7 py-6 overflow-y-auto text-sm leading-relaxed"
               style={{
-                color: GRAY,
+                color: MUTED,
                 paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
               }}
             >
@@ -95,7 +90,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
                 </p>
                 <p className="mt-2">
                   Sähköposti:{" "}
-                  <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: BLUE }} className="font-medium">
+                  <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: ACCENT }} className="font-medium">
                     {CONTACT_EMAIL}
                   </a>
                   <br />
@@ -200,7 +195,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
                 </ul>
                 <p className="mt-2">
                   Pyynnön voit tehdä lähettämällä sähköpostia osoitteeseen{" "}
-                  <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: BLUE }} className="font-medium">
+                  <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: ACCENT }} className="font-medium">
                     {CONTACT_EMAIL}
                   </a>
                   . Vastaamme pyyntöön kuukauden kuluessa.
@@ -211,7 +206,7 @@ export function PrivacyPolicy({ open, onClose }: Props) {
                     href="https://tietosuoja.fi"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: BLUE }}
+                    style={{ color: ACCENT }}
                     className="font-medium"
                   >
                     tietosuoja.fi
@@ -262,7 +257,7 @@ function Section({
 }) {
   return (
     <section className={last ? "" : "mb-6"}>
-      <h3 className="font-bold text-base mb-2" style={{ color: DARK }}>
+      <h3 className="font-bold text-base mb-2" style={{ color: INK }}>
         {title}
       </h3>
       {children}

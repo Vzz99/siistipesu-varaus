@@ -1,12 +1,7 @@
 import { useState, useMemo } from "react";
 import { type BookingData, type ServiceType } from "@/pages/BookingPage";
 import { CalendarPicker } from "@/components/CalendarPicker";
-
-const BLUE = "#2563eb";
-const DARK = "#0f172a";
-const GRAY = "#64748b";
-const BORDER = "#e2e8f0";
-const RED = "#dc2626";
+import { ACCENT_DARK, ACCENT_TINT, BORDER, BORDER_STRONG, DANGER, DISABLED, INK, MUTED, SURFACE, WHITE } from "@/lib/theme";
 
 /* ── Kauden alku ──
    Ikkunan- ja autonpesua ei tehdä talvella. Kaikki päivät ennen tätä
@@ -195,7 +190,7 @@ export function BookingForm({
       style={{ border: `1px solid ${BORDER}` }}
     >
       <div className="px-5 sm:px-6 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <h2 className="font-bold text-base" style={{ color: DARK }}>
+        <h2 className="font-bold text-base" style={{ color: INK }}>
           Yhteystiedot
         </h2>
       </div>
@@ -262,7 +257,7 @@ export function BookingForm({
         {isSnow && (
           <div
             className="text-xs leading-relaxed px-3.5 py-3 rounded-xl"
-            style={{ background: "#eff6ff", color: "#1e40af" }}
+            style={{ background: ACCENT_TINT, color: ACCENT_DARK }}
           >
             Lumityöt tehdään 5 km säteellä Kauniaisista — Kauniainen, Viherlaakso,
             Leppävaara, Kilo, Karakallio, Espoon keskus ja lähialueet.
@@ -271,17 +266,17 @@ export function BookingForm({
       </div>
 
       <div className="px-5 sm:px-6 py-6" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <h2 className="font-bold text-base mb-1.5" style={{ color: DARK }}>
+        <h2 className="font-bold text-base mb-1.5" style={{ color: INK }}>
           Aika
         </h2>
-        <p className="text-xs mb-4 leading-relaxed" style={{ color: GRAY }}>
+        <p className="text-xs mb-4 leading-relaxed" style={{ color: MUTED }}>
           Arkisin palvelemme klo 16–19 (koulun jälkeen), viikonloppuisin klo 8–19.
         </p>
 
         {SEASON_START && !isSnow && (
           <div
             className="text-xs leading-relaxed px-3.5 py-3 rounded-xl mb-5"
-            style={{ background: "#eff6ff", color: "#1e40af" }}
+            style={{ background: ACCENT_TINT, color: ACCENT_DARK }}
           >
             {SEASON_NOTE}
           </div>
@@ -294,10 +289,10 @@ export function BookingForm({
               onClick={() => setShowCalendar((v) => !v)}
               className={`${inputClass(!!errors.date)} text-left flex items-center justify-between gap-2`}
             >
-              <span style={{ color: form.date ? DARK : "#94a3b8" }}>
+              <span style={{ color: form.date ? INK : DISABLED }}>
                 {form.date ? formatDateFi(form.date) : "Valitse päivä..."}
               </span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={GRAY} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />
                 <line x1="8" y1="2" x2="8" y2="6" />
@@ -309,10 +304,10 @@ export function BookingForm({
           <Field label="Kellonaika *" error={errors.time}>
             <div
               className="grid grid-cols-3 gap-1.5 p-1.5 rounded-xl"
-              style={{ border: `1px solid ${errors.time ? RED : BORDER}` }}
+              style={{ border: `1px solid ${errors.time ? DANGER : BORDER}` }}
             >
               {!form.date && (
-                <p className="col-span-3 text-xs text-center py-2" style={{ color: GRAY }}>
+                <p className="col-span-3 text-xs text-center py-2" style={{ color: MUTED }}>
                   Valitse ensin päivämäärä
                 </p>
               )}
@@ -329,10 +324,10 @@ export function BookingForm({
                     className="py-2 rounded-lg text-sm font-semibold transition-all duration-150 select-none"
                     style={
                       blocked
-                        ? { background: "#f8fafc", color: "#cbd5e1", textDecoration: "line-through", cursor: "not-allowed" }
+                        ? { background: SURFACE, color: BORDER_STRONG, textDecoration: "line-through", cursor: "not-allowed" }
                         : selected
-                        ? { background: DARK, color: "#ffffff" }
-                        : { color: DARK, cursor: "pointer" }
+                        ? { background: INK, color: WHITE }
+                        : { color: INK, cursor: "pointer" }
                     }
                   >
                     {slot}
@@ -355,7 +350,7 @@ export function BookingForm({
               allowPast={false}
               mode="booking"
             />
-            <p className="text-xs mt-3" style={{ color: GRAY }}>
+            <p className="text-xs mt-3" style={{ color: MUTED }}>
               Yliviivatut päivät eivät ole saatavilla.
             </p>
           </div>
@@ -380,7 +375,7 @@ export function BookingForm({
         <button
           type="submit"
           className="mt-5 w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-          style={{ background: DARK }}
+          style={{ background: INK }}
         >
           Vahvista varaus
         </button>
@@ -406,12 +401,12 @@ interface FieldProps {
 function Field({ label, error, children }: FieldProps) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-semibold block" style={{ color: DARK }}>
+      <label className="text-sm font-semibold block" style={{ color: INK }}>
         {label}
       </label>
       {children}
       {error && (
-        <p className="text-xs flex items-start gap-1.5 leading-snug" style={{ color: RED }}>
+        <p className="text-xs flex items-start gap-1.5 leading-snug" style={{ color: DANGER }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 mt-0.5">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
