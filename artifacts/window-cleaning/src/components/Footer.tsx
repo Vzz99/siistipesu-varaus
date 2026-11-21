@@ -2,13 +2,12 @@ import { useState } from "react";
 import { PrivacyPolicy } from "@/components/PrivacyPolicy";
 import { INK } from "@/lib/theme";
 import { SocialLinks } from "@/components/SocialLinks";
+import { LISTED_SERVICES } from "@/data/services";
 
-const SERVICES = [
-  "Ikkunanpesu",
-  "Auton ulkopesu",
-  "Nurmikon leikkuu",
-  "Muut kotitalouspalvelut",
-];
+/* Lista tuli ennen kasin kirjoitettuna, joten se jai jalkeen kun
+   palveluita lisattiin tai otettiin pois. Nyt se seuraa samaa
+   lahdetta kuin palveluvalinta ja hinnasto. */
+const SERVICES = LISTED_SERVICES.map((s) => s.label);
 
 export function Footer() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
