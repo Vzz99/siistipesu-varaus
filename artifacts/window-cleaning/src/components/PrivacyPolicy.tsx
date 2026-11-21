@@ -4,7 +4,7 @@ import { useEffect } from "react";
 /* ─────────────────────────────────────────────
    Valtteri Jutila rekisterinpitäjänä.
    ───────────────────────────────────────────── */
-const OPERATOR_NAME = "Etunimi Sukunimi";
+const OPERATOR_NAME = "Valtteri Jutila";
 
 const BUSINESS_ID = "3609363-2";
 const CONTACT_EMAIL = "siisti.pesu@gmail.com";
