@@ -46,9 +46,9 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
             style={{ color: BODY }}
           >
-            Olemme kaksi nuorta yrittäjää Uudeltamaalta. Näet hinnan heti
-            laskurista, valitset sopivan ajan — ja me hoidamme loput.
-            Ei yllätyksiä, ei piilokuluja.
+            Kaksi nuorta yrittäjää Uudeltamaalta. Näet hinnan heti
+            laskurista ja valitset sopivan ajan — ei yllätyksiä,
+            ei piilokuluja.
           </motion.p>
 
           {/* Napit */}
@@ -56,18 +56,22 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.18 }}
-            className="flex flex-wrap justify-center lg:justify-start gap-3 mb-9"
+            /* Puhelimella napit vierekkain. Pinottuina ne veivat
+               yli 120 px pystysuunnassa ja tyonsivat kuvan pois
+               ensinakymasta. */
+            className="flex flex-nowrap justify-center lg:justify-start gap-3 mb-7 sm:mb-9"
           >
             <button
               onClick={onBookClick}
-              className="px-7 py-3.5 font-semibold rounded-xl text-base text-white transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              className="px-5 sm:px-7 py-3.5 font-semibold rounded-xl text-[15px] sm:text-base text-white whitespace-nowrap transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
               style={{ background: INK }}
             >
-              Laske hinta ja varaa →
+              <span className="sm:hidden">Laske hinta →</span>
+              <span className="hidden sm:inline">Laske hinta ja varaa →</span>
             </button>
             <a
               href="tel:+358442431103"
-              className="inline-flex items-center gap-2 px-6 py-3.5 font-semibold rounded-xl text-base transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 font-semibold rounded-xl text-[15px] sm:text-base whitespace-nowrap transition-all duration-200 hover:bg-slate-50 active:scale-[0.98]"
               style={{ border: `1px solid ${BORDER_STRONG}`, color: INK }}
             >
               Soita meille
@@ -79,16 +83,16 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.25 }}
-            className="flex flex-wrap justify-center lg:justify-start gap-x-7 gap-y-3"
+            className="flex flex-wrap justify-center lg:justify-start gap-x-5 sm:gap-x-7 gap-y-2 sm:gap-y-3"
           >
             {[
-              "Kotitalousvähennys −35 %",
+              "Kotitalousvähennys jopa 40 %",
               "Tyytyväisyystakuu",
               "Välineet mukanamme",
             ].map((item) => (
               <span
                 key={item}
-                className="inline-flex items-center gap-2 text-sm font-medium"
+                className="inline-flex items-center gap-1.5 sm:gap-2 text-[13px] sm:text-sm font-medium"
                 style={{ color: BODY }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -112,11 +116,12 @@ export function Hero({ onBookClick }: { onBookClick: () => void }) {
             style={{ aspectRatio: "4 / 5", background: SURFACE_SUNK }}
           >
             <img
-              src="/IMG_8822.webp"
-              alt="Siisti Pesu — ikkunanpesua"
+              src="/window-thumbs.webp"
+              alt="Siisti Pesun tekijä lasta kädessä pestyn ikkunan edessä"
               fetchPriority="high"
               decoding="async"
               className="w-full h-full object-cover"
+              style={{ objectPosition: "50% 35%" }}
             />
           </div>
 
