@@ -1,41 +1,7 @@
 import { motion } from "framer-motion";
-import { type ServiceType } from "@/pages/BookingPage";
+import { type ServiceType, LISTED_SERVICES, shortServicePrice } from "@/data/services";
 import { ACCENT, ACCENT_TINT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
 
-interface ServiceOption {
-  id: ServiceType;
-  title: string;
-  subtitle: string;
-  price: string;
-  priceNote?: string;
-  image: string;
-  badge?: string;
-}
-
-const services: ServiceOption[] = [
-  {
-    id: "ikkunanpesu",
-    title: "Ikkunanpesu",
-    subtitle: "Kaikki ikkunatyypit, ammattilaistulos",
-    price: "Laske hinta laskurista",
-    image: "/window-thumbs.webp",
-  },
-  {
-    id: "auton_ulkopesu",
-    title: "Auton ulkopesu",
-    subtitle: "Käsinpesu ulkoa, kiinteä hinta",
-    price: "30 €",
-    priceNote: "kiinteä hinta",
-    image: "/car-wash.webp",
-  },
-  {
-    id: "muut_palvelut",
-    title: "Muut palvelut",
-    subtitle: "Nurmikon leikkuu, pihatyöt yms.",
-    price: "Hinta sovitaan erikseen",
-    image: "/mowing.webp",
-  },
-];
 
 interface Props {
   onSelect: (service: ServiceType) => void;
@@ -80,7 +46,7 @@ export function ServiceSelector({ onSelect }: Props) {
 
       {/* Palvelut */}
       <div className="flex flex-col gap-3.5 max-w-3xl">
-        {services.map((service, i) => (
+        {LISTED_SERVICES.map((service, i) => (
           <motion.button
             key={service.id}
             initial={{ opacity: 0, y: 16 }}
@@ -100,7 +66,7 @@ export function ServiceSelector({ onSelect }: Props) {
               >
                 <img
                   src={service.image}
-                  alt={service.title}
+                  alt={service.label}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -109,24 +75,16 @@ export function ServiceSelector({ onSelect }: Props) {
 
               {/* Teksti */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                <div className="mb-0.5">
                   <span className="font-bold text-lg leading-tight" style={{ color: INK }}>
-                    {service.title}
+                    {service.label}
                   </span>
-                  {service.badge && (
-                    <span
-                      className="text-[11px] font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: ACCENT_TINT, color: ACCENT }}
-                    >
-                      {service.badge}
-                    </span>
-                  )}
                 </div>
                 <p className="text-sm mb-1.5 leading-snug" style={{ color: MUTED }}>
                   {service.subtitle}
                 </p>
                 <p className="text-sm font-semibold" style={{ color: INK }}>
-                  {service.price}
+                  {shortServicePrice(service.id)}
                   {service.priceNote && (
                     <span className="font-normal ml-1.5" style={{ color: MUTED }}>
                       ({service.priceNote})

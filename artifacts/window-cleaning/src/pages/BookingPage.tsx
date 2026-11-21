@@ -24,7 +24,11 @@ import { sendBookingEmail } from "@/lib/emailService";
 import { AMBER, BODY, BORDER, INK, MUTED, WHITE } from "@/lib/theme";
 
 export type WindowCounts = Record<string, number>;
-export type ServiceType = "ikkunanpesu" | "auton_ulkopesu" | "muut_palvelut" | "lumityot";
+/* ServiceType asuu nykyään tiedostossa src/data/services.ts palvelujen
+   ja hintojen kanssa. Vietään se täältä edelleen, jotta vanhat
+   importit toimivat. */
+import { type ServiceType } from "@/data/services";
+export type { ServiceType };
 
 export interface BookingData {
   name: string;

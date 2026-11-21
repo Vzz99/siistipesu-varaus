@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { WINDOW_TYPES } from "@/data/windows";
 import { type BookingData, type WindowCounts, type ServiceType } from "@/pages/BookingPage";
+import { SERVICE_LABELS, getService, formatServicePrice } from "@/data/services";
 
 interface Props {
   bookingData: BookingData;
@@ -11,16 +12,6 @@ interface Props {
   emailStatus: "idle" | "sending" | "sent" | "error";
   onReset: () => void;
 }
-
-/* Lumityöt eivät ole tällä hetkellä valittavissa varauksessa,
-   mutta tyyppi ja käsittely ovat tallella, jotta palvelun voi
-   ottaa takaisin käyttöön ilman koodimuutoksia. */
-const SERVICE_LABELS: Record<ServiceType, string> = {
-  ikkunanpesu: "Ikkunanpesu",
-  auton_ulkopesu: "Auton ulkopesu",
-  muut_palvelut: "Muut palvelut",
-  lumityot: "Lumityöt",
-};
 
 const MONTH_NAMES = [
   "tammikuuta", "helmikuuta", "maaliskuuta", "huhtikuuta", "toukokuuta", "kesäkuuta",
@@ -35,7 +26,7 @@ function formatDate(dateStr: string) {
 
 export function ConfirmationView({ bookingData, serviceType, windowCounts, travelFee, minimumCharge, emailStatus, onReset }: Props) {
   const isIkkunanpesu = serviceType === "ikkunanpesu";
-  const isCarWash = serviceType === "auton_ulkopesu";
+  const fixedPrice = getService(serviceType).price !== null;
   const isMuut = serviceType === "muut_palvelut";
 
   const selectedItems = isIkkunanpesu
@@ -157,11 +148,13 @@ export function ConfirmationView({ bookingData, serviceType, windowCounts, trave
               </div>
             )}
 
-            {isCarWash && (
+            {fixedPrice && (
               <div className="border-t border-border pt-2 mt-2">
                 <div className="flex justify-between font-semibold">
                   <span>Yhteensä</span>
-                  <span className="text-xl tabular-nums">30,00 €</span>
+                  <span className="text-xl tabular-nums">
+                    {formatServicePrice(serviceType)}
+                  </span>
                 </div>
               </div>
             )}
