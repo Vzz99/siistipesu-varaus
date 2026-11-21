@@ -6,7 +6,7 @@ import { ACCENT, BODY, BORDER, INK, MUTED, SURFACE_SUNK } from "@/lib/theme";
    public-kansioon ja rivi tähän — asettelu venyy itse. */
 const VIDEOS = [
   { src: "/hero.mp4", poster: "/hero-poster.webp", alt: "Siisti Pesu pesee ikkunaa" },
-  { src: "/car.mp4", poster: "/car-poster.webp", alt: "Auton sisäpesun jälki" },
+  { src: "/car.mp4", poster: "/car-poster.webp", alt: "Siisti Pesu pesee autoa sisältä ja ulkoa" },
 ];
 
 const PAIRS = [
