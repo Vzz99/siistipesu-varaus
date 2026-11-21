@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { type BookingData, type ServiceType } from "@/pages/BookingPage";
 import { CalendarPicker } from "@/components/CalendarPicker";
+import { slotsForDate } from "@/data/schedule";
 import { ACCENT_DARK, ACCENT_TINT, BORDER, BORDER_STRONG, DANGER, DISABLED, INK, MUTED, SURFACE, WHITE } from "@/lib/theme";
 
 /* ── Kauden alku ──
@@ -39,21 +40,6 @@ interface Props {
   blockedDates?: Set<string>;
   bookedSlots?: Record<string, string[]>;
   serviceType?: ServiceType;
-}
-
-const TIME_SLOTS = [
-  "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00",
-];
-
-// Arkisin (ma–pe) vain koulun jälkeen; viikonloppuisin koko päivä.
-function slotsForDate(dateStr: string): string[] {
-  if (!dateStr) return TIME_SLOTS;
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const day = new Date(y, m - 1, d).getDay(); // 0 = su, 6 = la
-  const isWeekend = day === 0 || day === 6;
-  if (isWeekend) return TIME_SLOTS;
-  return TIME_SLOTS.filter((t) => t >= "16:00");
 }
 
 const MONTH_NAMES = [
