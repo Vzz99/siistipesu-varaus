@@ -243,7 +243,7 @@ export function PriceSummary({
                 <p className="text-[11px] leading-snug mt-1" style={{ color: MUTED }}>
                   40 % työn osuudesta, kun vuoden {KV_OMAVASTUU} €
                   omavastuu on jo käytetty muihin kotitalouspalveluihin.
-                  Muuten omavastuu pienentää vähennystä {KV_OMAVASTUU}
+                  Muuten omavastuu pienentää vähennystä {KV_OMAVASTUU}{" "}
                   eurolla.
                 </p>
               </>
